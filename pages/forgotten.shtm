@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>
+		var preferences = {};
+		var layouts = {};
+
+		var accounts = [];
+		
+		$(document).ready(function() {
+			basicInit();
+			styleScreen();		//setup all the divs
+			styleLinks(5);
+
+			$(".main").css( "visibility","visible");
+			$("#email").focus();
+			
+			$("#form").submit(function(event) {
+				event.preventDefault();
+				$("#submitChangeCredentials").click();
+			});
+			
+			$("#submitChangeCredentials").click(function(){
+				var email = $("#email").val();
+				if (validateEmail(email)) {
+					var data = [];
+					data.push({name: 'email', value: email});
+					var id = parseInt($("[name=id]:checked").val());
+					if (id) {
+						for(var i=0; i < accounts.length; i++) {
+							if (accounts[i].id == id) {
+								data.push({name: 'contact', value: accounts[i].contact});
+								data.push({name: 'id', value: accounts[i].id});
+							}
+						}
+					}
+					$.ajax({
+						dataType: 'json',
+						data: data,
+						url: '/connector/html/requestLogin',
+						type: "POST",
+						success: function (result) {
+							if (result.errornumber) {
+								switch (result.errornumber) {
+									case 700:
+										openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/Onze server heeft u niet gevonden als geregistreerde gebruiker.-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+										break;
+									case 703:
+										openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/De gegevens zijn in gebruik. Probeer het later nog eens.-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+										break;
+									case 705:
+										openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/Het is niet toegestaan het wachtwoord op te vragen.-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+										break;
+									default:
+										openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+								}
+							} else {
+								$(".requestInfo").remove();
+								if (result.result == "succes") {
+									$("#submitChangeCredentials").hide();									
+									$("#requestText").html("<!--#4DSCRIPT/WEB_LANGUAGE/Uw gebruikersnaam en (nieuw) wachtwoord is verzonden naar:--> <b>" + email + "</b>");
+								} else if (result.accounts) {
+									accounts = result.accounts;
+									$("#requestText").html("<!--#4DSCRIPT/WEB_LANGUAGE/Er zijn meerdere gebruikers gevonden op dit email adres. Selecteer de juiste A.U.B.-->");
+									$("#entry-table").append("<input type='hidden' id='email' name='email' value='" + email + "'/>");		//save the email address
+									$.each(accounts, function (index, account) {															//loop trough the accounts
+										var tempFill = "<tr class='requestInfo'>";
+										tempFill += "<td class='leading'><input type='radio' name='id' value='" + account.id + "'";
+										if (index == 0) {
+											tempFill += " checked";
+										}
+										tempFill += "/></td>";
+										tempFill += "<td class='data'>" + account.description + "</td>";
+										tempFill += "<td class='trailing'>&nbsp;</td>";									
+										tempFill += "</tr>";
+										$("#entry-table").append(tempFill);
+									});
+								}
+							}
+						}
+					});
+				}
+			});
+		});
+		function checkEmail(field) {
+			if (!validateEmail(field.value)) {
+				openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/Ongeldig e-mailadres.-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+			}
+		}
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Vergeten--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"></div>
+		<div class="content">
+			<div id="content" class="content_child"></div>
+			<br />
+			<form id="form">
+				<table id="entry-table" class="content_table">
+					<tr>
+						<td class="nocolumn" colspan="3" id="requestText"><!--#4DSCRIPT/WEB_LANGUAGE/Vul hier onderin uw email adres in en wij zullen uw aanmeldgegevens naar dit adres versturen.--></td>
+					</tr>
+					<tr>
+						<td class="nocolumn" colspan="3">&nbsp;</td>
+					</tr>
+					<tr class="requestInfo">
+						<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Email:--></td>
+						<td class="data"><input type="text" id="email" name="email" size="60" onchange="javascript:checkEmail(this)"></input></td>
+						<td class="trailing">&nbsp;</td>
+					</tr>
+				</table>				
+			</form>
+		</div>
+		<div class="footer"><div class="margins right"><span id="submitChangeCredentials"><a id="submitChangeCredentials" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Verstuur--></a> | </span><a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Index--></a></div></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

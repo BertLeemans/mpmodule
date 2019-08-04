@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>				
+		var preferences = {};
+		var layouts = {};
+
+		var tableSetup = {
+			"table": 3,
+			"doubleClickHandler": selectLine,
+			"search": true,
+			"header": true,
+			"footer": true,
+			"distinct": ["product_type"],
+			"sorting": [{"field": "description", "direction": "asc"}],
+			"fields": [
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Omschrijving-->",
+					"field": "description",
+					"alignment": "left",
+					"width": "300px",
+					"sortable": true,
+					"searchable": true,
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Productsoort-->",
+					"field": "product_type",
+					"alignment": "left",
+					"width": "200px",
+					"sortable": true,
+					"searchable": false,
+					"visible": true
+				}
+			]
+		};
+
+		function selectLine(id) {
+			var result = getParameterFromURL('result');
+			if (result == "quotation") {
+				window.location.replace('/module/pages/quotationmanual.shtm?table=3&standard=' + id);
+			} else {
+				window.location.replace('/module/pages/jobmanual.shtm?table=3&standard=' + id);
+			}
+		}
+
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(5);
+			
+				fillTable({"action": "init"});
+
+				$("#group0").bind("change", function() {
+					fillTable({"action": "search"});
+				});
+				$("#searchSelect").bind("change", function() {
+					$("#searchValue").val("");
+					fillTable({"action": "search"});
+				});
+				$("#searchValue").bind("change", function() {
+					fillTable({"action": "search"});
+				});
+			});
+		});
+		
+		$( window ).resize(function() {
+			tableScrollHeight();
+		});
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Standaard berekeningen--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content">
+			<div class="content_child" style="height: 15px;"><!--#4DSCRIPT/WEB_LANGUAGE/Productsoort--> <select id="group0"></select> <!--#4DSCRIPT/WEB_LANGUAGE/Zoek--> <select id="searchSelect"></select><input id="searchValue"></input></div>
+			<div class="content_child" id="gridPlaceHolder"></div>			
+		</div>
+		<div class="footer"><div class="margins right"><a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

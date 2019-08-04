@@ -1,0 +1,341 @@
+<script type="text/javascript" charset="utf-8">
+	function initMenu() {
+	//main
+		$("#main").click(function(){
+			window.location.replace('/module/pages/main.shtm');
+		});
+		if (!preferences.active) {
+			$("#menuQuotation").remove();
+			$("#menuJob").remove();
+			$("#menuPrices").remove();
+			$("#menuStock").remove();
+			$("#menuImageStore").remove();
+			$("#menuOther").remove();
+			$("#menuShoppingcard").remove();
+		} else {
+	//quotation (menu)
+			if ((!preferences.active.quotations) & (!preferences.active.quotationlist)) {
+				$("#menuQuotation").remove();
+			} else {
+	//quotation
+				if (preferences.active.quotations) {
+					var urlQuotation = "";
+					if (preferences.access.enterManual) {
+						urlQuotation = '/module/pages/quotationmanual.shtm';
+					} else if ((preferences.access.enterPDF) && (preferences.access.uploadFiles)) {
+						urlQuotation = '/module/pages/quotationpdf.shtm';
+					} else if (preferences.access.enterStandardQuotations) {
+						urlQuotation = '/module/pages/selectstandard.shtm?result=quotation';
+					} else if (preferences.access.enterArchiveJobs) {
+						urlQuotation = '/module/pages/selectarchive.shtm?result=quotation';
+					}
+					if ( urlQuotation != "") {
+						$("#quotationmain").click(function(){
+							window.location.replace( urlQuotation );
+						});
+					} else {
+						$("#menuQuotationMain").remove();
+					}
+				} else {
+					$("#menuQuotationMain").remove();
+				}
+	//quotation manual
+				if (preferences.access.enterManual) {
+					$("#quotationmanual").click(function(){
+						window.location.replace('/module/pages/quotationmanual.shtm');
+					});
+				} else {
+					$("#menuQuotationManual").remove();
+				}
+	//quotation PDF
+				if ((preferences.access.enterPDF) && (preferences.access.uploadFiles)) {
+					$("#quotationpdf").click(function(){
+						window.location.replace('/module/pages/quotationpdf.shtm');
+					});
+				} else {
+					$("#menuQuotationPDF").remove();
+				}
+	//quotation standard
+				if (preferences.access.enterStandardQuotations) {
+					$("#quotationstandard").click(function(){
+						window.location.replace('/module/pages/selectstandard.shtm?result=quotation');
+					});
+				} else {
+					$("#menuQuotationStandard").remove();
+				}
+	//quotation archive
+				if (preferences.access.enterArchiveJobs) {
+					$("#quotationarchive").click(function(){
+						window.location.replace('/module/pages/selectarchive.shtm?result=quotation');
+					});
+				} else {
+					$("#menuQuotationArchive").remove();
+				}
+	//offertes
+				if (preferences.active.quotationlist) {
+					$("#quotations").click(function(){
+						window.location.replace('/module/pages/quotations.shtm');
+					});
+				} else {
+					$("#menuQuotations").remove();
+				}
+			}
+	//orders (menu)
+			if ((!preferences.active.jobs) & (!preferences.active.web2print) & (!preferences.active.webdesign) & (!preferences.active.progress)) {
+				$("#menuJob").remove();
+			} else {
+	//orders
+				if (preferences.active.jobs) {
+					var urlJob = "";
+					if (preferences.access.enterManual) {
+						urlJob = '/module/pages/jobmanual.shtm';
+					} else if ((preferences.access.enterPDF) && (preferences.access.uploadFiles)) {
+						urlJob = '/module/pages/jobpdf.shtm';
+					} else if ((preferences.access.enterQuotation) && (preferences.active.quotationlist)) {
+						urlJob = '/module/pages/selectquotation.shtm';
+					} else if (preferences.access.enterStandardQuotations) {
+						urlJob = '/module/pages/selectstandard.shtm?result=job';
+					} else if (preferences.access.enterArchiveJobs) {
+						urlJob = '/module/pages/selectarchive.shtm?result=job';
+					}
+					if ( urlJob != "") {
+						$("#jobmain").click(function(){
+							window.location.replace( urlJob );
+						});
+					} else {
+						$("#menuJobMain").remove();
+					}
+				} else {
+					$("#menuJobMain").remove();					
+				}
+	//orders manual
+				if (preferences.access.enterManual) {
+					$("#jobmanual").click(function(){
+						window.location.replace('/module/pages/jobmanual.shtm');
+					});
+				} else {
+					$("#menuJobManual").remove();
+				}
+	//orders PDF
+				if ((preferences.access.enterPDF) && (preferences.access.uploadFiles)) {
+					$("#jobpdf").click(function(){
+						window.location.replace('/module/pages/jobpdf.shtm');
+					});
+				} else {
+					$("#menuJobPDF").remove();
+				}
+	//job quotation
+				if ((preferences.access.enterQuotation) && (preferences.active.quotationlist)) {
+					$("#jobquotation").click(function(){
+						window.location.replace('/module/pages/selectquotation.shtm');
+					});
+				} else {
+					$("#menuJobQuotation").remove();
+				}
+	//job standard
+				if (preferences.access.enterStandardQuotations) {
+					$("#jobstandard").click(function(){
+						window.location.replace('/module/pages/selectstandard.shtm?result=job');
+					});
+				} else {
+					$("#menuJobStandard").remove();
+				}
+	//job archive
+				if (preferences.access.enterArchiveJobs) {
+					$("#jobarchive").click(function(){
+						window.location.replace('/module/pages/selectarchive.shtm?result=job');
+					});
+				} else {
+					$("#menuJobArchive").remove();
+				}
+	//web2print
+				if (preferences.active.web2print) {
+					$("#web2Print").click(function(){
+						window.location.replace('/module/pages/web2print.shtm');
+					});
+				} else {
+					$("#menuWeb2Print").remove();
+				}
+	//webdesign
+				if (preferences.active.webdesign) {
+					$("#webdesign").click(function(){
+						window.location.replace('/module/pages/webdesign.shtm');
+					});
+				} else {
+					$("#menuWebdesign").remove();
+				}
+	//voortgang
+				if (preferences.active.progress) {
+					$("#jobs").click(function(){
+						window.location.replace('/module/pages/jobs.shtm');
+					});
+				} else {
+					$("#menuJobs").remove();
+				}
+			}
+	//prices (menu)
+			if ((!preferences.active.arrangements) & (!preferences.active.calculator)) {
+				$("#menuPrices").remove();
+			} else {
+	//arrangement
+				if (preferences.active.arrangements) {
+					$("#arrangement").click(function(){
+						window.location.replace('/module/pages/arrangement.shtm');
+					});
+				} else {
+					$("#menuArrangement").remove();
+				}
+	//calculator
+				if (preferences.active.calculator) {
+					$("#calculator").click(function(){
+						window.location.replace('/module/pages/calculator.shtm');
+					});
+				} else {
+					$("#menuCalculator").remove();
+				}
+			}
+	//stock (menu)
+			if ((!preferences.active.products) & (!preferences.active.articles)) {
+				$("#menuStock").remove();
+			} else {
+	//producten
+				if (preferences.active.products) {
+					$("#products").click(function(){
+						window.location.replace('/module/pages/products.shtm');
+					});
+				} else {
+					$("#menuProducts").remove();
+				}
+	//articles
+				if (preferences.active.articles) {
+					$("#articles").click(function(){
+						window.location.replace('/module/pages/articles.shtm');
+					});
+				} else {
+					$("#menuArticles").remove();
+				}
+			}
+	//beeldbank (menu)
+			if (preferences.active.imagestore) {
+				$("#imageStore").click(function(){
+					window.location.replace('/module/pages/imagestore.shtm');
+				});
+			} else {
+				$("#menuImageStore").remove();
+			}
+	//others (menu)
+			if ((!preferences.active.messages) & (!preferences.active.deliveryform) & (!preferences.active.invoices) & (!preferences.active.management) & (!preferences.access.modifyCredentials)) {
+				$("#menuOther").remove();
+			} else {
+	//messages
+				if (preferences.active.messages) {
+					$("#messages").click(function(){
+						window.location.replace('/module/pages/message.shtm');
+					});
+				} else {
+					$("#menuMessages").remove();
+				}
+	//deliveryform
+				if (preferences.active.deliveryform) {
+					$("#deliveryform").click(function(){
+						window.location.replace('/module/pages/deliveryforms.shtm');
+					});
+				} else {
+					$("#menuDeliveryForm").remove();
+				}
+	//invoices
+				if (preferences.active.invoices) {
+					$("#invoices").click(function(){
+						window.location.replace('/module/pages/invoices.shtm');
+					});
+				} else {
+					$("#menuInvoices").remove();
+				}
+	//management
+				if (preferences.active.management) {
+					$("#management").click(function(){
+						window.location.replace('/module/pages/management.shtm');
+					});
+				} else {
+					$("#menuManagement").remove();
+				}
+	//userdata
+				if (preferences.access.modifyCredentials) {
+					$("#userdata").click(function(){
+						window.location.replace('/module/pages/userdata.shtm');
+					});
+				} else {
+					$("#menuUserData").remove();
+				}
+			}
+	//shoppingcard
+			if (preferences.active.shoppingcard) {
+				$("#shoppingcard").click(function(){
+					window.location.replace('/module/pages/shoppingcard.shtm');
+				});
+			} else {
+				$("#menuShoppingcard").remove();
+			}
+			if (!preferences.access.useShoppingcard) {
+				$("#toShoppingCard").text("<!--#4DSCRIPT/WEB_LANGUAGE/Verstuur-->");
+			}
+		}
+		styleLinks(3);   //style the menu
+	}
+</script>
+
+<ul class="jq-menu">
+	<li><a class="menu" href="#" id="main"><!--#4DSCRIPT/WEB_LANGUAGE/Hoofdmenu--></a></li>
+	<li id="menuQuotation">|<a class="menu" href="#"><!--#4DSCRIPT/WEB_LANGUAGE/Offertes--></a>
+		<ul>
+			<li class="menu" id="menuQuotationMain"><a class="menu" href="#" id="quotationmain"><!--#4DSCRIPT/WEB_LANGUAGE/Nieuw--></a>
+				<ul>
+					<li class="menu" id="menuQuotationManual"><a class="menu" href="#" id="quotationmanual"><!--#4DSCRIPT/WEB_LANGUAGE/Handmatig--></a></li>
+					<li class="menu" id="menuQuotationPDF"><a class="menu" href="#" id="quotationpdf"><!--#4DSCRIPT/WEB_LANGUAGE/PDF bestand--></a></li>
+					<li class="menu" id="menuQuotationStandard"><a class="menu" href="#" id="quotationstandard"><!--#4DSCRIPT/WEB_LANGUAGE/Standaard berekeningen--></a></li>
+					<li class="menu" id="menuQuotationArchive"><a class="menu" href="#" id="quotationarchive"><!--#4DSCRIPT/WEB_LANGUAGE/Archief--></a></li>
+				</ul>
+			</li>
+			<li class="menu" id="menuQuotations"><a class="menu" id="quotations" href="#"><!--#4DSCRIPT/WEB_LANGUAGE/Overzicht offertes--></a></li>
+		</ul>
+	</li>
+	<li id="menuJob">|<a class="menu" href="#"><!--#4DSCRIPT/WEB_LANGUAGE/Orders--></a>
+		<ul>
+			<li class="menu" id="menuJobMain"><a class="menu" href="#" id="jobmain"><!--#4DSCRIPT/WEB_LANGUAGE/Nieuw--></a>
+				<ul>
+					<li class="menu" id="menuJobManual"><a class="menu" href="#" id="jobmanual"><!--#4DSCRIPT/WEB_LANGUAGE/Handmatig--></a></li>
+					<li class="menu" id="menuJobPDF"><a class="menu" href="#" id="jobpdf"><!--#4DSCRIPT/WEB_LANGUAGE/PDF bestand--></a></li>
+					<li class="menu" id="menuJobQuotation"><a class="menu" href="#" id="jobquotation"><!--#4DSCRIPT/WEB_LANGUAGE/Offerte--></a></li>
+					<li class="menu" id="menuJobStandard"><a class="menu" href="#" id="jobstandard"><!--#4DSCRIPT/WEB_LANGUAGE/Standaard berekeningen--></a></li>
+					<li class="menu" id="menuJobArchive"><a class="menu" href="#" id="jobarchive"><!--#4DSCRIPT/WEB_LANGUAGE/Archief--></a></li>
+				</ul>
+			</li>
+			<li class="menu" id="menuWeb2Print"><a class="menu" href="#" id="web2Print"><!--#4DSCRIPT/WEB_LANGUAGE/Web2Print--></a></li>
+			<li class="menu" id="menuWebdesign"><a class="menu" href="#" id="webdesign"><!--#4DSCRIPT/WEB_LANGUAGE/Webdesign--></a></li>
+			<li class="menu" id="menuJobs"><a class="menu" href="#" id="jobs"><!--#4DSCRIPT/WEB_LANGUAGE/Voortgang--></a></li>
+		</ul>			
+	</li>
+	<li id="menuPrices">|<a class="menu" href="#"><!--#4DSCRIPT/WEB_LANGUAGE/Prijzen--></a>
+		<ul>
+			<li class="menu" id="menuArrangement"><a class="menu" href="#" id="arrangement"><!--#4DSCRIPT/WEB_LANGUAGE/Prijsafspraken--></a></li>
+			<li class="menu" id="menuCalculator"><a class="menu" href="#" id="calculator"><!--#4DSCRIPT/WEB_LANGUAGE/Calculator--></a></li>
+		</ul>			
+	</li>
+	<li id="menuStock">|<a class="menu" href="#"><!--#4DSCRIPT/WEB_LANGUAGE/Voorraad--></a>
+		<ul>
+			<li class="menu" id="menuProducts"><a class="menu" href="#" id="products"><!--#4DSCRIPT/WEB_LANGUAGE/Producten--></a></li>
+			<li class="menu" id="menuArticles"><a class="menu" href="#" id="articles"><!--#4DSCRIPT/WEB_LANGUAGE/Artikelen--></a></li>
+		</ul>			
+	</li>
+	<li id="menuImageStore">|<a class="menu" href="#" id="imageStore"><!--#4DSCRIPT/WEB_LANGUAGE/Beeldbank--></a></li>
+	<li id="menuOther">|<a class="menu" href="#"><!--#4DSCRIPT/WEB_LANGUAGE/Overige--></a>
+		<ul>
+			<li class="menu" id="menuMessages"><a class="menu" href="#" id="messages"><!--#4DSCRIPT/WEB_LANGUAGE/Bericht--></a></li>
+			<li class="menu" id="menuDeliveryForm"><a class="menu" href="#" id="deliveryform"><!--#4DSCRIPT/WEB_LANGUAGE/Afleverbonnen--></a></li>
+			<li class="menu" id="menuInvoices"><a class="menu" href="#" id="invoices"><!--#4DSCRIPT/WEB_LANGUAGE/Facturen--></a></li>
+			<li class="menu" id="menuManagement"><a class="menu" href="#" id="management"><!--#4DSCRIPT/WEB_LANGUAGE/Management--></a></li>
+			<li class="menu" id="menuUserData"><a class="menu" href="#" id="userdata"><!--#4DSCRIPT/WEB_LANGUAGE/Aanmeldgegevens--></a></li>
+		</ul>			
+	</li>
+	<li id="menuShoppingcard">|<a class="menu" href="#" id="shoppingcard"><!--#4DSCRIPT/WEB_LANGUAGE/Winkelwagen--></a></li>
+</ul>

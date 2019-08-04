@@ -1,0 +1,616 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>
+		var preferences = {};
+		var layouts = {};
+
+		var bufferlines = {};
+		
+		var tableSetup = {
+			"table": 0,
+			"doubleClickHandler": selectLine,
+			"height": 220,
+			"header": true,
+			"footer": true,
+			"sorting": [{"field": "id", "direction": "asc"}],
+			"fields": [
+				{
+					"label": formatSelectHeader,
+					"alignment": "center",
+					"format": formatSelect,
+					"width": "65px",
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Oplage-->",
+					"field": "run_01",
+					"alignment": "right",
+					"format": formatNumber,
+					"width": "65px",
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Omschrijving-->",
+					"field": "description",
+					"alignment": "left",
+					"width": "300px",
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Referentie-->",
+					"field": "reference",
+					"alignment": "left",
+					"width": "150px",
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/BTW-->",
+					"field": "vat",
+					"alignment": "right",
+					"width": "65px",
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Prijs-->",
+					"field": "price",
+					"alignment": "right",
+					"format": formatCurrency,
+					"width": "65px",
+					"visible": true
+				},
+				{
+					"label": "&nbsp;",
+					"alignment": "center",
+					"format": formatDelete,
+					"width": "45px",
+					"visible": true
+				}
+			]
+		};
+
+		function formatSelectHeader () {
+			return "<input type='checkbox' id='selectAll' checked onclick='selectLines();'></input>";
+		}
+		
+		function formatSelect(record) {
+			return "<input class='choice' type='checkbox' id='" + record.id + "' name='submitLine' value='" + record.id + "' checked></input>";
+		}
+
+		function formatDelete(record) {
+			return "<a class='choice' href='#' onclick='javascript:deleteLine(" + record.id + ");'><!--#4DSCRIPT/WEB_LANGUAGE/Wis--></a>";
+		}
+
+		function selectLines() {
+			$("[name=submitLine]").prop('checked', $("#selectAll").prop('checked'));
+		}
+
+		function selectLine(record) {
+			var temp = record.split("\t");
+			switch (temp[1]) {
+				case 'quotationmanual':
+					window.location.replace('/module/pages/quotationmanual.shtm?id=' + temp[0]);
+					break;
+				case 'quotationpdf':
+					window.location.replace('/module/pages/quotationpdf.shtm?id=' + temp[0]);
+					break;
+				case 'jobmanual':
+					window.location.replace('/module/pages/jobmanual.shtm?id=' + temp[0]);
+					break;
+				case 'jobpdf':
+					window.location.replace('/module/pages/jobpdf.shtm?id=' + temp[0]);
+					break;
+				case 'arrangement':
+					window.location.replace('/module/pages/arrangement.shtm?id=' + temp[0]);
+					break;
+				case 'calculator':
+					window.location.replace('/module/pages/calculator.shtm?id=' + temp[0]);
+					break;
+				case 'web2print':
+					window.location.replace('/module/pages/web2printedit.shtm?id=' + temp[0]);
+					break;
+				case 'webdesign':
+					switch ( preferences.settings.webdesign ) {
+						case 1:
+							window.location.replace('/module/pages/webdesignnxp.shtm?id=' + temp[0]);
+							break;
+						default:
+							break;
+					}	
+					break;
+				case 'imagestore':
+					window.location.replace('/module/pages/imagestoreorder.shtm?id=' + temp[0]);
+					break;
+				case 'product':
+					window.location.replace('/module/pages/product.shtm?id=' + temp[0]);
+					break;
+				case 'article':
+					window.location.replace('/module/pages/article.shtm?id=' + temp[0]);
+					break;
+			}
+		}
+
+		function deleteLine(id) {
+			openRequest("<!--#4DSCRIPT/WEB_LANGUAGE/Zeker weten?-->", function () {
+				$.ajax({
+					type: 'DELETE',
+					url: '/connector/html/handleBufferLine?session=' + sessionStorage.getItem("session") + '&id=' + id,
+					data: "{}",	//if this is not supplied this is not working on chrome and firefox
+					success: function (files) {
+						if (files.errornumber) {
+							openAlert(files.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else {
+							window.location.replace('/module/pages/shoppingcard.shtm');
+						}
+					}
+				});
+			});
+		}
+
+		function filterDeliveryAddress(field) {
+			$("#delivery_method").val("");
+			removeFalseCharacters(field);
+		}
+		
+		function selectDeliveryAddress() {
+			if (preferences.delivery_address.length > 0) {
+				var delivery_address = [];
+				preferences.delivery_address.forEach( function(element) {
+					var temp = "";
+					temp += (element.sequence + ". " + element.company);
+					if (element.branch != "") {
+						if (temp != "") {
+							temp +=  " / ";
+						}
+						temp += element.branch;
+					}
+					if (element.city != "") {
+						if (temp != "") {
+							temp +=  " / ";
+						}
+						temp += element.city;
+					}
+					delivery_address.push(temp);
+				});
+				openSelect("<!--#4DSCRIPT/WEB_LANGUAGE/Selecteer--> \"<!--#4DSCRIPT/WEB_LANGUAGE/Afleveradres-->\"", delivery_address, function (selected) {
+					$("#company").val(			preferences.delivery_address[selected].company);
+					$("#branch").val(			preferences.delivery_address[selected].branch);
+					$("#address").val(			preferences.delivery_address[selected].address);
+					$("#address_number").val(	preferences.delivery_address[selected].address_number);
+					$("#extra_address_1").val(	preferences.delivery_address[selected].extra_address_1);
+					$("#extra_address_2").val(	preferences.delivery_address[selected].extra_address_2);
+					$("#extra_address_3").val(	preferences.delivery_address[selected].extra_address_3);
+					$("#extra_address_4").val(	preferences.delivery_address[selected].extra_address_4);
+					$("#extra_address_5").val(	preferences.delivery_address[selected].extra_address_5);
+					$("#zipcode").val(			preferences.delivery_address[selected].zipcode);
+					$("#city").val(				preferences.delivery_address[selected].city);
+					$("#country").val(			preferences.delivery_address[selected].country);
+					$("#country_code").val(		preferences.delivery_address[selected].country_code);
+					$("#contact_name").val(		preferences.delivery_address[selected].contact_name);
+					$("#phone").val(			preferences.delivery_address[selected].phone);
+					$("#fax").val(				preferences.delivery_address[selected].fax);
+					$("#email").val(			preferences.delivery_address[selected].email);
+					$("#remark").val(			preferences.delivery_address[selected].remark);
+					$("#delivery_method").val(	preferences.delivery_address[selected].delivery_method);
+					
+					fillCountry( 0 );
+				});
+			}
+		}
+
+		function selectInvoiceAddress() {
+			var invoice_address = [];
+			preferences.invoice_address.forEach( function(element) {
+				var temp = element.partner_relation;
+// 				if ( element.partner_contact != "" ) {
+// 					temp += (" / " + element.partner_contact);
+// 				}
+				if ( element.partner_city != "" ) {
+					temp += (" / " + element.partner_city);
+				}
+				invoice_address.push( temp );
+			});
+			openSelect("<!--#4DSCRIPT/WEB_LANGUAGE/Selecteer--> \"<!--#4DSCRIPT/WEB_LANGUAGE/Factuuradres-->\"", invoice_address, function (selected) {
+				$("#invoice_company").val(preferences.invoice_address[selected].partner_relation);
+				$("#invoice_number").val(preferences.invoice_address[selected].partner_relation_number);
+			});
+		}
+
+		function changeInvoiceAddress() {
+			var selected = -1;
+			var temp = $("#invoice_company").val().toLowerCase();
+			if (temp != "") {
+				$.each(preferences.invoice_address, function(index, element) {
+					if (element.partner_relation.toLowerCase().indexOf(temp) != -1) {
+						selected = index;
+					}
+				});
+			}
+			if (selected == -1) {
+				selected = 0;
+			}
+			$("#invoice_company").val(preferences.invoice_address[selected].partner_relation);
+			$("#invoice_number").val(preferences.invoice_address[selected].partner_relation_number);
+		}
+
+		function fillCountry( action ) {
+			var search = "code=" + $("#country_code").val(); 
+			if (action == 2) {
+				search = "description=" + $("#country").val();
+			}
+			$.getJSON( "/connector/html/getCountryInfo?" + search, function( result ) {
+				if (action > 0) {
+					$("#country").val( result.description );
+					$("#country_code").val( result.code );
+				}
+				if (result.extra_address_1 == "") {
+					$(".extra_address_1").hide();
+				} else {
+					$(".extra_address_1").show();
+					$(".extra_address_1 td:first").text( result.extra_address_1 );
+				}
+				if (result.extra_address_2 == "") {
+					$(".extra_address_2").hide();
+				} else {
+					$(".extra_address_2").show();
+					$(".extra_address_2 td:first").text( result.extra_address_2 );
+				}
+				if (result.extra_address_3 == "") {
+					$(".extra_address_3").hide();
+				} else {
+					$(".extra_address_3").show();
+					$(".extra_address_3 td:first").text( result.extra_address_3 );
+				}
+				if (result.extra_address_4 == "") {
+					$(".extra_address_4").hide();
+				} else {
+					$(".extra_address_4").show();
+					$(".extra_address_4 td:first").text( result.extra_address_4 );
+				}
+				if (result.extra_address_5 == "") {
+					$(".extra_address_5").hide();
+				} else {
+					$(".extra_address_5").show();
+					$(".extra_address_5 td:first").text( result.extra_address_5 );
+				}
+			});
+		}
+				
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(5);
+			
+				$("#submitButton").hide();
+				$("#formDeliveryDate").hide();
+				$("#formDeliveryAddress").hide();
+				$("#formInvoice").hide();
+				$("#formPayment").hide();
+
+				$.getJSON( "/connector/html/calculateBufferLines?session=" + sessionStorage.getItem("session"), function( result ) {
+					bufferlines = result;
+					removePriceColumn ( [ "vat", "price" ] );					
+					fillTable({"action": "init"}, function (result) {
+						if (result.filterrecords > 0) {
+							$("#formDeliveryDate").show();
+							$("#formDeliveryAddress").show();
+							if ((preferences.access.invoiceAddress) & (preferences.invoice_address.length != 0)) {
+								$("#invoice_company").val("");
+								$("#invoice_number").val(0);
+								$("#specialInvoiceAddressSelect").prop( "checked", false );
+								$("#specialInvoiceAddressInput").hide();
+								for (var i = 0; i < preferences.invoice_address.length; i++) {
+									if ( preferences.invoice_address[i].default_invoiceaddress ) {
+										$("#invoice_company").val( preferences.invoice_address[i].partner_relation );
+										$("#invoice_number").val( preferences.invoice_address[i].partner_relation_number );
+										$("#specialInvoiceAddressSelect").prop( "checked", true );
+										$("#specialInvoiceAddressInput").show();
+										break;
+									}
+								}
+								$("#formInvoice").show();
+							}
+							if (preferences.access.paymentMethod) {
+								$("#formPayment").show();
+							}
+						}
+					});
+				});
+
+				$("#specialInvoiceAddressSelect").on("click", function () {
+					$("#invoice_company").val("");
+					$("#invoice_number").val(0);
+					if ( $(this).prop( "checked" ) ) {
+						$("#invoice_company").val( preferences.invoice_address[0].partner_relation );
+						$("#invoice_number").val( preferences.invoice_address[0].partner_relation_number );
+						for (var i = 0; i < preferences.invoice_address.length; i++) {
+							if ( preferences.invoice_address[i].default_invoiceaddress ) {
+								$("#invoice_company").val( preferences.invoice_address[i].partner_relation );
+								$("#invoice_number").val( preferences.invoice_address[i].partner_relation_number );
+								break;
+							}
+						}
+						$("#specialInvoiceAddressInput").show();
+					} else {
+						$("#specialInvoiceAddressInput").hide();
+					}
+				});
+				
+				if (preferences.delivery_address.length > 0) {
+					var selected = 0;
+					preferences.delivery_address.forEach( function( element, index ) {
+						if (element.contact_name === preferences.user.contact_name) {
+							if (selected === 0) {
+								selected = index;
+							}
+						}
+					});					
+					$("#company").val(			preferences.delivery_address[selected].company);
+					$("#branch").val(			preferences.delivery_address[selected].branch);
+					$("#address").val(			preferences.delivery_address[selected].address);
+					$("#address_number").val(	preferences.delivery_address[selected].address_number);
+					$("#extra_address_1").val(	preferences.delivery_address[selected].extra_address_1);
+					$("#extra_address_2").val(	preferences.delivery_address[selected].extra_address_2);
+					$("#extra_address_3").val(	preferences.delivery_address[selected].extra_address_3);
+					$("#extra_address_4").val(	preferences.delivery_address[selected].extra_address_4);
+					$("#extra_address_5").val(	preferences.delivery_address[selected].extra_address_5);
+					$("#zipcode").val(			preferences.delivery_address[selected].zipcode);
+					$("#city").val(				preferences.delivery_address[selected].city);
+					$("#country").val(			preferences.delivery_address[selected].country);
+					$("#country_code").val(		preferences.delivery_address[selected].country_code);
+					$("#contact_name").val(		preferences.delivery_address[selected].contact_name);
+					$("#phone").val(			preferences.delivery_address[selected].phone);
+					$("#fax").val(				preferences.delivery_address[selected].fax);
+					$("#email").val(			preferences.delivery_address[selected].email);
+					$("#remark").val(			preferences.delivery_address[selected].remark);
+					$("#delivery_method").val(	preferences.delivery_address[selected].delivery_method);
+				} else {
+					$("#company").val(			preferences.user.company);
+					$("#branch").val(			"");
+					$("#address").val(			preferences.user.address);
+					$("#address_number").val(	preferences.user.address_number);
+					$("#extra_address_1").val(	preferences.user.extra_address_1);
+					$("#extra_address_2").val(	preferences.user.extra_address_2);
+					$("#extra_address_3").val(	preferences.user.extra_address_3);
+					$("#extra_address_4").val(	preferences.user.extra_address_4);
+					$("#extra_address_5").val(	preferences.user.extra_address_5);
+					$("#zipcode").val(			preferences.user.zipcode);
+					$("#city").val(				preferences.user.city);
+					$("#country").val(			preferences.user.country);
+					$("#country_code").val(		preferences.user.country_code);
+					$("#contact_name").val(		preferences.user.contact_name);
+					$("#phone").val(			preferences.user.phone);
+					$("#fax").val(				preferences.user.fax);
+					$("#email").val(			preferences.user.email);
+					$("#remark").val(			"");
+					$("#delivery_method").val(	"");
+				}
+
+				fillCountry( 0 );
+			
+				$("#zipcode").on( "change", function () {
+					$.getJSON( "/connector/html/getCity?country_code=" + $("#country_code").val() + "&zipcode=" + $(this).val(), function( result ) {
+						if ( result.city != "" ) {
+							$("#city").val( result.city );
+						}
+					});
+				});	
+
+				$("#delivery_date").datetimepicker(datetimeformat);			
+				$.getJSON( "/connector/html/calculateDeliveryDate?session=" + sessionStorage.getItem("session"), function( result ) {
+					var temp = formatDate(result.delivery_date);
+					$("#delivery_date").val(temp);
+				});
+			
+				if (preferences.submit.shoppingcard) {
+					$("#submitShoppingCard").click(function(){
+						var array = $("#grid tbody td [name='submitLine']:checked");
+						if (array.length == 0) {
+							openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/Er zijn geen regels geselecteerd!-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else {
+							preventClickTwice(this);
+	// add session to parameters
+							var parameters = [];
+							parameters.push({name: 'session', value: sessionStorage.getItem("session")});
+	// add shoppingcard lines
+							var lines = [];
+							for(var i=0; i < array.length; i++) {
+								lines.push(parseInt(array[i].value));
+							}
+							parameters.push({name: 'lines', value: JSON.stringify(lines)});
+	// add delivery date
+							var temp = $("#formDeliveryDate").serializeArray();
+							$.each(temp, function(index, element) {
+								parameters.push({name: element.name, value: element.value});
+							});
+	// add delivery address
+							delivery = {};
+							var temp = $("#formDeliveryAddress").serializeArray();
+							$.each(temp, function(index, element) {
+								delivery[element.name] = element.value;
+							});
+							parameters.push({name: "delivery", value: JSON.stringify(delivery)});
+	// add invoice address
+							if (preferences.access.invoiceAddress) {
+								var temp = $("#formInvoice").serializeArray();
+								$.each(temp, function(index, element) {
+									parameters.push({name: element.name, value: element.value});
+								});
+							}
+	// add payment details
+							if (preferences.access.paymentMethod) {
+								var temp = $("#formPayment").serializeArray();
+								$.each(temp, function(index, element) {
+									parameters.push({name: element.name, value: element.value});
+								});
+							}
+							$.ajax({
+								dataType: 'json',
+								data: parameters,
+								url: '/connector/html/submitBufferLines',
+								type: "POST",
+								success: function (result) {
+									if (result.errornumber) {
+										openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->", function() { window.location.replace('/module/pages/shoppingcard.shtm'); });
+									} else {
+										window.location.replace('/module/pages/main.shtm?message=succesShoppingCard');
+									}
+								}
+							});
+						}
+					});
+					$("#submitButton").show();
+				}
+			});
+		});
+
+		$( window ).resize(function() {
+			tableScrollHeight(tableSetup.height);
+		});
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Winkelwagen--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content">
+			<div id="content" class="content_child">
+				<div class="content_child" id="gridPlaceHolder"></div>			
+				<form id="formDeliveryDate">
+					<table class="content_table">
+						<tr>
+							<td class="chapter" colspan="3"><!--#4DSCRIPT/WEB_LANGUAGE/Afleveradres--></td>
+						</tr>
+						<tr>
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Leverdatum:--></td>
+							<td class="data"><input type="text" id="delivery_date" name="delivery_date" size="10" maxlength="10" value=""></input></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+					</table>
+				</form>
+				<form id="formDeliveryAddress">
+					<input id="delivery_method" type="hidden" name="delivery_method" value=""></input>
+					<table class="content_table">
+						<tr> 
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Firma:--></td>
+							<td class="data"><input type="text" id="company" name="company" style="width:400px;" onchange="javascript:filterDeliveryAddress(this)"></input></td>
+							<td class="trailing"><a href="#" onclick="javascript:selectDeliveryAddress();" class="choice"><!--#4DSCRIPT/WEB_LANGUAGE/Keuze--></a></td>
+						</tr>
+						<tr> 
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Filiaal:--></td>
+							<td class="data"><input type="text" id="branch" name="branch" style="width:400px;" onchange="javascript:filterDeliveryAddress(this)"></input></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr> 
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Contactpersoon:--></td>
+							<td class="data"><input type="text" id="contact_name" name="contact_name" style="width:400px;" onchange="javascript:filterDeliveryAddress(this)"></input></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr> 
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Adres:--></td>
+							<td class="data"><input type="text" id="address" name="address" style="width:300px;" onchange="javascript:filterDeliveryAddress(this)"></input><input type="text" id="address_number" name="address_number" style="width:90px;" onchange="javascript:filterDeliveryAddress(this)"></input></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr class="extra_address_1"> 
+							<td class="leading">&nbsp;</td>
+							<td class="data"><input type="text" id="extra_address_1" name="extra_address_1" style="width:400px;" onchange="javascript:filterDeliveryAddress(this)"></input></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr class="extra_address_2"> 
+							<td class="leading">&nbsp;</td>
+							<td class="data"><input type="text" id="extra_address_2" name="extra_address_2" style="width:400px;" onchange="javascript:filterDeliveryAddress(this)"></input></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr class="extra_address_3"> 
+							<td class="leading">&nbsp;</td>
+							<td class="data"><input type="text" id="extra_address_3" name="extra_address_3" style="width:400px;" onchange="javascript:filterDeliveryAddress(this)"></input></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr class="extra_address_4"> 
+							<td class="leading">&nbsp;</td>
+							<td class="data"><input type="text" id="extra_address_4" name="extra_address_4" style="width:400px;" onchange="javascript:filterDeliveryAddress(this)"></input></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr class="extra_address_5"> 
+							<td class="leading">&nbsp;</td>
+							<td class="data"><input type="text" id="extra_address_5" name="extra_address_5" style="width:400px;" onchange="javascript:filterDeliveryAddress(this)"></input></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr> 
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Postcode en Plaats:--></td>
+							<td class="data"><input type="text" id="zipcode" name="zipcode" style="width:90px;" onchange="javascript:filterDeliveryAddress(this)"></input><input type="text" id="city" name="city" style="width:300px;" onchange="javascript:filterDeliveryAddress(this)"></input></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr> 
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Land:--></td>
+							<td class="data"><input type="text" id="country_code" name="country_code" style="width:30px;" onchange="javascript:filterDeliveryAddress(this); fillCountry( 1 );"></input><input type="text" id="country" name="country" style="width:360px;" onchange="javascript:filterDeliveryAddress(this); fillCountry( 2 );"></input></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr> 
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Telefoon:--></td>
+							<td class="data"><input type="text" id="phone" name="phone" style="width:400px;" onchange="javascript:filterDeliveryAddress(this)"></input></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr> 
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Fax:--></td>
+							<td class="data"><input type="text" id="fax" name="fax" style="width:400px;" onchange="javascript:filterDeliveryAddress(this)"></input></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr> 
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Email:--></td>
+							<td class="data"><input type="text" id="email" name="email" style="width:400px;" onchange="javascript:filterDeliveryAddress(this)"></input></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr> 
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Notities:--></td>
+							<td class="data"><textarea style="width:402px;" rows="2" id="remark" name="remark" onchange="javascript:removeFalseCharacters(this)"></textarea></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+					</table>
+				</form>
+				<form id="formInvoice">
+					<table class="content_table">
+						<tr>
+							<td class="nocolumn" colspan="3">&nbsp;</td>
+						</tr>
+						<tr>
+							<td class="chapter" colspan="3"><!--#4DSCRIPT/WEB_LANGUAGE/Factuuradres--></td>
+						</tr>
+						<tr> 
+							<td class="leading">&nbsp;</td>
+							<td class="data"><input type="checkbox" id="specialInvoiceAddressSelect"></input><!--#4DSCRIPT/WEB_LANGUAGE/Afwijkend factuuradres--></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr id="specialInvoiceAddressInput"> 
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Factuuradres:--></td>
+							<td class="data"><input type="text" id="invoice_company" name="invoice_company" style="width:400px;" onchange="javascript:changeInvoiceAddress();"><input type="hidden" id="invoice_number" name="invoice_number" value="0"><input type="hidden" id="invoice_address" name="invoice_address" value=""></td>
+							<td class="trailing"><a href="#" onclick="javascript:selectInvoiceAddress();" class="choice"><!--#4DSCRIPT/WEB_LANGUAGE/Keuze--></a></td>
+						</tr>
+					</table>
+				</form>
+				<form id="formPayment">
+					<table class="content_table">
+						<tr>
+							<td class="nocolumn" colspan="3">&nbsp;</td>
+						</tr>
+						<tr>
+							<td class="chapter" colspan="3"><!--#4DSCRIPT/WEB_LANGUAGE/Betaalwijze--></td>
+						</tr>
+						<tr> 
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Maak uw keuze:--></td>
+							<td class="data"><input type="radio" name="payment_type" checked value="<!--#4DSCRIPT/WEB_LANGUAGE/Rekening-->"><!--#4DSCRIPT/WEB_LANGUAGE/Rekening--><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><input type="radio" name="payment_type" value="<!--#4DSCRIPT/WEB_LANGUAGE/Machtiging-->"><!--#4DSCRIPT/WEB_LANGUAGE/Machtiging--><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><input type="radio" name="payment_type" value="<!--#4DSCRIPT/WEB_LANGUAGE/Online-->,sisow"><!--#4DSCRIPT/WEB_LANGUAGE/Online--><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><input type="radio" name="payment_type" value="<!--#4DSCRIPT/WEB_LANGUAGE/Rembours-->"><!--#4DSCRIPT/WEB_LANGUAGE/Rembours--></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+		<div class="footer"><div class="margins right"><span id="submitButton"><a id="submitShoppingCard" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Verstuur--></a> | </span><a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

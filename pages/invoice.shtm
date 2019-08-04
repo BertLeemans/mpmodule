@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>
+		var preferences = {};
+		var layouts = {};
+
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(4);
+				styleLinks(5);
+
+				if ( preferences.access.noPricesVisible ) {
+					$("#sub-table thead tr td:nth-child(6)").hide();
+					$("#sub-table thead tr td:nth-child(5)").hide();
+					$("#sub-table tfoot").hide();
+				}
+				
+				var id = parseInt(getParameterFromURL('key')) || 0;		//haal het product op
+				$('#id').val(id);
+				$.ajax({
+					url: "/connector/html/detailTables",
+					type: "GET",
+					data: { session : sessionStorage.getItem("session"), table: 7, id: id },
+					success: function(result) {
+						if (result.errornumber) {
+							openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else {
+							if (result.invoice_number) {		$("#invoiceNumber").children(".data").html(result.invoice_number);						} else {	$("#invoiceNumber").hide();				}
+							if (result.invoice_date) {			$("#invoiceDate").children(".data").html(formatDate(result.invoice_date));				} else {	$("#invoiceDate").hide();				}
+							if (result.expiration_date) {		$("#expirationDate").children(".data").html(formatDate(result.expiration_date));		} else {	$("#expirationDate").hide();			}
+							if (result.invoice_name) {			$("#company").children(".data").html(result.invoice_name);								} else {	$("#company").hide();					}
+							if (result.contact_name) {			$("#contact").children(".data").html(result.contact_name);								} else {	$("#contact").hide();					}
+							if (result.account_manager) {		$("#accountManager").children(".data").html(result.account_manager);					} else {	$("#accountManager").hide();			}
+
+							if (result.pdf) {
+								var url = "/connector/html/getCommunicationData/invoice" + result.invoice_number + ".pdf?session=" + sessionStorage.getItem("session") + "&location=invoice&id=" + result.invoice_number;
+								$("#invoiceNumber").children(".trailing").html("<a class='choice' href='#' onclick='javascript:openPDF(\"" + url + "\")'><!--#4DSCRIPT/WEB_LANGUAGE/PDF--></a>");
+								styleLinks(4);
+							}
+
+							$.each(result.invoices_detail, function (index, value ) {
+								var temp = "";
+								temp += "<tr>";
+								temp += "<td class=\"left\">" + formatCode( value.job_number ) + "</td>";
+								temp += "<td class=\"right\">" + formatNumber( value.quantity ) + "</td>";
+								temp += "<td class=\"left\">" + value.article_description + "</td>";
+								temp += "<td class=\"left\">" + value.reference + "</td>";
+								if ( !preferences.access.noPricesVisible ) {
+									temp += "<td class=\"right\">" + value.vat_percentage + "</td>";
+									temp += "<td class=\"right\">" + formatCurrency( value.exclusive_price ) + "</td>";
+								}
+								temp += "</tr>";
+								$("#sub-content").append(temp);
+							});
+						
+							if ( !preferences.access.noPricesVisible ) {
+								$("#exclusive").text(formatCurrency( result.exclusive_price ));
+								$("#vat").text(formatCurrency( result.vat_price ));
+								$("#inclusive").text(formatCurrency( result.inclusive_price ));
+							}
+						}
+
+						$(".main").css( "visibility","visible");
+					}
+				});
+						
+				$("#back").click(function(){
+					window.location.replace('/module/pages/invoices.shtm');
+				});
+			});
+		});
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Factuur--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content">
+			<div id="content" class="content_child">
+				<form id="form">
+					<input type="hidden" id="id" name="id" value="0"></input>
+					<table id="entry-table" class="content_table">
+						<tr>
+							<td class="nocolumn" colspan="3">&nbsp;</td>
+						</tr>
+						<tr id="invoiceNumber">
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Factuurnummer:--></td>
+							<td class="data">&nbsp;</td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr id="invoiceDate">
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Factuurdatum:--></td>
+							<td class="data">&nbsp;</td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr id="expirationDate">
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Vervaldatum:--></td>
+							<td class="data">&nbsp;</td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr id="company">
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Firma:--></td>
+							<td class="data">&nbsp;</td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr id="contact">
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Contactpersoon:--></td>
+							<td class="data">&nbsp;</td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr id="accountManager">
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Gemaakt door:--></td>
+							<td class="data">&nbsp;</td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr>
+							<td class="nocolumn" colspan="3">&nbsp;</td>
+						</tr>
+						<tr>
+							<td class="nocolumn" colspan="3">
+								<table id="sub-table" cellpadding="3">
+									<thead>
+										<tr>
+											<td width="80px;" class="left"><b><!--#4DSCRIPT/WEB_LANGUAGE/Ordernr.--></b></td>
+											<td width="80px;" class="right"><b><!--#4DSCRIPT/WEB_LANGUAGE/Oplage--></b></td>
+											<td class="left"><b><!--#4DSCRIPT/WEB_LANGUAGE/Omschrijving--></b></td>
+											<td class="left"><b><!--#4DSCRIPT/WEB_LANGUAGE/Referentie--></b></td>
+											<td width="80px;" class="right"><b><!--#4DSCRIPT/WEB_LANGUAGE/BTW--></b></td>
+											<td width="80px;" class="right"><b><!--#4DSCRIPT/WEB_LANGUAGE/Prijs--></b></td>
+										</tr>
+									</thead>
+									<tbody id="sub-content"></tbody>
+									<tfoot>
+										<tr>
+											<td colspan="5" class="right"><!--#4DSCRIPT/WEB_LANGUAGE/Exclusief:--></td>
+											<td class="right" id="exclusive">&nbsp;</td>
+										</tr>
+										<tr>
+											<td colspan="5" class="right"><!--#4DSCRIPT/WEB_LANGUAGE/BTW:--></td>
+											<td class="right" id="vat">&nbsp;</td>
+										</tr>
+										<tr>
+											<td colspan="5" class="right"><!--#4DSCRIPT/WEB_LANGUAGE/Inclusief:--></td>
+											<td class="right" id="inclusive">&nbsp;</td>
+										</tr>
+									</tfoot>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+		<div class="footer"><div class="margins right"><a id="back" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Terug--></a> | <a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<link rel="apple-touch-icon" href="/module/images/module.png"/>
+
+<title><!--#4DSCRIPT/WEB_LANGUAGE/MultiPress internet module--></title>
+
+<link 		href="/module/images/favicon.ico" 					type="image/x-icon"			rel="shortcut icon"/>
+<link 		href="/module/images/favicon.ico" 					type="image/x-icon"			rel="icon"/>
+<link 		href="/module/css/jqsimplemenu.css"					type="text/css"				rel="stylesheet"/>
+<link		href="/module/css/smoothness/jquery-ui.min.css"		type="text/css"				rel="stylesheet"/>
+<link		href="/module/css/jquery.fileupload-ui.css"			type="text/css"				rel="stylesheet"/>
+<link 		href="/module/css/jquery.datetimepicker.css"		type="text/css"				rel="stylesheet"/>
+<link 		href="/module/css/jquery.bxslider.css"				type="text/css"				rel="stylesheet"/>
+<link 		href="/module/css/jqtree.css"						type="text/css"				rel="stylesheet"/>
+<link 		href="/module/css/style.css"						type="text/css"				rel="stylesheet"/>
+<link 		href="/module/css/turn/basic.css"					type="text/css"				rel="stylesheet"/>
+<link		href="/module/css/clusterize.css"					type="text/css"				rel="stylesheet"/>
+
+<script		src="/module/js/jquery-1.11.1.min.js"				type="text/javascript"		charset="utf-8"></script>
+<script		src="/module/js/jquery.modalbox.js"					type="text/javascript"		charset="utf-8"></script>
+<script		src="/module/js/jqsimplemenu.js"					type="text/javascript"		charset="utf-8"></script>
+<script		src="/module/js/jquery-ui-1.10.4.min.js"			type="text/javascript"		charset="utf-8"></script>
+<script		src="/module/js/jquery.iframe-transport.js"			type="text/javascript"		charset="utf-8"></script>
+<script 	src="/module/js/jquery.fileupload.js"				type="text/javascript"		charset="utf-8"></script>
+<script		src="/module/js/jquery.datetimepicker.js"			type="text/javascript"		charset="utf-8"></script>
+<script		src="/module/js/jquery.bxslider.min.js"				type="text/javascript"		charset="utf-8"></script>
+<script		src="/module/js/tree.jquery.js"						type="text/javascript"		charset="utf-8"></script>
+<script		src="/module/js/accounting.min.js"					type="text/javascript"		charset="utf-8"></script>
+<script		src="/module/js/turn/turn.min.js"					type="text/javascript"		charset="utf-8"></script>
+<script		src="/module/js/zoom/jquery.zoom.min.js"			type="text/javascript"		charset="utf-8"></script>
+<script		src="/module/js/clusterize.js"						type="text/javascript"		charset="utf-8"></script>
+
+<script>
+	<!--#4DINCLUDE ../js/module.js-->
+</script>

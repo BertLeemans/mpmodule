@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>				
+		var preferences = {};
+		var layouts = {};
+
+		var tableSetup = {
+			"table": 9,
+			"doubleClickHandler": selectLine,
+			"search": true,
+			"header": true,
+			"footer": true,
+			"distinct": ["product_type"],
+			"sorting": [{"field": "jobs.quotation_number", "direction": "desc"}],
+			"fields": [
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Offertenr.-->",
+					"field": "jobs.quotation_number",
+					"alignment": "left",
+					"width": "65px",
+					"sortable": true,
+					"searchable": true,
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Oplage-->",
+					"field": "run_01",
+					"alignment": "right",
+					"format": formatNumber,
+					"width": "65px",
+					"sortable": true,
+					"searchable": false,
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Omschrijving-->",
+					"field": "description",
+					"alignment": "left",
+					"width": "280px",
+					"sortable": true,
+					"searchable": true,
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Referentie-->",
+					"field": "jobs.reference",
+					"alignment": "left",
+					"width": "120px",
+					"sortable": true,
+					"searchable": true,
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Prijs-->",
+					"field": "price_1",
+					"alignment": "right",
+					"format": formatCurrency,
+					"width": "65px",
+					"visible": true
+				}
+			]
+		};
+
+		function selectLine(id) {
+			window.location.replace('/module/pages/jobmanual.shtm?table=9&standard=' + id);
+		}
+
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(5);
+			
+				removePriceColumn ( ["price_1"] );					
+				fillTable({"action": "init"});
+
+				$("#group0").bind("change", function() {
+					fillTable({"action": "search"});
+				});
+				$("#searchSelect").bind("change", function() {
+					$("#searchValue").val("");
+					fillTable({"action": "search"});
+				});
+				$("#searchValue").bind("change", function() {
+					fillTable({"action": "search"});
+				});
+			});
+		});
+		
+		$( window ).resize(function() {
+			tableScrollHeight();
+		});
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Zoekvenster offertes--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content">
+			<div class="content_child" style="height: 15px;"><!--#4DSCRIPT/WEB_LANGUAGE/Productsoort--> <select id="group0"></select> <!--#4DSCRIPT/WEB_LANGUAGE/Zoek--> <select id="searchSelect"></select><input id="searchValue"></input></div>
+			<div class="content_child" id="gridPlaceHolder"></div>			
+		</div>
+		<div class="footer"><div class="margins right"><a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

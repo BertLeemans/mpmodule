@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>
+		var preferences = {};
+		var layouts = {};
+
+		var checklist = {};
+		
+		function calculatedPrice(field) {
+			var run = unformatNumber($(field).val());
+			if (run > 0) {
+				$(field).val(formatNumber(run));
+			} else {
+				$(field).val("0");
+			}
+		}
+						
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(4);
+				styleLinks(5);
+			
+				$.getJSON('/connector/html/getChecklists?session=' + sessionStorage.getItem("session"), function (data) {
+					if (data.errornumber) {
+						openAlert(data.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						checklist = data; 
+
+						var options = $("#checklist");
+						options.empty();
+						$.each(checklist, function(item) {
+							if ((checklist[item].language == "") | (checklist[item].language == preferences.user.language)) {
+								options.append($("<option />").val(checklist[item].id).text(checklist[item].description));
+							}
+						});					
+
+						if ($("#checklist option").length > 1) {
+							$("#checklistChoice").show();
+						} else {
+							$("#checklistChoice").hide();
+						}
+
+						var standardQuotation = parseInt(getParameterFromURL('standard')) || 0;		//kijk of dit een bestaande regel is
+						if (standardQuotation > 0 ) {
+								$('#id').val(0);
+								$('#standardQuotation').val(standardQuotation);
+								$('#locationFiles').val("temp");
+							
+								$.getJSON('/connector/html/detailTables?session=' + sessionStorage.getItem("session") +  '&id=' + standardQuotation + '&table=' + parseInt(getParameterFromURL('table')), function (data) {
+									$("#text_01").val(data.text_01);
+									$("#text_02").val(data.text_02).attr('readonly', true);
+									$("#text_03").val(data.text_03).attr('readonly', true);
+									$("#text_04").val(data.text_04).attr('readonly', true);
+									$("#text_05").val(data.text_05).attr('readonly', true);
+									$("#text_06").val(data.text_06).attr('readonly', true);
+									$("#text_07").val(data.text_07).attr('readonly', true);
+									$("#text_08").val(data.text_08).attr('readonly', true);
+									$("#text_09").val(data.text_09).attr('readonly', true);
+									$("#text_10").val(data.text_12).attr('readonly', true);
+									$("#text_11").val(data.text_10).attr('readonly', true);
+									$("#text_12").val(data.text_11).attr('readonly', true);
+									disableChecklist();							
+
+									$("#checklist").val(data.checklist);
+									updateChecklist();
+
+									getCurrentFiles(function () {
+										$(".main").css( "visibility","visible");
+										$("#run_01").focus();
+									});
+								});
+						} else {
+							var id = parseInt(getParameterFromURL('id')) || 0;		//kijk of dit een bestaande regel is
+							$('#id').val(id);
+							if (id > 0 ) {
+								$('#locationFiles').val("internet");
+												
+								$.getJSON('/connector/html/detailTables?session=' + sessionStorage.getItem("session") +  '&id=' + id +  '&table=0', function (data) {
+									$("#run_01").val(formatNumber(data.run_01));
+									$("#text_01").val(data.text_01);
+									$("#text_02").val(data.text_02);
+									$("#text_03").val(data.text_03);
+									$("#text_04").val(data.text_04);
+									$("#text_05").val(data.text_05);
+									$("#text_06").val(data.text_06);
+									$("#text_07").val(data.text_07);
+									$("#text_08").val(data.text_08);
+									$("#text_09").val(data.text_09);
+									$("#text_10").val(data.text_10);
+									$("#text_11").val(data.text_11);							
+									$("#text_12").val(data.text_12);							
+									$("#reference").val(data.reference);
+									$("#remark").val(data.remark);
+									$("#artwork_date").val(formatDate(data.artwork_date));
+									$("#standardQuotation").val(data.standard_quotation);
+									if (data.standard_quotation != 0) {
+										disableChecklist();
+									}
+
+									$("#checklist").val(data.checklist);
+									updateChecklist();
+
+									getCurrentFiles(function () {
+										$(".main").css( "visibility","visible");
+										$("#run_01").focus();
+									});
+								});
+							} else {
+								$('#standardQuotation').val(0);
+								$('#locationFiles').val("temp");
+
+								updateChecklist();
+
+								getCurrentFiles(function () {
+									$(".main").css( "visibility","visible");
+									$("#run_01").focus();
+								});
+							}
+						}
+					}
+				});
+
+				initFileUpload();
+			
+				$("#artwork_date").datetimepicker(datetimeformat);
+			
+				if (preferences.submit.quotations) {
+					$("#sendQuotation").click(function(){
+						var data = unformatNumberSerializeArray( $("#form").serializeArray(), ["run_01", "run_02", "run_03"]);
+						if ( testValueFound(data, "run_01", 0) ) {
+							openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U dient een oplage in te geven-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->", function () { $("#run_01").focus(); });
+						} else if ( testValueFound(data, "text_01", "") & testValueFound(data, "text_10", "")) {
+							openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U dient een omschrijving in te geven-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->", function () { $("#text_01").focus(); });
+						} else {
+							if ( testValueFound(data, "id", 0) ) {
+								var method = "PUT";
+							} else {
+								var method = "POST";
+							}
+							preventClickTwice(this);
+							data.push({name: 'session', value: sessionStorage.getItem("session")});
+							$.ajax({
+								dataType: 'json',
+								data: data,
+								url: '/connector/html/handleBufferLine',
+								type: method,
+								success: function (files) {
+									if (files.errornumber) {
+										openAlert(files.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+									} else {
+										window.location.replace('/module/pages/main.shtm?message=succesQuotation');
+									}
+								}
+							});    
+						}
+					});
+				} else {
+					$("#submitButton").hide();
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Nieuwe offerte--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content"><div id="content" class="content_child">
+		<form id="form">
+			<input type="hidden" id="id" 				name="id"					value="0"></input>
+			<input type="hidden" id="locationFiles"		name="locationFiles"		value="temp"></input>
+			<input type="hidden" id="bufferType" 		name="bufferType"			value="quotationManual"></input>
+			<input type="hidden" id="standardQuotation"	name="standard_quotation"	value="0"></input>
+			<table id="entry-table" class="content_table">
+				<tr>
+					<td class="nocolumn" colspan="3">&nbsp;</td>
+				</tr>
+				<tr id="checklistChoice"> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Checklist:--></td>
+					<td class="data"><select id="checklist" name="checklist" class="smallselect" onchange="javascript:updateChecklist();"></select></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Oplagen:--></td>
+					<td class="data"><input type="text" id="run_01" name="run_01" size="10" maxlength="10" value="0" onchange="javascript:calculatedPrice(this)">&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="run_02" name="run_02" size="10" maxlength="10" value="0" onchange="javascript:calculatedPrice(this)">&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="run_03" name="run_03" size="10" maxlength="10" value="0" onchange="javascript:calculatedPrice(this)"></input></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<!--#4DINCLUDE checklist.shtm-->
+				<tr> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Referentie:--></td>
+					<td class="data"><input type="text" id="reference" name="reference" size="30" maxlength="30" onchange="javascript:removeFalseCharacters(this)"></input></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Notities:--></td>
+					<td class="data"><textarea class="longtext" rows="2" id="remark" name="remark" onchange="javascript:removeFalseCharacters(this)"></textarea></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Aanleverdatum:--></td>
+					<td class="data"><input type="text" id="artwork_date" name="artwork_date" size="10" maxlength="10" value=""></input></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+			</table>
+			<table id="upload-table" class="content_table">
+				<tr> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Bestanden:--></td>
+					<td class="data"><input id="fileupload-button" type="file" name="vx_Data"></input><div style="float:left; width:95%;" id="fileupload-progressbar"><div class="progress-label"></div></div></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+			</table>
+		</form>
+		</div></div>
+		<div class="footer"><div class="margins right"><span id="submitButton"><a id="sendQuotation" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Verstuur--></a> | </span><a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

@@ -1,0 +1,111 @@
+/* max-height - the only parameter in this file that needs to be edited.
+ * Change it to suit your needs. The rest is recommended to leave as is.
+ */
+.clusterize-scroll{
+  max-height: 450px;
+  overflow: auto;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-right: 1px solid;
+/*  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black; */
+}
+
+/* By default extra tag .clusterize-keep-parity added to keep parity of rows.
+ * Useful when used :nth-child(even/odd)
+ */
+.clusterize-extra-row.clusterize-keep-parity{
+  display: none;
+}
+
+/* During initialization clusterize adds tabindex to force the browser to keep focus
+ * on the scrolling list, see issue #11
+ * Outline removes default browser's borders for focused elements.
+ */
+.clusterize-content{
+    outline: 0;
+}
+
+/* centering message that appears when no data provided
+ */
+.clusterize-no-data td{
+  text-align: center;
+}
+
+/* Dataline */
+
+.clusterize td,
+.clusterize_wrapper,
+.clusterize_head,
+.clusterize_foot {
+	border:1px solid #ccc;
+}
+
+.clusterize table {
+	table-layout:fixed;
+	width: 100%;
+}
+.clusterize {
+    border-spacing: 0px;
+    border-collapse: separate;
+}
+
+.clusterize td {
+	padding:3px 5px;
+}
+
+.clusterize_wrapper {
+	border-left:0;
+}
+
+.clusterize_head {
+	font-weight:bold;
+	margin-bottom:3px;
+}
+
+.clusterize thead td {
+	border-top:0;	
+	border-right:0;
+	border-bottom:0;
+}
+
+.clusterize thead td:first-child {	
+	border-left:0;		
+}
+
+.clusterize tbody td {
+	border-right:0;
+	border-bottom:0;
+
+	width: 5%;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+
+.clusterize tbody tr.first td {
+	border-top:0;
+}
+
+.clusterize_foot {
+	margin-top:3px;
+}
+
+.clusterize tfoot td {
+	border-top:0;	
+	border-right:0;
+	border-bottom:0;
+}
+
+.clusterize tfoot td:first-child {	
+	border-left:0;		
+}
+
+.clusterize_head .sort {
+	cursor:pointer;
+}
+
+#grid tr {
+	cursor:pointer;
+}

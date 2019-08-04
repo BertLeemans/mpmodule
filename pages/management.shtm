@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>
+		var preferences = {};
+		var layouts = {};
+
+		var tableSetup = {
+			"table": 10,
+			"search": true,
+			"header": true,
+			"footer": true,
+			"distinct": ["relation_stock.product_code", "partner_relation"],
+			"sorting": [{"field": "date", "direction": "desc"}],
+			"fields": [
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Datum-->",
+					"field": "date",
+					"alignment": "center",
+					"format": formatDate,
+					"width": "65px",
+					"sortable": true,
+					"searchable": false,
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Artikel-->",
+					"field": "relation_stock.product_code",
+					"alignment": "left",
+					"width": "65px",
+					"sortable": true,
+					"searchable": false,
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Omschrijving-->",
+					"field": "relation_stock.description",
+					"alignment": "left",
+					"width": "150px",
+					"sortable": true,
+					"searchable": false,
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Dochter-->",
+					"field": "partner_relation",
+					"alignment": "left",
+					"width": "150px",
+					"sortable": true,
+					"searchable": false,
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Informatie-->",
+					"field": "description",
+					"alignment": "left",
+					"width": "200px",
+					"sortable": true,
+					"searchable": false,
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Bij-->",
+					"field": "add",
+					"alignment": "right",
+					"format": formatNumber,
+					"width": "65px",
+					"sortable": false,
+					"searchable": false,
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Af-->",
+					"field": "subtract",
+					"alignment": "right",
+					"format": formatNumber,
+					"width": "65px",
+					"sortable": false,
+					"searchable": false,
+					"visible": true
+				}
+			]
+		};
+
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(5);
+
+				var tempdatetimeformat = datetimeformat;
+				tempdatetimeformat.minDate = false;
+				tempdatetimeformat.maxDate = '-1969/12/31';
+				
+				var currentDate = new Date();
+				var month = currentDate.getMonth() + 1;
+				var year = currentDate.getFullYear();
+				var separator = "-";
+				
+				$("#searchEndDate").datetimepicker(tempdatetimeformat);
+				$("#searchEndDate").val( '01' + separator + ("0" + month).slice(-2) + separator + year );
+				$("#searchEndDate").bind("change", function() {
+					fillTable({"action": "search"});
+				});
+
+				month -= 1;
+				if ( month == 0 ) {
+					month = 12;
+					year--;
+				}
+
+				$("#searchStartDate").datetimepicker(tempdatetimeformat);
+				$("#searchStartDate").val('01' + separator + ("0" + month).slice(-2) + separator + year );
+				$("#searchStartDate").bind("change", function() {
+					fillTable({"action": "search"});
+				});
+
+				$("#searchNoDate").bind("change", function() {
+					fillTable({"action": "search"});
+				});
+				
+				fillTable({"action": "init"});
+
+				$("#group0").bind("change", function() {
+					fillTable({"action": "search"});
+				});
+				$("#group1").bind("change", function() {
+					fillTable({"action": "search"});
+				});
+								
+				$("#download").bind("click", function() {
+					var link = '/connector/html/getStatistics/result.zip?session=' + sessionStorage.getItem("session");
+					link += ("&type=products");
+					if ( !$("#searchNoDate").is(':checked') ) {
+						if (($("#searchStartDate").val()) && ($("#searchStartDate").val() != "")) {
+							link += ("&startdate=" + $("#searchStartDate").val());
+						}
+						if (($("#searchEndDate").val()) && ($("#searchEndDate").val() != "")) {
+							link += ("&stopdate=" + $("#searchEndDate").val());
+						}
+					}
+					var temp = $("#group0").val();
+					if ( temp != "" ) {
+						link += ("&article=" + temp);
+					}
+					var temp = $("#group1").val();
+					if ( temp != "" ) {
+						link += ("&daughter=" + temp);
+					}
+					$("#download").attr ( "href", link);
+				});
+			});
+		});
+
+		$( window ).resize(function() {
+			tableScrollHeight();
+		});
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Management--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content">
+			<div class="content_child" style="height: 15px;"><span><!--#4DSCRIPT/WEB_LANGUAGE/Datum--> <input id="searchStartDate" size="10" maxlength="10" value=""> <!--#4DSCRIPT/WEB_LANGUAGE/tot--> <input id="searchEndDate" size="10" maxlength="10" value=""></input><input id="searchNoDate" type="checkbox"><!--#4DSCRIPT/WEB_LANGUAGE/Geen selectie--></input></span><span style="float: right;"><!--#4DSCRIPT/WEB_LANGUAGE/Artikel--> <select id="group0"></select> <!--#4DSCRIPT/WEB_LANGUAGE/Dochter--> <select id="group1"></select></span></div>
+			<div class="content_child" id="gridPlaceHolder"></div>			
+		</div>
+		<div class="footer"><div class="margins right"><a id="download" class="link" target="_blank"><!--#4DSCRIPT/WEB_LANGUAGE/Download--></a> | <a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

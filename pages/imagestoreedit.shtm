@@ -1,0 +1,261 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>
+		var preferences = {};
+		var layouts = {};
+
+		var imageStore = {};
+
+		function setupFileUpload () {
+			var id = imageStore.id;
+			if ( !imageStore.id ) {
+				id = parseInt(getParameterFromURL('selected')) || 0;
+			}
+			if (( preferences.submit.imagestore ) & (imageStore.rights == 5)) {
+				$("#submitButton").show();
+				$("#sendFile").click( function () {
+					if ( $("#imagestore_description").val() != "" ) {
+						var method = "POST";
+						if ( !imageStore.id ) {
+							method = "PUT";
+						}
+						$.ajax({
+							url: "/connector/html/handleImageStore",
+							type: method,
+							data: { session : sessionStorage.getItem("session"), data : "update", id : id, description : $("#imagestore_description").val(), info : $("#imagestore_info").val(), type : $("#imagestore_type").val(), filename : imageStore.filename },
+							success: function(result) {
+								if (result.errornumber) {
+									openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+								} else {
+									window.location.replace( '/module/pages/imagestore.shtm?selected=' + parseInt(getParameterFromURL('selected')) );						
+								}
+							}
+						});
+					} else {
+						openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U dient een omschrijving in te geven-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->", function () { $("#imagestore_description").focus(); });
+					}
+				});				
+			} else {
+				$("#submitButton").hide();
+			}
+
+			$("#returnfrom").click( function () {
+				window.location.replace( '/module/pages/imagestore.shtm?selected=' + parseInt(getParameterFromURL('selected')) );						
+			});				
+
+			$("#imagestore_upload-button").fileupload({			// init the upload tool
+				dataType: 'json',
+				formData: [{name: 'session', value: sessionStorage.getItem("session")}, {name: 'id', value: id}, {name: 'data', value: 'upload'}],
+				url: '/connector/html/handleImageStore',
+				done: function (e, data) {
+					if (data.result.errornumber) {
+						imageStore.filename =  "";
+						openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						if (data.result.filename) {
+							imageStore.filename = data.result.filename;
+							showInputMode ( data.result.image );
+							if ( $("#imagestore_description").val() == "" ) {
+								$("#imagestore_description").val( data.result.filename );
+							}
+						}
+					}
+				},
+				add: function (e, data) {
+					if (false) {
+						openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/Ongeldige bestandstype:--> " + data.files[0].type, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else if (false) {
+						openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/Bestand te groot. Maximaal--> " + web2print.filesize + " MB!", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						jqXHR = data.submit();
+					}
+				},      
+				start: function (e, data) {
+					$( "#imagestore_upload-button").css('visibility', 'hidden');
+					$( "#imagestore_upload-button").css('width', '0px');
+
+					$( "#fileupload-progressbar").progressbar({ value: 0 });
+					$( "#fileupload-progressbar").height(18);
+					$( ".progress-label").css('visibility', 'visible');
+	// creer een stop button
+					$( "#imagestore_upload-button").parent().parent().children(".trailing").html('<a href="#" onclick="javascript:jqXHR.abort();" class="choice"><!--#4DSCRIPT/WEB_LANGUAGE/Annuleer--></a>');
+					styleLinks(4);
+				},
+				stop: function (e, data) {
+					$( "#fileupload-progressbar").progressbar( "destroy");
+					$( "#fileupload-progressbar").height(0);
+					$( ".progress-label").css('visibility', 'hidden');
+
+					$( "#imagestore_upload-button").css('visibility', 'visible');
+					$( "#imagestore_upload-button").css('width', '');
+	// verwijder een stop button
+					$( "#imagestore_upload-button").parent().parent().children(".trailing").html('&nbsp;');
+				},
+				fail: function (e, data) {
+					openAlert(e, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+				},
+				progress: function (e, data) {
+					var progress = parseInt(data.loaded / data.total * 100, 10);
+					$("#fileupload-progressbar").progressbar( "option", "value", progress );
+					$(".progress-label").text(progress + "%" );
+				}
+			});
+		}
+		
+		function eraseFileUpload ( element ) {
+			var id = imageStore.id;
+			if ( !imageStore.id ) {
+				id = parseInt(getParameterFromURL('selected')) || 0;
+			}
+			element.checked = false;
+			$.ajax({
+				url: "/connector/html/handleImageStore",
+				type: "POST",
+				data: { session : sessionStorage.getItem("session"), id : id, data : 'upload', filename : imageStore.filename },
+				success: function(result) {
+					if (result.errornumber) {
+						openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						showInputMode();
+					}
+					imageStore.filename =  "";
+				}
+			});
+		}
+
+		function showInputMode ( image ) {
+			if ( image ) {
+				var imageWidth = 200;
+				var imageHeight = 100;
+				var url = "/connector/html/getImage/" + image.id + ".jpg?session=" + sessionStorage.getItem("session") + "&type=" + image.type + "&id=" + image.id + "&width=" + imageWidth + "&height=" + imageHeight;
+				if ( !imageStore.id ) {
+					url = url + "&filename=" + imageStore.filename;
+				}
+				$("#imagestore_image").attr( 'src', url);
+				$("#showImage").show();
+				$("#uploadImage").hide();
+				if  (( preferences.submit.imagestore ) & (imageStore.rights == 5)) {
+					$("#eraseFileUpload").show();
+				} else {
+					$("#eraseFileUpload").hide();
+				}
+			} else {
+				$("#showImage").hide();
+				if (( preferences.submit.imagestore ) & (imageStore.rights == 5)) {
+					$("#uploadImage").show();
+				} else {
+					$("#uploadImage").hide();
+				}
+			}
+			if (( !preferences.submit.imagestore ) | (imageStore.rights != 5)) {
+				$("#imagestore_description").prop('disabled', true);
+				$("#imagestore_info").prop('disabled', true);
+				$("#imagestore_type").prop('disabled', true);
+				$("#selectType").hide();
+				$("#showType").show();
+			} else {
+				$("#selectType").show();
+				$("#showType").hide();
+			}
+		}
+		
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(4);
+				styleLinks(5);
+				var id = parseInt(getParameterFromURL('id')) || 0;
+				if (!id) {
+					id = parseInt(getParameterFromURL('selected')) || 0;
+				}
+				$.getJSON('/connector/html/handleImageStore?session=' + sessionStorage.getItem("session") + '&data=detail&id=' + id, function (result) {
+					if (result.errornumber) {
+						openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						imageStore = result;
+				
+						$("#imagestore_description").val( imageStore.description );
+						$("#imagestore_info").val( imageStore.info );
+						$("#imagestore_show").val( imageStore.type );
+			
+						var options = $("#imagestore_type");
+						options.empty();
+						options.append($("<option />").val("").text(""));
+						$.each( imageStore.types, function(item) {
+							options.append($("<option />").val(imageStore.types[item]).text(imageStore.types[item]));
+						});
+						options.val( imageStore.type ).attr('selected',true);
+				
+						setupFileUpload ();
+						
+						if ( imageStore.id ) {
+							if ( imageStore.content ) {
+								showInputMode ( imageStore.image );
+							} else {
+								showInputMode ( );
+							}
+						} else {
+							showInputMode ( );
+						}
+
+						$(".main").css( "visibility","visible");
+					}
+				});
+			});
+		});
+
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Beeldbank--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content"><div id="content" class="content_child">
+		<form id="form">
+			<table class="content_table">
+				<tr>
+					<td class="nocolumn" colspan="3">&nbsp;</td>
+				</tr>
+				<tr id="showImage">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Afbeelding:--></td>
+					<td class="data"><img id="imagestore_image" /><span id="eraseFileUpload"><input type="checkbox" name="vx_Data" onchange="javascript:eraseFileUpload(this);" value="RESET" /><!--#4DSCRIPT/WEB_LANGUAGE/Verwijder--></span></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="uploadImage">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Bestand:--></td>
+					<td class="data"><input id="imagestore_upload-button" type="file" name="vx_Data" ></input><div style="float:left; width:95%;" id="fileupload-progressbar"><div class="progress-label"></div></div></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Naam:--></td>
+					<td class="data"><input id="imagestore_description" type="text" size="60"></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Omschrijving:--></td>
+					<td class="data"><textarea id="imagestore_info" class="longtext" rows="6"></textarea></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="selectType">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Soort:--></td>
+					<td class="data"><select id="imagestore_type" size="1"></select></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="showType">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Soort:--></td>
+					<td class="data"><input id="imagestore_show" type="text" size="60" disabled></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+			</table>
+		</form>
+		</div></div>
+		<div class="footer"><div class="margins right"><a id="returnfrom" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Terug--></a> | <span id="submitButton"><a id="sendFile" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Bewaar--></a> | </span><a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+`		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

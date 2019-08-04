@@ -1,0 +1,64 @@
+.tablescroll td, 
+.tablescroll_wrapper,
+.tablescroll_head,
+.tablescroll_foot {
+	border:1px solid #ccc;
+}
+
+.tablescroll table {
+	table-layout:fixed;
+	width: 100%;
+}
+
+.tablescroll td {
+	padding:3px 5px;
+}
+
+.tablescroll_wrapper {
+	border-left:0;
+}
+
+.tablescroll_head {
+	font-weight:bold;
+	border-left:0;
+	border-top:0;
+	margin-bottom:3px;
+}
+
+.tablescroll thead td {
+	border-right:0;
+	border-bottom:0;
+}
+
+.tablescroll tbody td {
+	border-right:0;
+	border-bottom:0;
+
+	width: 5%;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+
+.tablescroll tbody tr.first td {
+	border-top:0;
+}
+
+.tablescroll_foot {
+	border-left:0;
+	border-top:0;
+	margin-top:3px;
+}
+
+.tablescroll tfoot td {
+	border-right:0;
+	border-bottom:0;
+}
+
+.tablescroll_head .sort {
+	cursor:pointer;
+}
+
+#gridBody tr {
+	cursor:pointer;
+}

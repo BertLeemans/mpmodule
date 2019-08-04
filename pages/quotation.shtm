@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>
+		var preferences = {};
+		var layouts = {};
+
+		var quotation = {}
+				
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(4);
+				styleLinks(5);
+
+				var id = parseInt(getParameterFromURL('key')) || 0;		//haal het product op
+				$('#id').val(id);
+				$.ajax({
+					url: "/connector/html/detailTables",
+					type: "GET",
+					data: { session : sessionStorage.getItem("session"), table: 1, id: id },
+					success: function(result) {
+						if (result.errornumber) {
+							$("#entry-table").hide();
+							$("#status-table").hide();
+							$("#upload-table").hide();
+							$("#sub-table").hide();
+							$(".main").css( "visibility","visible");
+							openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else {
+							quotation = result;
+
+							if (quotation.quotation_number) {	$("#quotationNumber").children(".data").html(quotation.quotation_number);				} else {	$("#quotationNumber").hide();		}
+							if (quotation.quotation_date) {		$("#quotationDate").children(".data").html(formatDate(quotation.quotation_date));		} else {	$("#quotationDate").hide();			}
+							if (quotation.description) {		$("#description").children(".data").html(quotation.description);						} else {	$("#description").hide();			}
+							if (quotation.reference) {			$("#reference").children(".data").html(quotation.reference);							} else {	$("#reference").hide();				}
+							if (quotation.contact_name) {		$("#contact").children(".data").html(quotation.contact_name);							} else {	$("#contact").hide();				}
+							if (quotation.salesman) {			$("#salesMan").children(".data").html(quotation.salesman);								} else {	$("#salesMan").hide();				}
+
+							if (quotation.pdf) {
+								var url = "/connector/html/getCommunicationData/quotation" + quotation.quotation_number + ".pdf?session=" + sessionStorage.getItem("session") + "&location=quotation&id=" + quotation.quotation_number;
+								$("#quotationNumber").children(".trailing").html("<a class='choice' href='#' onclick='javascript:openPDF(\"" + url + "\")'><!--#4DSCRIPT/WEB_LANGUAGE/PDF--></a>");
+							}
+
+							var temp = "<a class='choice' href='#' onclick='javascript:openAlert(\"" + quotation.quotation_status_history.replace(/\r/g, "<br />").replace(/'/g,"&#x26;#x27;").replace(/"/g,"&#x26;#x22;") + "\", \"<!--#4DSCRIPT/WEB_LANGUAGE/Status-->\")'>" + quotation.quotation_status + "</a>";
+							$("#quotationStatus").children(".data").html(temp);
+							preferences.employees.forEach(function(entry) {
+								if (entry.name == quotation.salesman) {
+									var temp = "<a class='choice' href='mailto:" + entry.email + "?subject=" + encodeMailTo("<!--#4DSCRIPT/WEB_LANGUAGE/Betreft offertenummer-->: " + quotation.quotation_number) + "'><!--#4DSCRIPT/WEB_LANGUAGE/Email--></a>";
+									$("#quotationStatus").children(".trailing").html(temp);
+								}
+							});
+
+							quotation.sub_jobs.forEach(function(sub_job) {
+								temp = "<tr>";
+								temp += "<td class=\"leading\"><!--#4DSCRIPT/WEB_LANGUAGE/Oplage:--></td>";
+								temp += "<td class=\"data\"><table><tr>";
+								if ( preferences.access.noPricesVisible ) {
+									temp += "<td class=\"inner\" width=\"33%\">" + formatNumber(sub_job.run_01) + "</td>";
+									if (sub_job.run_02 != 0) {
+										temp += "<td class=\"inner\" width=\"33%\">" + formatNumber(sub_job.run_02) + "</td>";
+									}
+									if (sub_job.run_03 != 0) {
+										temp += "<td class=\"inner\" width=\"33%\">" + formatNumber(sub_job.run_03) + "</td>";
+									}
+								} else {
+									temp += "<td class=\"inner\" width=\"33%\">" + formatNumber(sub_job.run_01) + " (" + formatCurrency(sub_job.price_1) + ")" + "</td>";
+									if (sub_job.run_02 != 0) {
+										temp += "<td class=\"inner\" width=\"33%\">" + formatNumber(sub_job.run_02) + " (" + formatCurrency(sub_job.price_2) + ")" + "</td>";
+									}
+									if (sub_job.run_03 != 0) {
+										temp += "<td class=\"inner\" width=\"33%\">" + formatNumber(sub_job.run_03) + " (" + formatCurrency(sub_job.price_3) + ")" + "</td>";
+									}
+								}
+								temp += "</tr></table></td>";
+								temp += "<td class=\"trailing\"><a class=\"choice\" href=\"/module/pages/jobmanual.shtm?standard=" + sub_job.id + "&table=9\"><!--#4DSCRIPT/WEB_LANGUAGE/Order--></a></td>";
+								temp += "<tr>";
+								$("#sub-table").append(temp);
+								sub_job.checklist.forEach(function(item) {
+									temp = "<tr>";
+									temp += "<td class=\"leading\">" + item.name + "</td>";
+									temp += "<td class=\"data\">" + item.value + "</td>";
+									temp += "<td class=\"trailing\"></td>";
+									temp += "<tr>";
+									$("#sub-table").append(temp);
+								});
+								temp = "<tr><td class=\"nocolumn\" colspan=\"3\">&nbsp;</td>";
+								$("#sub-table").append(temp);
+							});
+
+							styleLinks(4);
+
+							getCurrentFiles(function () {
+								if (quotation.allow_upload) {
+									$("#fileupload-button").show();
+									$(".deletefiles").show();
+								} else {
+									$("#fileupload-button").hide();
+									$(".deletefiles").hide();
+								}
+
+								$(".main").css( "visibility","visible");
+							});
+						}
+					}
+				});
+			
+				initFileUpload();
+			
+				$("#back").click(function(){
+					window.location.replace('/module/pages/quotations.shtm');
+				});
+			});
+		});
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Offerte--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content"><div id="content" class="content_child">
+		<form id="form">
+			<input type="hidden" id="id" 				name="id"				value="0"></input>
+			<input type="hidden" id="locationFiles"		name="locationFiles"	value="quotation"></input>
+			<table id="entry-table" class="content_table">
+				<tr>
+					<td class="nocolumn" colspan="3">&nbsp;</td>
+				</tr>
+				<tr id="quotationNumber">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Offertenummer:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="quotationDate">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Offertedatum:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="description">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Omschrijving:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="reference">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Referentie:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="contact">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Contactpersoon:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="salesMan">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Verkoper:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+			</table>
+			<table id="status-table" class="content_table">
+				<tr>
+					<td class="nocolumn" colspan="3"><hr /></td>
+				</tr>
+				<tr id="quotationStatus">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Status:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+			</table>
+			<table id="upload-table" class="content_table">
+				<tr>
+					<td class="nocolumn" colspan="3"><hr /></td>
+				</tr>
+				<tr> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Bestanden:--></td>
+					<td class="data"><input id="fileupload-button" type="file" name="vx_Data"></input><div style="float:left; width:95%;" id="fileupload-progressbar"><div class="progress-label"></div></div></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+			</table>
+			<table id="sub-table" class="content_table">
+				<tr>
+					<td class="nocolumn" colspan="3"><hr /></td>
+				</tr>
+			</table>
+		</form>
+		</div></div>
+		<div class="footer"><div class="margins right"><a id="back" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Terug--></a> | <a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

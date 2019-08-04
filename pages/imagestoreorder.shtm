@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>
+		var preferences = {};
+		var layouts = {};
+
+		var imageStore = {};
+
+		function initInputForm ( id ) {
+			$("#key").val(id);
+			if ( id ) {
+				$.getJSON('/connector/html/handleImageStore?session=' + sessionStorage.getItem("session") + '&data=detail&id=' + id, function (result) {
+					imageStore = result;
+					
+					$("#imagestore_description").val( imageStore.description );
+					$("#imagestore_info").val( imageStore.info );
+					$("#imagestore_type").val( imageStore.type );
+					$("#imagestore_price").val( formatCurrency(imageStore.price) );
+
+					if ( imageStore.image ) {
+						var imageWidth = 200;
+						var imageHeight = 100;
+						var url = "/connector/html/getImage/" + imageStore.image.id + ".jpg?session=" + sessionStorage.getItem("session") + "&type=12&id=" + imageStore.image.id + "&width=" + imageWidth + "&height=" + imageHeight;
+						$("#imagestore_image").attr( 'src', url);
+					}
+				});
+			}
+		}
+
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(4);
+				styleLinks(5);
+				
+				var id = parseInt(getParameterFromURL('id')) || 0;		//kijk of dit een bestaande regel is
+				$('#id').val(id);
+				if (id > 0) {
+					$('#locationFiles').val("internet");
+					$.getJSON('/connector/html/detailTables?session=' + sessionStorage.getItem("session") +  '&id=' + id +  '&table=0', function (data) {
+						if (data.errornumber) {
+							openAlert(data.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else {
+							$("#run_01").val(formatNumber(data.run_01));
+							$("#reference").val(data.reference);
+							$("#remark").val(data.remark);
+							initInputForm(data.standard_quotation);
+						}
+					});
+				} else {
+					initInputForm( parseInt(getParameterFromURL('key'))  || 0);
+				}
+
+				if ( preferences.access.noPricesVisible ) {
+					$("#priceRow").hide();
+				}
+						
+				$("#returnfrom").click( function () {
+					window.location.replace( '/module/pages/imagestore.shtm?selected=' + parseInt(getParameterFromURL('selected')) );						
+				});				
+
+				if (preferences.submit.imagestore) {
+					$("#toShoppingCard").click( function() {
+						preventClickTwice(this);
+						
+						var data = $("#form").serializeArray();
+						
+						if ( testValueFound(data, "id", 0) ) {
+							var method = "PUT";
+						} else {
+							var method = "POST";
+						}
+						
+						submitLineHandler(data, method, "succesJob");
+					});
+				} else {
+					$("#submitButton").hide();
+				}
+
+				$(".main").css( "visibility","visible");
+			});
+		});
+
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Beeldbank--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content"><div id="content" class="content_child">
+		<form id="form">
+			<input type="hidden" id="id" 				name="id"					value="0"></input>
+			<input type="hidden" id="key"				name="key"					value="0"></input>
+			<input type="hidden" id="bufferType" 		name="bufferType"			value="imagestore"></input>
+			<table class="content_table">
+				<tr>
+					<td class="nocolumn" colspan="3">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Afbeelding:--></td>
+					<td class="data"><img id="imagestore_image" /></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Naam:--></td>
+					<td class="data"><input id="imagestore_description" type="text" size="60" disabled></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Omschrijving:--></td>
+					<td class="data"><textarea id="imagestore_info" class="longtext" rows="6" disabled></textarea></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Soort:--></td>
+					<td class="data"><input id="imagestore_type" type="text" size="60" disabled></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="priceRow">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Prijs:--></td>
+					<td class="data"><input id="imagestore_price" type="text" size="10" disabled></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Referentie:--></td>
+					<td class="data"><input type="text" id="reference" name="reference" size="30" maxlength="30" onchange="javascript:removeFalseCharacters(this)"></input></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Notities:--></td>
+					<td class="data"><textarea class="longtext" rows="2" id="remark" name="remark" onchange="javascript:removeFalseCharacters(this)"></textarea></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+			</table>
+		</form>
+		</div></div>
+		<div class="footer"><div class="margins right"><a id="returnfrom" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Terug--></a> | <span id="submitButton"><a id="toShoppingCard" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/In winkelwagen--></a> | </span><a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+`		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

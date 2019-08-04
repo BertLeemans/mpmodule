@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>
+		var preferences = {};
+		var layouts = {};
+
+		var article = {}
+		
+		function fillDetails (key) {
+			$.ajax({
+				url: "/connector/html/detailTables",
+				type: "GET",
+				data: { session : sessionStorage.getItem("session"), table: 6, id: key },
+				success: function(result) {
+					if (result.errornumber) {
+						openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						$("#key").val(key);
+						article = result;
+						
+						var unit = "<!--#4DSCRIPT/WEB_LANGUAGE/expl.-->";
+						if (article.unit != "") {
+							unit = article.unit;
+						}
+						
+						if (article.group) {			$("#group").children(".data").html(article.group);											} else {	$("#group").hide();				}
+						if (article.description) {		$("#description").children(".data").html(article.description);								} else {	$("#description").hide();		}
+						if (article.remark) {			$("#information").children(".data").html(article.remark);									} else {	$("#information").hide();		}
+						if (article.article_number) {	$("#code").children(".data").html(article.article_number);									} else {	$("#code").hide();				}
+						if (article.color) {			$("#color").children(".data").html(article.color);											} else {	$("#color").hide();				}
+														$("#stock").children(".data").html(formatNumber(article.stock) + " " + unit);
+						if (article.packed_per) {		$("#packed").children(".data").html(formatNumber(article.packed_per) + " " + unit);			} else {	$("#packed").hide();			}
+						if (article.minimum_size) {		$("#minimumRun").children(".data").html(formatNumber(article.minimum_size) + " " + unit);	} else {	$("#minimumRun").hide();		}
+						if (article.maximum_size) {		$("#maximumRun").children(".data").html(formatNumber(article.maximum_size) + " " + unit);	} else {	$("#maximumRun").hide();		}
+
+						calculatedPrice();
+						setupImage(article.image);
+
+						$(".main").css( "visibility","visible");
+						$("#run_01").focus();
+					}
+				}
+			});
+		}
+
+		function calculatedPrice() {
+			var run = unformatNumber($("#run_01").val());
+			if (run > 0) {
+				var unit = "<!--#4DSCRIPT/WEB_LANGUAGE/expl.-->";
+				if (article.unit != "") {
+					unit = article.unit;
+				}
+
+				if (article.minimum_size!=0) {
+					if (article.minimum_size>run) {
+						openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U moet minimaal--> " + formatNumber(article.minimum_size) + " " + unit + " <!--#4DSCRIPT/WEB_LANGUAGE/bestellen!-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						run = article.minimum_size;
+					}
+				}
+				if (article.maximum_size!=0) {
+					if (run > article.maximum_size) {
+						openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U mag maximaal--> " + formatNumber(article.maximum_size) + " " + unit + " <!--#4DSCRIPT/WEB_LANGUAGE/bestellen!-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						run = article.maximum_size;
+					}
+				}
+				if (article.packed_per>1) {
+					run = Math.round(((run - 1) / article.packed_per) + 0.5)*article.packed_per.toString();
+				}
+
+				$("#run_01").val(formatNumber(run));
+				$("#price").val("");
+
+				$.getJSON('/connector/html/calculateProductPrice?session=' + sessionStorage.getItem("session") +  '&id=' + $("#key").val() +  '&bufferType=article&run=' + run, function (data) {
+					if (data.errornumber) {
+						openAlert(data.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						$("#price").val(formatCurrency(data.price));
+					}
+				});
+			} else {
+				$("#run_01").val("");
+				$("#price").val("");
+			}
+		}
+				
+						
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(4);
+				styleLinks(5);
+
+				var id = parseInt(getParameterFromURL('id')) || 0;		//kijk of dit een bestaande regel is
+				$('#id').val(id);
+				if (id > 0 ) {
+					$.getJSON('/connector/html/detailTables?session=' + sessionStorage.getItem("session") +  '&id=' + id +  '&table=0', function (data) {
+						if (data.errornumber) {
+							openAlert(data.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else {
+							$("#run_01").val(formatNumber(data.run_01));
+							$("#reference").val(data.reference);
+							$("#remark").val(data.remark);
+							fillDetails(data.standard_quotation);
+						}
+					});
+				} else {
+					fillDetails(parseInt(getParameterFromURL('key')) || 0); //haal het product op
+				}
+						
+				if ( preferences.access.noPricesVisible ) {
+					$("#priceRow").hide();
+				}
+
+				if (preferences.submit.articles) {
+					$("#toShoppingCard").click(function(){
+						var data = unformatNumberSerializeArray ( $("#form").serializeArray(), ["run_01"]);
+						if ( testValueFound(data, "run_01", 0) ) {
+							openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U dient een oplage in te geven-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else {
+							if ( testValueFound(data, "id", 0) ) {
+								var method = "PUT";
+							} else {
+								var method = "POST";
+							}
+							preventClickTwice(this);
+							submitLineHandler(data, method, "succesArticle");
+						}
+					});
+				} else {
+					$("#submitButton").hide();
+				}
+			
+				if (id > 0) {
+					$("#backButton").hide();
+				} else {
+					$("#back").click(function(){
+						window.location.replace('/module/pages/articles.shtm');
+					});
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Artikel--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content"><div id="content" class="content_child">
+		<form id="form">
+			<input type="hidden" id="id" 				name="id"					value="0"></input>
+			<input type="hidden" id="key"				name="key"					value="0"></input>
+			<input type="hidden" id="bufferType" 		name="bufferType"			value="article"></input>
+			<table id="entry-table" class="content_table">
+				<tr>
+					<td class="nocolumn" colspan="3">&nbsp;</td>
+				</tr>
+				<tr id="group">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Groep:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="description">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Omschrijving:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="information">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Informatie:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="code">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Code:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="color">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Kleur:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="stock">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Voorraad:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="packed">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Verpakt per:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="minimumRun">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Minimaal bestellen:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="maximumRun">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Maximaal bestellen:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Oplage:--></td>
+					<td class="data"><input type="text" id="run_01" name="run_01" size="10" maxlength="10" value="" onchange="javascript:calculatedPrice()"></input></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="priceRow">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Prijs:--></td>
+					<td class="data"><input type="text" id="price" name="price" size="10" maxlength="10" value="" disabled></input></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Referentie:--></td>
+					<td class="data"><input type="text" id="reference" name="reference" size="30" maxlength="30" onchange="javascript:removeFalseCharacters(this)"></input></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Notities:--></td>
+					<td class="data"><textarea class="longtext" rows="2" id="remark" name="remark" onchange="javascript:removeFalseCharacters(this)"></textarea></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+			</table>
+		</form>
+		</div></div>
+		<div class="footer"><div class="margins right"><span id="backButton"><a id="back" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Terug--></a> | </span><span id="submitButton"><a id="toShoppingCard" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/In winkelwagen--></a> | </span><a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+		<div class="imageViewer"><img id="imageViewer" /></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>
+		var preferences = {};
+		var layouts = {};
+				
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(4);
+				styleLinks(5);
+
+				var options = $("#employee");
+				options.empty();
+				$.each(preferences.employees, function(item) {
+					if (preferences.employees[item].message) {
+						options.append($("<option />").val(preferences.employees[item].name).text(preferences.employees[item].name));
+					}
+				});					
+
+				$(".main").css( "visibility","visible");
+			
+				$("#submit").click(function(){
+					var data = $("#form").serializeArray();
+					if ( testValueFound(data, "subject", "") ) {
+						openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U dient een omschrijving in te geven-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						data.push({name: 'session', value: sessionStorage.getItem("session")});
+						$.ajax({
+							dataType: 'json',
+							data: data,
+							url: '/connector/html/submitMessage',
+							type: "POST",
+							success: function (files) {
+								if (files.errornumber) {
+									openAlert(files.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+								} else {
+									window.location.replace('/module/pages/main.shtm?message=submitMessage');
+								}
+							}
+						});    
+					}
+				});
+			});
+		});
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Bericht--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content"><div id="content" class="content_child">
+		<form id="form">
+			<table id="entry-table" class="content_table">
+				<tr>
+					<td class="nocolumn" colspan="3">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Medewerker:--></td>
+					<td class="data"><select id="employee" name="employee" class="smallselect"></select></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Omschrijving:--></td>
+					<td class="data"><input type="text" id="subject" name="subject" size="40" maxlength="40" onchange="javascript:removeFalseCharacters(this)"></input></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Bericht:--></td>
+					<td class="data"><textarea class="longtext" rows="5" id="body" name="body" onchange="javascript:removeFalseCharacters(this)"></textarea></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+			</table>
+		</form>
+		</div></div>
+		<div class="footer"><div class="margins right"><a id="submit" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Verstuur--></a> | <a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

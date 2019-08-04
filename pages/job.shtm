@@ -1,0 +1,320 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>
+		var preferences = {};
+		var layouts = {};
+
+		var job = {}
+
+		function fillApproveStatus( ) {
+			$("#approve-table").hide();
+			if (preferences.access.workflowApprove) {
+				if (job.proofing) {
+					$("#approve-table").show();
+					var rows = $("#approve-table").children().children();
+					rows.hide();
+					$(rows[0]).show();
+					switch ( job.proofing.status ) {
+						case 1:	//akkoord
+							$(rows[2]).show();
+							break;
+						case 2: //afgekeurd
+							$(rows[3]).show();
+							break;
+						default: //onbekend
+							$(rows[1]).show();
+							break;
+					}
+				}
+			}
+		}
+		
+		function approveFiles( approved ) {
+			
+			function sendApprove ( comment ) {
+				$(".approveButtons").hide();	//zorg dat er niet nogeens geklikt kan worden.
+
+				$.ajax({
+					url: "/connector/html/approveFiles",
+					type: "POST",
+					data: { session : sessionStorage.getItem("session"), id: $('#id').val(), approved: approved, comment: comment },
+					success: function(result) {
+						if (result.errornumber) {
+							openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else {
+							job.proofing.status = result.status;
+
+							var temp = "";
+							
+							if ( approved ) {
+								temp += "<!--#4DSCRIPT/WEB_LANGUAGE/Bedankt voor het goedkeuren van de bestanden!-->";
+							} else {
+								temp += "<!--#4DSCRIPT/WEB_LANGUAGE/Wij zullen uw afkeuring in behandeling nemen!-->";
+							}
+							if ( result.email ) {
+								temp += " <!--#4DSCRIPT/WEB_LANGUAGE/Er is een bevestigingsmail verstuurd naar:--> " + result.email;
+							}
+							openAlert( temp, "<!--#4DSCRIPT/WEB_LANGUAGE/Informatie-->");
+
+							fillApproveStatus();
+						}
+					}
+				});
+			}
+						
+			if ( approved ) {
+				sendApprove ();
+			} else {
+				openComment ( "<!--#4DSCRIPT/WEB_LANGUAGE/Geef een reden voor het afkeuren van deze bestanden!-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Opmerking-->", sendApprove );
+			}
+		}
+						
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(4);
+				styleLinks(5);
+
+				var id = parseInt(getParameterFromURL('key')) || 0;		//haal het product op
+				$('#id').val(id);
+				$.ajax({
+					url: "/connector/html/detailTables",
+					type: "GET",
+					data: { session : sessionStorage.getItem("session"), table: 2, id: id },
+					success: function(result) {
+						if (result.errornumber) {
+							$("#entry-table").hide();
+							$("#status-table").hide();
+							$("#upload-table").hide();
+							$("#approve-table").hide();
+							$("#sub-table").hide();
+							$(".main").css( "visibility","visible");
+							openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else {
+							job = result;
+							var temp;
+					
+							if (job.job_number) {			$("#jobNumber").children(".data").html(job.job_number);									} else {	$("#jobNumber").hide();				}
+							if (job.job_date) {				$("#jobDate").children(".data").html(formatDate(job.job_date));							} else {	$("#jobDate").hide();				}
+							if (job.description) {			$("#description").children(".data").html(job.description);								} else {	$("#description").hide();			}
+							if (job.reference) {			$("#reference").children(".data").html(job.reference);									} else {	$("#reference").hide();				}
+							if (job.contact_name) {			$("#contact").children(".data").html(job.contact_name);									} else {	$("#contact").hide();				}
+							if (job.jobmanager) {			$("#jobmanager").children(".data").html(job.jobmanager);								} else {	$("#jobmanager").hide();			}
+							if (job.salesman) {				$("#salesman").children(".data").html(job.salesman);									} else {	$("#salesman").hide();			}
+							if (job.delivery_date) {
+								temp = formatDate(job.delivery_date);
+								if (temp == "") {
+									$("#deliveryDate").hide();
+								} else {
+									$("#deliveryDate").children(".data").html(temp);
+								}
+							} else {
+								$("#deliveryDate").hide();
+							}
+							if (job.artwork_date) {
+								var temp = formatDate(job.artwork_date);
+								if (temp == "") {
+									$("#artworkDate").hide();
+								} else {
+									$("#artworkDate").children(".data").html(temp);
+								}
+							} else {
+								$("#artworkDate").hide();
+							}
+
+							if (job.pdf) {
+								var url = "/connector/html/getCommunicationData/job" + job.job_number + ".pdf?session=" + sessionStorage.getItem("session") + "&location=job&id=" + job.job_number;
+								$("#jobNumber").children(".trailing").html("<a class='choice' href='#' onclick='javascript:openPDF(\"" + url + "\")'><!--#4DSCRIPT/WEB_LANGUAGE/PDF--></a>");
+							}
+
+							temp = "<a class='choice' href='#' onclick='javascript:openAlert(\"" + job.job_status_history.replace(/\r/g, "<br />").replace(/'/g,"&#x26;#x27;").replace(/"/g,"&#x26;#x22;") + "\", \"<!--#4DSCRIPT/WEB_LANGUAGE/Status-->\")'>" + job.job_status + "</a>";
+							if (job.job_status) {			$("#jobStatus").children(".data").html(temp);											} else {	$("#jobStatus").hide();				}
+							preferences.employees.forEach(function(entry) {
+								if (entry.name == job.jobmanager) {
+									var temp = "<a class='choice' href='mailto:" + entry.email + "?subject=" + encodeMailTo("<!--#4DSCRIPT/WEB_LANGUAGE/Betreft ordernummer-->: " + job.job_number) + "'><!--#4DSCRIPT/WEB_LANGUAGE/Email--></a>";
+									$("#jobStatus").children(".trailing").html(temp);
+								}
+							});
+
+							fillApproveStatus();
+					
+							for (i = 0; i < job.sub_jobs.length; i++) {
+								var sub_job = job.sub_jobs[i];
+								
+								var proof = "";
+								if (preferences.access.workflowProof) {
+									if (sub_job.pageproof) {
+										var proof = "<a href='#' onclick='javascript:openTurn(" + i + ");' class='choice'><!--#4DSCRIPT/WEB_LANGUAGE/Proef--></a>";
+									}
+								}
+
+								var imposition = "";
+								if (preferences.access.workflowImpose) {
+									if (sub_job.imposeproof) {
+										var imposition = "<a href='#' onclick='javascript:openCarousel(" + i + ");' class='choice'><!--#4DSCRIPT/WEB_LANGUAGE/Impositie--></a>";
+									}
+								}
+
+								temp = "<tr>";
+								temp += "<td class=\"leading\"><!--#4DSCRIPT/WEB_LANGUAGE/Oplage:--></td>";
+								temp += "<td class=\"data\">" + formatNumber(sub_job.run_01) + "</td>";
+								temp += "<td class=\"trailing\">" + proof + "</td>";
+								temp += "<tr>";
+								$("#sub-table").append(temp);
+								sub_job.checklist.forEach(function(item, index) {
+									temp = "<tr>";
+									temp += "<td class=\"leading\">" + item.name + "</td>";
+									temp += "<td class=\"data\">" + item.value + "</td>";
+									if (index == 0) {
+										temp += "<td class=\"trailing\">" + imposition + "</td>";
+									} else {
+										temp += "<td class=\"trailing\"></td>";
+									}
+									temp += "<tr>";
+									$("#sub-table").append(temp);
+								});
+								temp = "<tr><td class=\"nocolumn\" colspan=\"3\">&nbsp;</td>";
+								$("#sub-table").append(temp);
+							}
+					
+							styleLinks(4);
+
+							getCurrentFiles(function () {
+								if (job.allow_upload) {
+									$("#fileupload-button").show();
+									$(".deletefiles").show();
+								} else {
+									$("#fileupload-button").parent().html("<!--#4DSCRIPT/WEB_LANGUAGE/Bestand(en) uploaden (nog) niet mogelijk.-->");
+									$(".deletefiles").hide();
+								}
+
+								$(".main").css( "visibility","visible");
+							});
+						}
+					}
+				});
+		
+				initFileUpload();
+		
+				$("#back").click(function(){
+					window.location.replace('/module/pages/jobs.shtm');
+				});
+			});
+		});
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Order--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content"><div id="content" class="content_child">
+		<form id="form">
+			<input type="hidden" id="id" 				name="id"				value="0"></input>
+			<input type="hidden" id="locationFiles"		name="locationFiles"	value="job"></input>
+			<table id="entry-table" class="content_table">
+				<tr>
+					<td class="nocolumn" colspan="3">&nbsp;</td>
+				</tr>
+				<tr id="jobNumber">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Ordernummer:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="jobDate">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Orderdatum:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="description">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Omschrijving:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="reference">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Referentie:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="contact">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Contactpersoon:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="jobmanager">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Begeleider:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="salesman">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Verkoper:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="deliveryDate">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Leverdatum:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="artworkDate">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Aanleverdatum:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+			</table>
+			<table id="status-table" class="content_table">
+				<tr>
+					<td class="nocolumn" colspan="3"><hr /></td>
+				</tr>
+				<tr id="jobStatus">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Status:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+			</table>
+			<table id="upload-table" class="content_table">
+				<tr>
+					<td class="nocolumn" colspan="3"><hr /></td>
+				</tr>
+				<tr> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Bestanden:--></td>
+					<td class="data"><input id="fileupload-button" type="file" name="vx_Data"></input><div style="float:left; width:95%;" id="fileupload-progressbar"><div class="progress-label"></div></div></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+			</table>
+			<table id="approve-table" class="content_table">
+				<tr>
+					<td class="nocolumn" colspan="3"><hr /></td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Goedkeuring:--></td>
+					<td class="data"><!--#4DSCRIPT/WEB_LANGUAGE/Graag uw akkoord op bovenstaande bestanden!--><div style="float: right; display: inline;"><a href="#" onclick="javascript:approveFiles(false);" class="choice approveButtons"><!--#4DSCRIPT/WEB_LANGUAGE/Afgekeurd--></a></div></td>
+					<td class="trailing"><a href="#" onclick="javascript:approveFiles(true);" class="choice approveButtons"><!--#4DSCRIPT/WEB_LANGUAGE/Akkoord--></a></td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Goedkeuring:--></td>
+					<td class="data"><!--#4DSCRIPT/WEB_LANGUAGE/De bestanden zijn akkoord gegeven voor productie!--></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Goedkeuring:--></td>
+					<td class="data"><!--#4DSCRIPT/WEB_LANGUAGE/De bestanden zijn afgekeurd voor productie!--></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+			</table>
+			<table id="sub-table" class="content_table">
+				<tr>
+					<td class="nocolumn" colspan="3"><hr /></td>
+				</tr>
+			</table>
+		</form>
+		</div></div>
+		<div class="footer"><div class="margins right"><a id="back" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Terug--></a> | <a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>
+		var preferences = {};
+		var layouts = {};
+				
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(5);
+
+				var welcomeText = "<br />";
+				var message = getParameterFromURL('message');		//kijk of er een bericht is
+				if (message != "") {
+					switch (message) {
+						case "submitMessage":
+							welcomeText += "<!--#4DSCRIPT/WEB_LANGUAGE/Hartelijk dank--> <b><i>" + preferences.user.contact_name + "</i></b> <!--#4DSCRIPT/WEB_LANGUAGE/voor uw bericht. U ontvangt binnenkort een reactie. Maak uw keuze uit ons hoofdmenu.-->";
+							break;
+						case "succesCredentials":
+							welcomeText += "<!--#4DSCRIPT/WEB_LANGUAGE/Uw gegevens zijn correct gewijzigd. De volgende keer kunt u hiermee inloggen. Maak uw keuze uit ons hoofdmenu.-->";
+							break;
+						case "succesQuotation":
+							welcomeText += "<!--#4DSCRIPT/WEB_LANGUAGE/Hartelijk dank--> <b><i>" + preferences.user.contact_name + "</i></b> <!--#4DSCRIPT/WEB_LANGUAGE/voor uw offerte aanvraag. U ontvangt binnenkort een offerte. Maak uw keuze uit ons hoofdmenu.-->";
+							break;
+						case "succesJob":
+							welcomeText += "<!--#4DSCRIPT/WEB_LANGUAGE/Hartelijk dank--> <b><i>" + preferences.user.contact_name + "</i></b> <!--#4DSCRIPT/WEB_LANGUAGE/voor uw order. U ontvangt binnenkort een orderbevestiging. Maak uw keuze uit ons hoofdmenu.-->";
+							break;
+						case "succesProduct":
+							welcomeText += "<!--#4DSCRIPT/WEB_LANGUAGE/Hartelijk dank--> <b><i>" + preferences.user.contact_name + "</i></b> <!--#4DSCRIPT/WEB_LANGUAGE/voor uw voorraad order. U ontvangt binnenkort een orderbevestiging. Maak uw keuze uit ons hoofdmenu.-->";
+							break;
+						case "succesArticle":
+							welcomeText += "<!--#4DSCRIPT/WEB_LANGUAGE/Hartelijk dank--> <b><i>" + preferences.user.contact_name + "</i></b> <!--#4DSCRIPT/WEB_LANGUAGE/voor uw artikel order. U ontvangt binnenkort een orderbevestiging. Maak uw keuze uit ons hoofdmenu.-->";
+							break;
+						case "succesNoShoppingCard":
+							welcomeText += "<!--#4DSCRIPT/WEB_LANGUAGE/Hartelijk dank--> <b><i>" + preferences.user.contact_name + "</i></b> <!--#4DSCRIPT/WEB_LANGUAGE/voor uw toevoeging aan de winkelwagen. Maak uw keuze uit ons hoofdmenu.-->";
+							break;
+						case "succesShoppingCard":
+							welcomeText += "<!--#4DSCRIPT/WEB_LANGUAGE/Hartelijk dank--> <b><i>" + preferences.user.contact_name + "</i></b> <!--#4DSCRIPT/WEB_LANGUAGE/voor uw bestelling. U ontvangt binnenkort een reactie. Maak uw keuze uit ons hoofdmenu.-->";
+							break;
+						default:
+							welcomeText += (message + preferences.user.contact_name);
+							break;
+					}
+				} else {
+					welcomeText += "<!--#4DSCRIPT/WEB_LANGUAGE/Welkom--> <b><i>" + preferences.user.contact_name + "</i></b> <!--#4DSCRIPT/WEB_LANGUAGE/van--> <b><i>" + preferences.user.company + "</i></b><!--#4DSCRIPT/WEB_LANGUAGE/, maak uw keuze uit bovenstaande menubalk.--><br />";
+					welcomeText += preferences.settings.welcome.replace(/\r/g, "<br />");
+
+					if (preferences.active) {
+						if (preferences.active.shoppingcard) {
+							var number = parseInt(getParameterFromURL('count')) || 0;
+							if (number) {
+								if (number == 1) {
+									welcomeText += "<br /><br /><a  class='choice' href='/module/pages/shoppingCard.shtm'><!--#4DSCRIPT/WEB_LANGUAGE/Er staat nog--> " + number + " <!--#4DSCRIPT/WEB_LANGUAGE/item in uw winkelwagen.--></a>"
+								} else if (number > 1) {
+									welcomeText += "<br /><br /><a  class='choice' href='/module/pages/shoppingCard.shtm'><!--#4DSCRIPT/WEB_LANGUAGE/Er staan nog--> " + number + " <!--#4DSCRIPT/WEB_LANGUAGE/items in uw winkelwagen.--></a>"
+								}
+							}
+						}
+					}
+				}
+				$("#content").html(welcomeText);
+				styleLinks(4);
+
+				$(".main").css( "visibility","visible");
+			});
+		});
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Hoofdmenu--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content"><div id="content" class="content_child"></div></div>
+		<div class="footer"><div class="margins right"><a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

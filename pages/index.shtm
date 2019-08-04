@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>				
+		var preferences = {};
+		var layouts = {};
+
+		var redirect_url = "";
+		var requested = false;
+		
+		function logon () {
+			var username = $("input[name='username']").val();
+			var password = $("input[name='password']").val()
+			if ((username !="") && (password !="") && (!requested)) {
+				requested = true;
+				$.ajax({
+					url: "/connector/html/createUserSession",
+					type: "POST",
+					data: { username : username, password: password },
+					success: function(result) {
+						if (result.session) {
+							$.getJSON( "/connector/html/getUserStylesheets?session=" + result.session, function( style ) {
+								$.getJSON( "/connector/html/calculateBufferLines?session=" + result.session, function( bufferlines ) {
+									$.getJSON( "/connector/html/getUserPreferences?session=" + result.session, function( preferences ) {
+										requested = false;
+										if (preferences.user.generalAccount) {
+											if (preferences.user.contacts.length > 1) {
+												var contacts = [];
+												preferences.user.contacts.forEach( function(element) {
+													var temp = element.name;
+													contacts.push(temp);
+												});
+												openSelect("<!--#4DSCRIPT/WEB_LANGUAGE/Selecteer--> \"<!--#4DSCRIPT/WEB_LANGUAGE/Contactpersoon-->\"", contacts, function (selected) {
+													$.ajax({
+														dataType: 'json',
+														data: [{name: 'session', value: result.session}, {name: 'name', value: contacts[selected]}],
+														url: '/connector/html/changeCurrentUser',
+														type: 'POST',
+														success: function (data) {
+															if (data.errornumber) {
+																openAlert(data.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+															} else {
+																preferences.user.contact_name = data.contact_name;
+																preferences.user.phone = data.phone;
+																preferences.user.fax = data.fax;
+																preferences.user.email = data.email;
+															
+																sessionStorage.setItem('style', JSON.stringify(style));
+																sessionStorage.setItem('preferences', JSON.stringify(preferences));
+																sessionStorage.setItem('session', result.session);
+																if (redirect_url == "") {
+																	redirect_url = '/module/pages/main.shtm';
+																	if (bufferlines.count) {
+																		redirect_url += ("?count=" + bufferlines.count);
+																	}
+																}
+																document.cookie = "language=" + data.language_code;
+																window.location.replace(redirect_url);
+															}
+														}
+													});    
+												});
+											} else {
+												sessionStorage.setItem('style', JSON.stringify(style));
+												sessionStorage.setItem('preferences', JSON.stringify(preferences));
+												sessionStorage.setItem('session', result.session);
+												redirect_url = '/module/pages/main.shtm';
+												if (bufferlines.count) {
+													redirect_url += ("?count=" + bufferlines.count);
+												}
+												document.cookie = "language=" + preferences.user.language_code;
+												window.location.replace(redirect_url);
+											}
+										} else {
+											sessionStorage.setItem('style', JSON.stringify(style));
+											sessionStorage.setItem('preferences', JSON.stringify(preferences));
+											sessionStorage.setItem('session', result.session);
+											redirect_url = '/module/pages/main.shtm';
+											if (bufferlines.count) {
+												redirect_url += ("?count=" + bufferlines.count);
+											}
+											document.cookie = "language=" + preferences.user.language_code;
+											window.location.replace(redirect_url);
+										}
+									});
+								});
+							});
+						} else {
+							openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/Onze server heeft u niet gevonden als geregistreerde gebruiker.-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+							requested = false;
+						}
+					}
+				});
+			}
+		}
+
+		$(document).ready(function() {
+			if (sessionStorage.getItem("redirect")) {
+				redirect_url = sessionStorage.getItem("redirect");
+			}
+			sessionStorage.clear();
+			basicInit();
+
+			$.getJSON( "/connector/html/getUserStylesheets", function( data ) {
+				if (data.errornumber) {
+ 					openAlert(data.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+				} else {
+					sessionStorage.setItem('style', JSON.stringify(data));
+					layouts = data;
+								
+					styleScreen();		//setup all the divs
+					styleLinks(5);		//styles the links in the footer
+				
+					$.getJSON( "/connector/html/getUserPreferences", function( data ) {
+						sessionStorage.setItem('preferences', JSON.stringify(data));
+						$("#content").html(data.settings.welcome.replace(/\r/g, "<br />"));
+					
+						if (data.settings.noguests) {
+							$("#noguests").hide();
+						} else {
+							$("#noguests").show();
+						}
+						
+						$(".main").css( "visibility","visible");
+						$("[name=username]").focus();
+					});
+								
+					$("#forgotten").click(function(){
+						window.location.replace('/module/pages/forgotten.shtm');
+					});
+
+					$("#guest").click(function(){
+						window.location.replace('/module/pages/guest.shtm');
+					});
+
+					$("#index").click(function(){
+						window.location.replace('/module/pages/index.shtm');
+					});
+
+					$("#logon").click(function(){
+						logon();
+					});
+									
+					$('.inputfields').keyup(function(event) {
+						var keycode = (event.keyCode ? event.keyCode : event.which);
+						if( keycode == 13 ) {
+							event.preventDefault();
+							if ($(".tnr_modal_box").length == 0) {
+								logon();
+							}
+						}
+					});
+				}
+ 			}).error(function(httpObj, textStatus) {
+ 				openAlert("HTTP " + textStatus + ": " + httpObj.status, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+            });
+		});
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Index--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"></div>
+		<div class="content">
+			<div id="content" class="content_child"></div>
+			<br />
+			<form>
+				<table>
+					<tr>
+						<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Gebruikersnaam:--></td>
+						<td class="data"><input class="inputfields" type="text" name="username" size="50" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td>
+						<td class="trailing">&nbsp;</td>
+					</tr>
+					<tr>
+						<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Wachtwoord:--></td>
+						<td class="data"><input class="inputfields" type="password" name="password" size="50"></td>
+						<td class="trailing">&nbsp;</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		<div class="footer"><div class="margins right"><a id="forgotten" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Vergeten--></a> | <span id="noguests"><a id="guest" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Gast--></a> | </span><a id="logon" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Aanmelden--></a> | <a id="index" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Index--></a></div></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

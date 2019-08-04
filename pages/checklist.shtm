@@ -1,0 +1,108 @@
+<tr id="checklist1">
+	<td class="leading"></td>
+	<td class="data"><textarea class="longtext" rows="3" id="text_01" name="text_01" onchange="javascript:removeFalseCharacters(this)" onfocus="javascript:changeHeight(1)"></textarea></td>
+	<td class="trailing"><a href="#" onclick="javascript:selectChecklist(1);" class="choice"><!--#4DSCRIPT/WEB_LANGUAGE/Keuze--></a></td>
+</tr>
+<tr id="checklist2">
+	<td class="leading"></td>
+	<td class="data"><textarea class="longtext" rows="1" id="text_02" name="text_02" onchange="javascript:removeFalseCharacters(this)" onfocus="javascript:changeHeight(2)"></textarea></td>
+	<td class="trailing"><a href="#" onclick="javascript:selectChecklist(2);" class="choice"><!--#4DSCRIPT/WEB_LANGUAGE/Keuze--></a></td>
+</tr>
+<tr id="checklist3">
+	<td class="leading"></td>
+	<td class="data"><textarea class="longtext" rows="1" id="text_03" name="text_03" onchange="javascript:removeFalseCharacters(this)" onfocus="javascript:changeHeight(3)"></textarea></td>
+	<td class="trailing"><a href="#" onclick="javascript:selectChecklist(3);" class="choice"><!--#4DSCRIPT/WEB_LANGUAGE/Keuze--></a></td>
+</tr>
+<tr id="checklist4">
+	<td class="leading"></td>
+	<td class="data"><textarea class="longtext" rows="1" id="text_04" name="text_04" onchange="javascript:removeFalseCharacters(this)" onfocus="javascript:changeHeight(4)"></textarea></td>
+	<td class="trailing"><a href="#" onclick="javascript:selectChecklist(4);" class="choice"><!--#4DSCRIPT/WEB_LANGUAGE/Keuze--></a></td>
+</tr>
+<tr id="checklist5">
+	<td class="leading"></td>
+	<td class="data"><textarea class="longtext" rows="1" id="text_05" name="text_05" onchange="javascript:removeFalseCharacters(this)" onfocus="javascript:changeHeight(5)"></textarea></td>
+	<td class="trailing"><a href="#" onclick="javascript:selectChecklist(5);" class="choice"><!--#4DSCRIPT/WEB_LANGUAGE/Keuze--></a></td>
+</tr>
+<tr id="checklist6">
+	<td class="leading"></td>
+	<td class="data"><textarea class="longtext" rows="1" id="text_06" name="text_06" onchange="javascript:removeFalseCharacters(this)" onfocus="javascript:changeHeight(6)"></textarea></td>
+	<td class="trailing"><a href="#" onclick="javascript:selectChecklist(6);" class="choice"><!--#4DSCRIPT/WEB_LANGUAGE/Keuze--></a></td>
+</tr>
+<tr id="checklist7">
+	<td class="leading"></td>
+	<td class="data"><textarea class="longtext" rows="1" id="text_07" name="text_07" onchange="javascript:removeFalseCharacters(this)" onfocus="javascript:changeHeight(7)"></textarea></td>
+	<td class="trailing"><a href="#" onclick="javascript:selectChecklist(7);" class="choice"><!--#4DSCRIPT/WEB_LANGUAGE/Keuze--></a></td>
+</tr>
+<tr id="checklist8">
+	<td class="leading"></td>
+	<td class="data"><textarea class="longtext" rows="1" id="text_08" name="text_08" onchange="javascript:removeFalseCharacters(this)" onfocus="javascript:changeHeight(8)"></textarea></td>
+	<td class="trailing"><a href="#" onclick="javascript:selectChecklist(8);" class="choice"><!--#4DSCRIPT/WEB_LANGUAGE/Keuze--></a></td>
+</tr>
+<tr id="checklist9">
+	<td class="leading"></td>
+	<td class="data"><textarea class="longtext" rows="1" id="text_09" name="text_09" onchange="javascript:removeFalseCharacters(this)" onfocus="javascript:changeHeight(9)"></textarea></td>
+	<td class="trailing"><a href="#" onclick="javascript:selectChecklist(9);" class="choice"><!--#4DSCRIPT/WEB_LANGUAGE/Keuze--></a></td>
+</tr>
+<tr id="checklist11">
+	<td class="leading"></td>
+	<td class="data"><textarea class="longtext" rows="1" id="text_11" name="text_11" onchange="javascript:removeFalseCharacters(this)" onfocus="javascript:changeHeight(11)"></textarea></td>
+	<td class="trailing"><a href="#" onclick="javascript:selectChecklist(11);" class="choice"><!--#4DSCRIPT/WEB_LANGUAGE/Keuze--></a></td>
+</tr>
+<tr id="checklist12">
+	<td class="leading"></td>
+	<td class="data"><textarea class="longtext" rows="1" id="text_12" name="text_12" onchange="javascript:removeFalseCharacters(this)" onfocus="javascript:changeHeight(12)"></textarea></td>
+	<td class="trailing"><a href="#" onclick="javascript:selectChecklist(12);" class="choice"><!--#4DSCRIPT/WEB_LANGUAGE/Keuze--></a></td>
+</tr>
+<tr id="checklist10">
+	<td class="leading"></td>
+	<td class="data"><textarea class="longtext" rows="1" id="text_10" name="text_10" onchange="javascript:removeFalseCharacters(this)" onfocus="javascript:changeHeight(10)"></textarea></td>
+	<td class="trailing"><a href="#" onclick="javascript:selectChecklist(10);" class="choice"><!--#4DSCRIPT/WEB_LANGUAGE/Keuze--></a></td>
+</tr>
+<script>
+	function selectChecklist(list) {
+		changeHeight(list);
+		var currentChecklist = 0;
+		$.each(checklist, function(item) {
+			if (checklist[item].id == $("#checklist").val()) {
+				currentChecklist = item;
+			}
+		});
+		openSelect("<!--#4DSCRIPT/WEB_LANGUAGE/Selecteer--> \"" + checklist[currentChecklist].fields[list - 1].header + "\"", checklist[currentChecklist].fields[list - 1].choice, function (selected) {
+			$("#text_" + ("0" + list).slice (-2)).val(checklist[currentChecklist].fields[list - 1].text[selected]);
+		});
+	}
+	
+	function changeHeight(element) {
+		for(var i=0; i < 12; i++) {
+			$("#text_" + ("0" + (i + 1)).slice (-2)).attr('rows', 1)
+		}
+		$("#text_" + ("0" + element).slice (-2)).attr('rows', 3)
+	}
+	function disableChecklist() {
+		for(var i=2; i < 13; i++) {
+			$("#checklist" + i).children(".data").children().first().attr('readonly', true);
+			$("#checklist" + i).children(".trailing").html("&nbsp;");
+		}
+	}
+	
+	function updateChecklist() {
+		var currentChecklist = 0;
+		$.each(checklist, function(item) {
+			if (checklist[item].id == $("#checklist").val()) {
+				currentChecklist = item;
+			}
+		});
+		for(var i=1; i < 13; i++) {
+			if ($("#checklist option").length == 0) {
+				$("#checklist"+i).hide();
+			} else {
+				if (checklist[currentChecklist].fields[i - 1].header) {
+					$("#checklist"+i).show();
+					$("#checklist"+i).children().first().html( makeColonAtEnd( checklist[currentChecklist].fields[i - 1].header ));
+				} else {
+					$("#checklist"+i).hide();
+				}
+			}
+		}
+	}		
+</script>

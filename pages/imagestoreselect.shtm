@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>
+		var preferences = {};
+		var layouts = {};
+
+		function searchSelection ( element ) {
+			removeFalseCharacters( element );
+			var value = $(element).val();
+			if (value != "") {
+				$.getJSON('/connector/html/searchImageStore?session=' + sessionStorage.getItem("session") + "&search=" + value, function (imageStore) {
+					var $imagetable = $("#image-table");
+					var columns = layouts.general.columnsImage;
+					$imagetable.empty();
+					$imagetable.append('<tr><td colspan="' + columns + '" class="nocolumn">&nbsp;</td></tr>');
+					var rows = imageStore.length;
+					if ( rows > 0 ) {
+						var temp = '<table width="100%" class="inline_table">';
+						temp += '<thead><tr class="inline_table">';
+						temp += '<th class="inline_table"><b><!--#4DSCRIPT/WEB_LANGUAGE/Omschrijving--></b></th>';
+						temp += '<th class="inline_table"><b><!--#4DSCRIPT/WEB_LANGUAGE/Soort--></b></th>';
+						temp += '<th class="inline_table"><b><!--#4DSCRIPT/WEB_LANGUAGE/Informatie--></b></th>';
+						temp += '</tr></thead><tbody>';
+						for (var i=0; i < rows; i++) {
+							temp += '<tr data-mother="' + imageStore[i].mother + '" class="inline_table highlight_table ';
+							if ((i%2)==0) {
+								temp += 'even';
+							} else {
+								temp += 'odd';
+							}
+							temp += '"><td class="inline_table">' + imageStore[i].description + '</td><td class="inline_table">' + imageStore[i].type + '</td><td class="inline_table">' + imageStore[i].info + '</td></tr>';
+						}
+						temp += '</tbody></table>';
+						$imagetable.append('<tr><td colspan="' + columns + '" class="nocolumn">' + temp + '<td></tr>');
+
+						$("table td.inline_table").css("max-width", (layouts.general.width / 3));
+
+						$(".inline_table tbody tr.even")
+							.css( "background-color", layouts.styles[4].altcolor )
+							.css( "border-color", layouts.styles[4].fontcolor )
+							.mouseenter(function() {
+								$(this).css("background", ColorLuminance(layouts.styles[4].altcolor, 0.2));
+							})
+							.mouseleave(function() {
+								$(this).css("background", layouts.styles[4].altcolor);
+							});
+						$(".inline_table tbody tr.odd")
+							.css( "background-color", layouts.styles[4].backcolor )
+							.mouseenter(function() {
+								$(this).css("background", ColorLuminance(layouts.styles[4].altcolor, 0.2));
+							})
+							.mouseleave(function() {
+								$(this).css("background", layouts.styles[4].backcolor);
+							});
+																	
+						$(".inline_table tbody tr").one( "click", function ( event ) {
+							var $tree = $('#treeList');
+							var selected = parseInt( $(this).data("mother") );
+							var node = $tree.tree('getNodeById', selected);
+							$tree.tree('selectNode', node);
+						})
+					} else {	
+						$imagetable.append('<tr><td colspan="' + columns + '" class="nocolumn"><!--#4DSCRIPT/WEB_LANGUAGE/Er zijn geen resultaten gevonden!!!--><td></tr>');
+					}
+				});
+			}
+		}
+
+		function fillSelection ( node ) {
+			var $imagetable = $("#image-table");
+			var defaultHeight = layouts.general.heightImage;
+			var columns = layouts.general.columnsImage;
+			$imagetable.empty();
+			$imagetable.append('<tr><td colspan="' + columns + '" class="nocolumn">&nbsp;</td></tr>');
+			if ( node ) {
+				$.getJSON('/connector/html/handleImageStore?session=' + sessionStorage.getItem("session") + '&id=' + node.id, function (imageStore) {
+			// build the image list
+					if (imageStore.files.length > 0) {
+						var maxWidth = parseInt(($(".content").width() - 300) / columns);
+						var maxHeight = maxWidth;
+						var rows = Math.floor(imageStore.files.length / columns);
+						if ((imageStore.files.length % columns) != 0) {
+							rows++;
+						}
+						var element = 0;
+						for (var i=0; i < rows; i++) {
+							$imagetable.append('<tr class=\"imageRow' + i + '\"></tr>');
+							for (var j=0; j < columns; j++) {
+								$(".imageRow" + i).append('<td width=\"33%\" class=\"placeholderImage\" id=\"selectImage' + element + '\"></td>');
+						
+								if (element < imageStore.files.length) {
+									if (defaultHeight) {
+										var imageWidth = maxWidth;
+										var imageHeight = defaultHeight;
+										maxHeight = defaultHeight;
+
+										var url = "/connector/html/getImage/" + imageStore.files[element].id + ".jpg?session=" + sessionStorage.getItem("session") + "&type=12&id=" + imageStore.files[element].id + "&width=" + imageWidth + "&height=" + imageHeight + "&background=" + encodeURIComponent( layouts.styles[4].backcolor );
+										$("#selectImage" + element).append('<div class="specialImage"><img id=\"' + imageStore.files[element].id + '\" title=\"' + imageStore.files[element].description + '\" alt=\"' + imageStore.files[element].description + '\" height=\"' + imageHeight + '\" width=\"' + imageWidth + '\" class=\"selectImage\" src=\"' + url + '\"/><h2><span>' + imageStore.files[element].description + '</span></h2></div>');
+									} else {
+										var imageWidth = imageStore.files[element].image.width;
+										var imageHeight = imageStore.files[element].image.height;
+							
+										if ( imageWidth > maxWidth ) {
+											imageHeight = imageHeight * ( maxWidth / imageWidth);
+											imageWidth = maxWidth;
+										}
+										if ( imageHeight > (maxHeight - 20) ) {
+											imageWidth = imageWidth * ( (maxHeight - 20) / imageHeight);
+											imageHeight = (maxHeight - 20);
+										}
+								
+										var url = "/connector/html/getImage/" + imageStore.files[element].id + ".jpg?session=" + sessionStorage.getItem("session") + "&type=12&id=" + imageStore.files[element].id + "&width=" + imageWidth + "&height=" + imageHeight;
+										$("#selectImage" + element).append('<div class="specialImage"><img id=\"' + imageStore.files[element].id + '\" title=\"' + imageStore.files[element].description + '\" alt=\"' + imageStore.files[element].description + '\" height=\"' + imageHeight + '\" width=\"' + imageWidth + '\" class=\"selectImage\" src=\"' + url + '\"/><h2><span>' + imageStore.files[element].description + '</span></h2></div>');
+									}
+									$("#selectImage" + element).append('<div><a id="' + imageStore.files[element].id + '" href="#" class="choice selectItem"><!--#4DSCRIPT/WEB_LANGUAGE/Selecteer--></a></div>');
+								}
+								element++;
+							}									
+						}
+
+						$(".placeholderImage").css('width', maxWidth);
+						maxHeight += 50;
+						$(".placeholderImage").css('height', maxHeight);
+						$(".specialImage h2 span").css( "max-width", maxWidth);
+
+						styleLinks(4);
+
+						$( ".selectImage" ).click( function() {
+							var id = 0;
+							for (var i = 0, len = imageStore.files.length; i < len; i++) {
+								if (imageStore.files[i].id == this.id) id = i;
+							}
+							openImage( imageStore.files[id].image );
+						});
+						$(".selectItem").click( function () {
+							window.location.replace( '/module/pages/' + getParameterFromURL('requestfrom') + '.shtm?returnfrom=imagestore&image=' + this.id );						
+						});
+					} else {
+						$imagetable.append('<tr><td colspan="' + columns + '" class="nocolumn"><!--#4DSCRIPT/WEB_LANGUAGE/Er zijn geen resultaten gevonden!!!--><td></tr>');
+					}
+				});
+			} else {
+				$imagetable.append('<tr><td colspan="' + columns + '" class="nocolumn"><!--#4DSCRIPT/WEB_LANGUAGE/Er zijn geen resultaten gevonden!!!--><td></tr>');
+			}
+		}
+		
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(4);
+				styleLinks(5);
+								
+				$("#returnfrom").click( function () {
+					window.location.replace( '/module/pages/' + getParameterFromURL('requestfrom') + '.shtm?returnfrom=imagestore' );						
+				});
+
+				$.getJSON('/connector/html/handleImageStore?session=' + sessionStorage.getItem("session"), function (data) {
+					if ( data.length ) {
+						var $tree = $('#treeList');
+						$tree.tree({
+							data: data
+						});
+						// change the colors to the customer colors
+						$(".jqtree-tree .jqtree-title").css( "color",  layouts.styles[4].fontcolor);
+						$("ul.jqtree-tree .jqtree-toggler").css( "color",  layouts.styles[4].fontcolor)
+						.mouseenter(function(){
+							$(this).css("color", layouts.styles[4].linkcolor);
+						})
+						.mouseleave(function(){
+							$(this).css("color", layouts.styles[4].fontcolor);
+						});
+
+						$tree.bind( 'tree.select',
+							function(event) {
+								$("ul.jqtree-tree li.jqtree_common > .jqtree-element span").css( "color", layouts.styles[4].fontcolor).css( "font-weight", "normal");
+								$("ul.jqtree-tree li.jqtree-selected > .jqtree-element span").css( "color", layouts.styles[4].linkcolor).css( "font-weight", "bold");
+
+								fillSelection(event.node);
+							}
+						);
+
+						var node = $tree.tree('getNodeById', -preferences.user.relation_number );
+						$tree.tree('selectNode', node);
+						$tree.tree('openNode', node);
+					} else {
+						$("#selection-table").empty();
+						$("#selection-table").append("<tr><td style=\"vertical-align:top;\"><!--#4DSCRIPT/WEB_LANGUAGE/Er zijn geen resultaten gevonden!!!--></td></tr>");
+					}
+				});
+				
+				$("#form").submit( function( event ) {
+					event.preventDefault();
+				});
+
+				$("#selection-table tr td:eq( 0 )").css("width", 200);
+				$("#selection-table tr td:eq( 1 )").css("width", $(".content").width() - 250);
+							
+				$(".main").css( "visibility","visible");
+			});
+		});
+
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Beeldbank--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content"><div id="content" class="content_child">
+		<form id="form">
+			<table id="selection-table" class="content_table">
+				<tr>
+					<td style="vertical-align:top;">
+						<input type="text" id="search" size="20" placeholder="<!--#4DSCRIPT/WEB_LANGUAGE/Zoekwaarde-->" onchange="javascript:searchSelection(this)"></input>
+						<div id="treeList"></div>
+					</td>
+					<td style="vertical-align:top;"><table id="image-table" class="content_table"></table></td>
+				</tr>
+			</table>
+		</form>
+		</div></div>
+		<div class="footer"><div class="margins right"><a id="returnfrom" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Terug--></a> | <a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+`		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

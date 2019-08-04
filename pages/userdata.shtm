@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>
+		var preferences = {};
+		var layouts = {};
+				
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(4);
+				styleLinks(5);
+
+				$(".main").css( "visibility","visible");
+			
+				$("#submitUserData").click(function() {
+					var data = $("#form").serializeArray();
+					data.push({name: 'session', value: sessionStorage.getItem("session")});
+					$.ajax({
+						dataType: 'json',
+						data: data,
+						url: '/connector/html/changeLogin',
+						type: "POST",
+						success: function (result) {
+							if (result.errornumber) {
+								switch (result.errornumber) {
+									case 702:
+										openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/Deze gebruikersnaam bestaat reeds. Kies een andere gebruikersnaam.-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+										break;
+									case 703:
+										openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/De gegevens zijn in gebruik. Probeer het later nog eens.-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+										break;
+									case 705:
+										openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/Het is niet toegestaan het wachtwoord op te vragen.-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+										break;
+									default:
+										openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+								}
+							} else {
+								window.location.replace('/module/pages/main.shtm?message=succesCredentials');
+							}
+						}
+					});				
+				});
+			});
+		});
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Aanmeldgegevens--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content"><div id="content" class="content_child">
+		<form id="form">
+			<table id="entry-table" class="content_table">
+				<tr>
+					<td class="nocolumn" colspan="3">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="nocolumn" colspan="3"><!--#4DSCRIPT/WEB_LANGUAGE/Wijzig hieronder uw aanmeldgegevens en klik op verstuur om de aanpassing te activeren.--></td>
+				</tr>
+				<tr>
+					<td class="nocolumn" colspan="3">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Gebruikersnaam:--></td>
+					<td class="data"><input class="inputfields" type="text" name="username" size="50"></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Wachtwoord:--></td>
+					<td class="data"><input class="inputfields" type="password" name="password" size="50"></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+			</table>
+		</form>
+		</div></div>
+		<div class="footer"><div class="margins right"><a id="submitUserData" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Verstuur--></a> | <a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

@@ -1,0 +1,693 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>
+		var preferences = {};			// voorkeuren van deze sessie
+		var layouts = {};				// opmaak van de pagina
+
+		var web2print = {};				// geselecteerde web2print layout
+
+		function synchronizeFields (dropdownlist, field) {
+			$.each(web2print.fields, function(item) {
+				if (( web2print.fields[item].type == 0) || ( web2print.fields[item].type == 2)) {
+					if (web2print.fields[item].synchronize == field) {
+						var lists = web2print.fields[item].choice_list.split("\r");
+						$.each(lists, function(list) {
+							if ($("#" + dropdownlist + " option:selected").index() == list) {
+								$( "#" + web2print.fields[item].id ).val(lists[list]);
+							}
+						});
+					}
+				}
+			});
+		}
+
+		function eraseFileUploadW2P ( field_id, field_name ) {
+			var data = {};
+			data.session = sessionStorage.getItem("session");
+			data.id = $("#key").val();
+			data.data = 'upload';
+			data.current = $("#current").val();
+			data.field = field_id;
+			data[field_name] = "RESET";
+			$.ajax({
+				url: "/connector/html/handleWeb2Print",
+				type: "POST",
+				data: data,
+				success: function(result) {
+					if (result.errornumber) {
+						openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						submitW2Pinput();
+					}
+				}
+			});
+		}
+
+		function changeSession ( dropdownlist ) {
+			$.ajax({
+				url: "/connector/html/handleWeb2Print",
+				type: "POST",
+				data: { session : sessionStorage.getItem("session"), id : $("#key").val(), data : "change", current : $("#current").val(), value : dropdownlist.value },
+				success: function(result) {
+					if (result.errornumber) {
+						openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						web2print = result;
+						$("#current").val( result.current );
+
+						fillW2Pinput();
+					}
+				}
+			});
+		}
+
+		function initFileUploadW2P () {
+			$(".imagestore-class").click( function () {
+				var tempStorage = {
+					"id": $("#id").val(),
+					"key": $("#key").val(),
+					"field": this.id,
+					"current": $("#current").val(),
+					"run": $("#run_01").val(),
+					"reference": $("#reference").val(),
+					"remark": $("#remark").val()
+				};
+				sessionStorage.setItem( "tempStorage", JSON.stringify(tempStorage) );
+
+				submitW2Pinput( function () {
+					window.location.replace( '/module/pages/imagestoreselect.shtm?requestfrom=web2printedit' );
+				});
+			});
+
+			var uploadFields = $(".fileupload-class");
+			$.each( uploadFields , function (item) {
+				$( uploadFields[item] ).fileupload({			// init the upload tool:
+					dataType: 'json',
+					formData: [{name: 'session', value: sessionStorage.getItem("session")}, {name: 'id', value: $('#key').val()}, {name: 'data', value: 'upload'}, {name: 'current', value: $("#current").val()}, {name: 'field', value: uploadFields[item].id}],
+					url: '/connector/html/handleWeb2Print',
+					done: function (e, data) {
+						if (data.result.errornumber) {
+							openAlert(data.result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else {
+							submitW2Pinput();
+						}
+					},
+					add: function (e, data) {
+						if ((web2print.mimetypes.indexOf(data.files[0].type) == -1) && (web2print.mimetypes.length !=0)) {
+							openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/Ongeldige bestandstype:--> " + data.files[0].type, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else if ((data.files[0].size > (web2print.filesize * 1024 * 1024)) & (web2print.filesize != 0)) {
+							openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/Bestand te groot. Maximaal--> " + web2print.filesize + " MB!", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else {
+							jqXHR = data.submit();
+						}
+					},
+					start: function (e, data) {
+						$( "." + uploadFields[item].id + "-button").css('visibility', 'hidden');
+						$( "." + uploadFields[item].id + "-button").css('width', '0px');
+
+						$( "#" + uploadFields[item].id + "-progressbar").progressbar({ value: 0 });
+						$( "#" + uploadFields[item].id + "-progressbar").height(18);
+						$( "#" + uploadFields[item].id + "-progresslabel").css('visibility', 'visible');
+// creer een stop button
+						$( "#" + uploadFields[item].id ).parent().parent().children(".trailing").html('<a href="#" onclick="javascript:jqXHR.abort();" class="choice"><!--#4DSCRIPT/WEB_LANGUAGE/Annuleer--></a>');
+						styleLinks(4);
+					},
+					stop: function (e, data) {
+						$( "#" + uploadFields[item].id + "-progressbar").progressbar( "destroy");
+						$( "#" + uploadFields[item].id + "-progressbar").height(0);
+						$( "#" + uploadFields[item].id + "-progresslabel").css('visibility', 'hidden');
+
+						$( "." + uploadFields[item].id + "-button").css('visibility', 'visible');
+						$( "." + uploadFields[item].id + "-button").css('width', '');
+// verwijder een stop button
+						$( "#" + uploadFields[item].id ).parent().parent().children(".trailing").html('&nbsp;');
+					},
+					fail: function (e, data) {
+						openAlert(e, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					},
+					progress: function (e, data) {
+						var progress = parseInt(data.loaded / data.total * 100, 10);
+						$( "#" + uploadFields[item].id + "-progressbar").progressbar( "option", "value", progress );
+						$( "#" + uploadFields[item].id + "-progresslabel").text(progress + "%" );
+					}
+				});
+				$( "#" + uploadFields[item].id + "-progressbar").height(0);
+				$( "#" + uploadFields[item].id + "-progresslabel").css('visibility', 'hidden');
+			});
+		}
+
+		function calculatedPrice() {
+			var run = unformatNumber($("#run_01").val());
+			if (run > 0) {
+				if (web2print.minimum_size!=0) {
+					if (web2print.minimum_size>run) {
+						openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U moet minimaal--> " + formatNumber(web2print.minimum_size) + " <!--#4DSCRIPT/WEB_LANGUAGE/exemplaren bestellen!-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						run = web2print.minimum_size;
+					}
+				}
+				if (web2print.maximum_size!=0) {
+					if (run > web2print.maximum_size) {
+						openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U mag maximaal--> " + formatNumber(web2print.maximum_size) + " <!--#4DSCRIPT/WEB_LANGUAGE/exemplaren bestellen!-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						run = web2print.maximum_size;
+					}
+				}
+				if (web2print.ordersize>1) {
+					run = Math.round(((run - 1) / web2print.ordersize) + 0.5)*web2print.ordersize.toString();
+				}
+
+				$("#run_01").val(formatNumber(run));
+				$("#price").val("");
+				
+				var versions = 1;
+				if (web2print.mailing_count) {
+					versions = web2print.mailing_count;
+				}
+
+				$.getJSON('/connector/html/calculateProductPrice?session=' + sessionStorage.getItem("session") +  '&id=' + web2print.id +  '&bufferType=link&run=' + run + "&versions=" + versions, function (data) {
+					if (data.errornumber) {
+						openAlert(data.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						$("#price").val(formatCurrency(data.price));
+					}
+				});
+			} else {
+				$("#run_01").val("");
+				$("#price").val("");
+			}
+		}
+
+		function getW2Pdata() {
+			$.ajax({
+				url: "/connector/html/handleWeb2Print",
+				type: "GET",
+				data: { session : sessionStorage.getItem("session"), id : $("#key").val(), current : $("#current").val() },
+				success: function(result) {
+					if (result.errornumber) {
+						openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						web2print = result;
+
+						$("#current").val( web2print.current );
+						if (web2print.group) {			$("#group").children(".data").html(web2print.group);				} else {	$("#group").hide();				}
+						if (web2print.description) {	$("#description").children(".data").html(web2print.description);	} else {	$("#description").hide();		}
+
+						if ((web2print.mailing_count) & (web2print.mailing_run)) {
+							$("#run_01").prop("readonly", true);
+						}
+						
+						fillW2Pinput();
+					}
+				}
+			});
+		}
+
+		function fillW2Pinput() {
+			$("#formData").show();
+			$("#formList").show();
+			$("#formImage").empty().hide();
+
+			if ( web2print.previous_sessions ) {
+				if ( web2print.previous_sessions.length > 0) {
+					$("#previousSession").empty();
+					$("#previousSession").append($("<option />").val("").text("<!--#4DSCRIPT/WEB_LANGUAGE/Maak uw keuze...-->"));
+					$.each(web2print.previous_sessions, function(item) {
+						if (web2print.previous_sessions[item].selected) {
+							$("#previousSession").append($("<option selected/>").val(web2print.previous_sessions[item].session).text(web2print.previous_sessions[item].description));
+						} else {
+							$("#previousSession").append($("<option />").val(web2print.previous_sessions[item].session).text(web2print.previous_sessions[item].description));
+						}
+					});
+					$("#previousSessionRow").show();
+				} else {
+					$("#previousSessionRow").hide();
+				}
+			} else {
+				$("#previousSessionRow").hide();
+			}
+
+			$("#proofButton").show();
+			$("#previewButton").show();
+			if (preferences.submit.web2print) {
+				$("#submitButton").show();
+			}
+
+			$("#layout-table").empty();
+
+			if (web2print.mailing_upload) {
+				if (web2print.mailing_count) {
+					var temp = "<tr>";
+					temp += "<td class=\"leading\"><!--#4DSCRIPT/WEB_LANGUAGE/XML of TAB Bestand-->:</td>";
+					temp += "<td class=\"data\">" + web2print.mailing_count + " <!--#4DSCRIPT/WEB_LANGUAGE/record(s)--></td>";
+					temp += "<td class=\"trailing\"><input id=\"mailing_upload-button-delete\" type=\"button\" value=\"<!--#4DSCRIPT/WEB_LANGUAGE/Verwijder-->\" /></td>";
+					temp += "</tr>";
+
+					$("#layout-table").append(temp);
+
+					$("#mailing_upload-button-delete").click( function() {
+						$.ajax({
+							url: "/connector/html/handleWeb2Print",
+							type: "POST",
+							data: { session : sessionStorage.getItem("session"), id : $("#key").val(), data : 'mailing', current : $("#current").val() },
+							success: function(result) {
+								if (result.errornumber) {
+									openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+								} else {
+									web2print = result;
+									$("#run_01").val("");
+									$("#run_01").prop("readonly", false);
+									fillW2Pinput();
+								}
+							}
+						});
+					});
+				} else {
+					var temp = "<tr>";
+					temp += "<td class=\"leading\"><!--#4DSCRIPT/WEB_LANGUAGE/XML of TAB Bestand-->:</td>";
+					temp += "<td class=\"data\"><input id=\"mailing_upload-button\" type=\"file\" name=\"vx_Data\" /><div style=\"float:left; width:95%;\" id=\"mailingupload-progressbar\"><div class=\"progress-label\"></div></div></td>";
+					temp += "<td class=\"trailing\">&nbsp;</td>";
+					temp += "</tr>";
+
+					$("#layout-table").append(temp);
+
+					$("#mailing_upload-button").fileupload({			// init the upload tool:
+						dataType: 'json',
+						formData: [{name: 'session', value: sessionStorage.getItem("session")}, {name: 'id', value: $('#key').val()}, {name: 'data', value: 'mailing'}, {name: 'current', value: $("#current").val()}],
+						url: '/connector/html/handleWeb2Print',
+						done: function (e, data) {
+							if (data.result.errornumber) {
+								openAlert(data.result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+							} else {
+								web2print = data.result;
+								$("#run_01").val(web2print.mailing_run);
+								if (web2print.mailing_run) {
+									$("#run_01").prop("readonly", true);
+								}
+								fillW2Pinput();
+							}
+						},
+						add: function (e, data) {
+							if (false) {
+								openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/Ongeldige bestandstype:--> " + data.files[0].type, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+							} else if (false) {
+								openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/Bestand te groot. Maximaal--> " + web2print.filesize + " MB!", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+							} else {
+								jqXHR = data.submit();
+							}
+						},
+						start: function (e, data) {
+							$( "#mailing_upload-button").css('visibility', 'hidden');
+							$( "#mailing_upload-button").css('width', '0px');
+
+							$( "#mailingupload-progressbar").progressbar({ value: 0 });
+							$( "#mailingupload-progressbar").height(18);
+							$( ".progress-label").css('visibility', 'visible');
+			// creer een stop button
+							$( "#mailing_upload-button").parent().parent().children(".trailing").html('<a href="#" onclick="javascript:jqXHR.abort();" class="choice"><!--#4DSCRIPT/WEB_LANGUAGE/Annuleer--></a>');
+							styleLinks(4);
+						},
+						stop: function (e, data) {
+							$( "#mailingupload-progressbar").progressbar( "destroy");
+							$( "#mailingupload-progressbar").height(0);
+							$( ".progress-label").css('visibility', 'hidden');
+
+							$( "#mailing_upload-button").css('visibility', 'visible');
+							$( "#mailing_upload-button").css('width', '');
+			// verwijder een stop button
+							$( "#mailing_upload-button").parent().parent().children(".trailing").html('&nbsp;');
+						},
+						fail: function (e, data) {
+							openAlert(e, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						},
+						progress: function (e, data) {
+							var progress = parseInt(data.loaded / data.total * 100, 10);
+							$("#mailingupload-progressbar").progressbar( "option", "value", progress );
+							$(".progress-label").text(progress + "%" );
+						}
+					});
+					$( "#mailingupload-progressbar").height(0);
+					$( ".progress-label").css('visibility', 'hidden');
+				}
+			}
+
+			if (web2print.fields.length > 0) {
+				var dropdowns = [];		//this will be used for synchronization afterwords
+				$.each(web2print.fields, function(item) {
+					var temp = "";
+					if ( web2print.fields[item].hidden ) {
+						if ( web2print.fields[item].type == 2 ) {
+							temp += "<input id=\"" + web2print.fields[item].id + "\" type=\"hidden\" name=\"" + web2print.fields[item].id + "\" value=\"" + web2print.fields[item].value.replace(/\"/g, "&quot;") + "\" />";
+						}
+					} else {
+						var error = web2print.fields[item].error;
+						temp += "<tr>";
+						temp += "<td class=\"leading\">" + makeColonAtEnd ( web2print.fields[item].name ) + "</td>";
+						temp += "<td class=\"data\">";
+						switch ( web2print.fields[item].type ) {
+							case 2:																																		//choicelist
+								if (web2print.fields[item].synchronize == 0) {
+									var lists = web2print.fields[item].choice_list.split("\r");
+									temp += "<select id=\"" + web2print.fields[item].id + "\" size=\"1\" name=\"" + web2print.fields[item].id + "\" onchange=\"javascript:synchronizeFields(" + web2print.fields[item].id + ", " + web2print.fields[item].field + ");\">";
+									$.each(lists, function(list) {
+										temp += "<option ";
+										if (lists[list] == web2print.fields[item].value) {
+											temp += "selected";
+										}
+										temp += ">" + lists[list] + "</option>";
+									});
+									temp += "</select>";
+									dropdowns.push({id: web2print.fields[item].id, field: web2print.fields[item].field});
+								} else {
+									if (web2print.fields[item].front_text) {
+										temp += web2print.fields[item].front_text;
+									}
+									temp += "<input id=\"" + web2print.fields[item].id + "\" type=\"text\" name=\"" + web2print.fields[item].id + "\" size=\"" + web2print.fields[item].size_display + "\" value=\"" + web2print.fields[item].value.replace(/\"/g, "&quot;") + "\" title=\"" + web2print.fields[item].description + "\" readonly />";
+									if (web2print.fields[item].back_text) {
+										temp += web2print.fields[item].back_text;
+									}
+								}
+								break;
+							case 7: 																																	//file
+								if (web2print.fields[item].value == "") {
+									if ((!parseInt(web2print.fields[item].format)) | (parseInt(web2print.fields[item].format) == 2)) {
+										temp += "<input id=\"" + web2print.fields[item].id + "imagestore\" type=\"button\" value=\"<!--#4DSCRIPT/WEB_LANGUAGE/Beeldbank-->\" class=\"" + web2print.fields[item].id + "fileupload-button imagestore-class\" />";
+									}
+									if ((!parseInt(web2print.fields[item].format)) | (parseInt(web2print.fields[item].format) == 1)) {
+										var accept_types = "";
+										switch (web2print.fields[item].block) {
+											case "Graphics":
+												accept_types = "image/svg+xml";
+												break;
+											case "Image":
+												accept_types = "image/bmp, image/gif, image/jpeg, image/png, image/tiff";
+												break;
+											default:
+												accept_types = "application/pdf, application/x-pdf";
+												break;
+										}
+										temp += "<input id=\"" + web2print.fields[item].id + "fileupload\" type=\"file\" name=\"vx_Data\" class=\"" + web2print.fields[item].id + "fileupload-button fileupload-class\" accept=\"" + accept_types + "\" /><div style=\"float:left; width:75%;\" id=\"" + web2print.fields[item].id + "fileupload-progressbar\"><div id=\"" + web2print.fields[item].id + "fileupload-progresslabel\" class=\"progress-label\"></div></div>";
+									}
+								} else {
+									if ( web2print.fields[item].value != "<!--#4DSCRIPT/WEB_LANGUAGE/-2131#leeg-->") {
+										var url = "/connector/html/handleWeb2Print?session=" + sessionStorage.getItem("session") + "&current=" + $("#current").val() + "&id=" + $("#key").val() + "&data=upload&field=" + web2print.fields[item].id + "&random=" + Math.random();
+										temp += "<img src=\"" + url + "\" />";
+									}
+									if  (error === "") {
+										error = "<input id=\"" + web2print.fields[item].id + "\" type=\"button\" name=\"" + web2print.fields[item].id + "\" onclick=\"javascript:eraseFileUploadW2P(" + web2print.fields[item].id + ",'" + web2print.fields[item].name + "');\" value=\"<!--#4DSCRIPT/WEB_LANGUAGE/Verwijder-->\" />";
+									}
+								}
+								break;
+							case 8:																																		//textflow
+								if (web2print.fields[item].front_text) {
+									temp += web2print.fields[item].front_text;
+								}
+								temp += "<textarea id=\"" + web2print.fields[item].id + "\" name=\"" + web2print.fields[item].id + "\" rows=\"5\" cols=\"" + web2print.fields[item].size_display + "\" title=\"" + web2print.fields[item].description + "\"";
+								if (web2print.fields[item].readonly) {
+									temp += " readonly";
+								}
+								temp += " >" + web2print.fields[item].value.replace(/\"/g, "&quot;") + "</textarea>";
+								if (web2print.fields[item].back_text) {
+									temp += web2print.fields[item].back_text;
+								}
+								break;
+							default: 																																	//textline
+								if (web2print.fields[item].front_text) {
+									temp += web2print.fields[item].front_text;
+								}
+								temp += "<input id=\"" + web2print.fields[item].id + "\" type=\"text\" name=\"" + web2print.fields[item].id + "\" size=\"" + web2print.fields[item].size_display + "\" value=\"" + web2print.fields[item].value.replace(/\"/g, "&quot;") + "\" title=\"" + web2print.fields[item].description + "\"";
+								if (web2print.fields[item].readonly) {
+									temp += " readonly";
+								}
+								temp += " />";
+								if (web2print.fields[item].back_text) {
+									temp += web2print.fields[item].back_text;
+								}
+								break;
+						}
+						temp += "</td>";
+						temp += "<td class=\"trailing\">" + error + "</td>";
+						temp += "</tr>";
+					}
+					if ( temp != "" ) {
+						$("#layout-table").append(temp);
+					}
+				});
+// 				$.each(dropdowns, function(item) {
+// 					synchronizeFields(dropdowns[item].id, dropdowns[item].field);
+// 				});
+				initFileUploadW2P();
+			} else {
+				var temp = "<tr>";
+				temp += "<td class=\"leading\">&nbsp;</td>";
+				temp += "<td class=\"data\"><!--#4DSCRIPT/WEB_LANGUAGE/Deze layout heeft geen variabele data!!!--></td>";
+				temp += "<td class=\"trailing\">&nbsp;</td>";
+				temp += "</tr>";
+
+				$("#layout-table").append(temp);
+			}
+
+			if ( preferences.access.noPricesVisible ) {
+				$("#priceRow").hide();
+			}
+
+			calculatedPrice();
+
+			setupImage(web2print.image);
+
+			styleLinks(4);
+		}
+
+		function submitW2Pinput( callback ) {
+			var data = $("#formData").serializeArray();
+			$.ajax({
+				url: "/connector/html/handleWeb2Print",
+				type: "POST",
+				data: { session : sessionStorage.getItem("session"), id : $("#key").val(), current : $("#current").val(), data : JSON.stringify(data) },
+				success: function(result) {
+					if (result.errornumber) {
+						openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						web2print = result;
+						if ( !web2print.error ) {
+							if ( callback ) {
+								callback();
+							} else {
+								fillW2Pinput();
+							}
+						} else {
+							$("#toShoppingCard").off("click").click( handleSubmitShoppingCart );
+							fillW2Pinput();
+						}
+					}
+				}
+			});
+		}
+
+		function handleSubmitShoppingCart() {
+			var data = unformatNumberSerializeArray( $("#formList").serializeArray(), ["run_01"]);
+			if ( testValueFound(data, "run_01", 0) ) {
+				openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U dient een oplage in te geven-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->", function () { $("#run_01").focus(); });
+			} else {
+				preventClickTwice(this);
+				submitW2Pinput( function () {
+					if ( testValueFound(data, "id", 0) ) {
+						var method = "PUT";
+					} else {
+						var method = "POST";
+					}
+					submitLineHandler(data, method, "succesJob");
+				});
+			}
+		}
+
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(5);
+				$(".imageViewer").hide();
+	// check if this is a imagestore
+				if ( getParameterFromURL('returnfrom') == "imagestore") {
+					var tempStorage = JSON.parse( sessionStorage.getItem( "tempStorage" ) );
+
+					$('#id').val(tempStorage.id);
+					$("#run_01").val(tempStorage.run);
+					$("#reference").val(tempStorage.reference);
+					$("#remark").val(tempStorage.remark);
+
+					var key = tempStorage.key;
+					var current = tempStorage.current;
+
+					var image = parseInt(getParameterFromURL('image')) || 0;
+					if ( image ) {
+						$.ajax({
+							url: "/connector/html/handleImageStore",
+							type: "POST",
+							data: { session : sessionStorage.getItem("session"), data : "web2print", key : key, current : current, field : tempStorage.field, id : image },
+							success: function(result) {
+								if (result.errornumber) {
+									openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+								}
+								$("#key").val( key );
+								$("#current").val( current );
+								$("#layout").val( key );
+
+								getW2Pdata();
+								$(".main").css( "visibility","visible");
+							}
+						});
+					} else {
+						$("#key").val( key );
+						$("#current").val( current );
+						$("#layout").val( key );
+
+						getW2Pdata();
+						$(".main").css( "visibility","visible");
+					}
+				} else {
+	// check if this is new request
+					var id = parseInt(getParameterFromURL('id')) || 0;		//kijk of dit een bestaande regel is
+					$('#id').val(id);
+					if (id > 0 ) {
+						$.getJSON('/connector/html/detailTables?session=' + sessionStorage.getItem("session") +  '&id=' + id +  '&table=0', function (data) {
+							if (data.errornumber) {
+								openAlert(data.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+							}
+							$("#run_01").val(formatNumber(data.run_01));
+							$("#reference").val(data.reference);
+							$("#remark").val(data.remark);
+
+							$("#key").val(data.key);
+							$("#current").val(data.current);
+							$("#layout").val( data.key );
+
+							getW2Pdata();
+							$(".main").css( "visibility","visible");
+						});
+					} else {
+						var key = parseInt(getParameterFromURL('key')) || 0;		//layout
+						var current = getParameterFromURL('current');				//sessie
+
+						$("#key").val( key );
+						$("#current").val( current );
+						$("#layout").val( key );
+
+						getW2Pdata();
+						$(".main").css( "visibility","visible");
+					}
+				}
+
+				if (preferences.submit.web2print) {
+					$("#toShoppingCard").click( handleSubmitShoppingCart );
+				} else {
+					$("#submitButton").hide();
+				}
+
+				$("#proof").click( function() {
+					submitW2Pinput( function () {
+						var url = preferences.settings.url + "/connector/html/handleWeb2Print?session=" + sessionStorage.getItem("session") +  "%26id=" + $("#key").val() +  "%26current=" + $("#current").val() + "%26data=preview";
+
+					    var BodyLine = "<!--#4DSCRIPT/WEB_LANGUAGE/Open de volgende URL--> " + url + " <!--#4DSCRIPT/WEB_LANGUAGE/om uw digitaal document te openen en te controleren.-->";
+	    				BodyLine = BodyLine.replace(/&#39;/g,"%27");
+
+	    				var email = web2print.proofEmailAddress;
+	    				if ( email === "") {
+	    					email = preferences.user.email;
+	    				}
+
+ 						window.location.replace( "mailto:" + email + "?Subject=<!--#4DSCRIPT/WEB_LANGUAGE/Controle digitaal document-->&Body=" + BodyLine );
+					});
+				});
+
+				$("#preview").click( function() {
+					submitW2Pinput( function () {
+						if (web2print.preview_jpeg) {
+							openImageURL( "/connector/html/handleWeb2Print?session=" + sessionStorage.getItem("session") + "&id=" + $("#key").val() + "&current=" + $("#current").val() + "&data=preview" );
+						} else {
+							openPDF( "/connector/html/handleWeb2Print?session=" + sessionStorage.getItem("session") + "&id=" + $("#key").val() + "&current=" + $("#current").val() + "&data=preview" );
+						}
+					});
+				});
+
+				if ($('#id').val() > 0) {
+					$("#backButton").hide();
+				} else {
+					$("#back").click(function(){
+						window.location.replace('/module/pages/web2print.shtm');
+					});
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Web2Print--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content"><div id="content" class="content_child">
+		<form id="formList">
+			<table id="entry-table" class="content_table">
+				<input type="hidden" id="id" 				name="id"					value="0" />
+				<input type="hidden" id="key" 				name="key"					value="0" />
+				<input type="hidden" id="current" 			name="current"				value="" />
+				<input type="hidden" id="bufferType" 		name="bufferType"			value="web2print" />
+				<tr>
+					<td class="nocolumn" colspan="3">&nbsp;</td>
+				</tr>
+				<tr id="group">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Groep:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="description">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Layout:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Oplage:--></td>
+					<td class="data"><input type="text" id="run_01" name="run_01" size="10" maxlength="10" value="" onchange="javascript:calculatedPrice()" /></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="priceRow">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Prijs:--></td>
+					<td class="data"><input type="text" id="price" name="price" size="10" maxlength="10" value="" disabled /></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Referentie:--></td>
+					<td class="data"><input type="text" id="reference" name="reference" size="30" maxlength="30" onchange="javascript:removeFalseCharacters(this)" /></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Notities:--></td>
+					<td class="data"><textarea class="longtext" rows="2" id="remark" name="remark" onchange="javascript:removeFalseCharacters(this)"></textarea></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="previousSessionRow" style="display: none;">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Vorige sessie:--></td>
+					<td class="data"><select id="previousSession" size="1" onchange="javascript:changeSession(this)"></select></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="chapter" colspan="3">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="chapter" colspan="3"><!--#4DSCRIPT/WEB_LANGUAGE/Layoutgegevens--></td>
+				</tr>
+			</table>
+		</form>
+		<form id="formData">
+			<table id="layout-table" class="content_table">
+			</table>
+		</form>
+		</div></div>
+		<div class="footer"><div class="margins right"><span id="backButton"><a id="back" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Terug--></a> | </span><span id="proofButton"><a id="proof" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Proef--></a> | </span><span id="previewButton"><a id="preview" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Voorbeeld--></a> | </span><span id="submitButton"><a id="toShoppingCard" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/In winkelwagen--></a> | </span><a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+		<div class="imageViewer"><img id="imageViewer" /></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

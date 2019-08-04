@@ -1,0 +1,323 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>
+		var preferences = {};
+		var layouts = {};
+
+		var webdesign = {};
+		var nxp = {};
+
+		function openPreview ( orderId ) {
+			openPDF( "/connector/html/handleWebDesign?session=" + sessionStorage.getItem("session") + "&orderId=" + orderId + "&action=preview" );
+		}
+		
+		function deleteProduct( orderId ) {
+			$.ajax({
+				url: "/connector/html/handleWebDesign",
+				type: "POST",
+				data: { session : sessionStorage.getItem("session"), orderId: orderId, action: "delete" },
+				success: function(result) {
+					debugger;
+				}
+			});
+		}
+		
+		function editProduct( orderId ) {
+			var sessionParams = "session:" + sessionStorage.getItem("session");
+			sessionParams += ";key:" + $("#key").val();
+			sessionParams += ";id:" + $("#id").val();
+			sessionParams += ";run:" + $("#run_01").val();
+			sessionParams += ";reference:" + $("#reference").val();
+			sessionParams += ";remark:" + $("#remark").val();
+			sessionParams += ";url:" + location.pathname;
+			
+			window.location = nxp.url + "editor/?uniqueUserId=" + nxp.uniqueUserId + "&tokenId=" + nxp.tokenId + "&lang=NL&sessionParams=" + sessionParams + "#/product/edit/" + orderId + "/0";
+		}
+		
+		function createProduct (){
+			var sessionParams = "session:" + sessionStorage.getItem("session");
+			sessionParams += ";key:" + $("#key").val();
+			sessionParams += ";id:" + $("#id").val();
+			sessionParams += ";run:" + $("#run_01").val();
+			sessionParams += ";reference:" + $("#reference").val();
+			sessionParams += ";remark:" + $("#remark").val();
+			sessionParams += ";url:" + location.pathname;
+
+			window.location = nxp.url + "createTemplate?id=" + nxp.templateId + "&key=" + nxp.vendorId + "&uniqueUserId=" + nxp.uniqueUserId + "&tokenId=" + nxp.tokenId + "&lang=NL" + "&sessionParams=" + sessionParams;
+		}
+
+		function fillDetails (key ) {
+			$.ajax({
+				url: "/connector/html/detailTables",
+				type: "GET",
+				data: { session : sessionStorage.getItem("session"), table: 11, id: key },
+				success: function(result) {
+					if (result.errornumber) {
+						openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						$("#key").val(key);
+						webdesign = result;
+						
+						if (webdesign.group) {			$("#group").children(".data").html(webdesign.group);											} else {	$("#group").hide();				}
+						if (webdesign.description) {	$("#description").children(".data").html(webdesign.description);								} else {	$("#description").hide();		}
+
+						setupImage(webdesign.image);
+
+						$(".main").css( "visibility","visible");
+						$("#run_01").focus();
+						
+						$.ajax({
+							url: "/connector/html/handleWebDesign",
+							type: "GET",
+							data: { session : sessionStorage.getItem("session"), id: key },
+							success: function(result) {
+								if (result.errornumber) {
+									openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+								} else {
+									nxp = result;
+									
+									if ( nxp.editProduct ) {
+										$("#nxpNew").show();
+										$("#nxpNew td:nth(1)").text( webdesign.group + " " + webdesign.description );
+									} else {
+										$("#nxpNew").hide();
+									}
+									
+									var temp = "";
+									if ( nxp.layouts.length > 0 ) {
+										temp += "<table cellspacing=\"0px\" cellpadding=\"2px\">";
+										temp += "<tr>";
+										temp += "<td align=\"left\" width=\"55%\" class=\"listHeader\" colspan=\"4\"><b><!--#4DSCRIPT/WEB_LANGUAGE/Opgeslagen--></b></td>";
+										temp += "<td align=\"left\" width=\"45%\" class=\"listHeader\" colspan=\"3\"><b><!--#4DSCRIPT/WEB_LANGUAGE/Akkoord--></b></td>";
+										temp += "</tr>";
+
+										$.each(nxp.layouts, function(item) {
+											if ( item % 2) {
+												temp += "<tr class=\"odd\">";
+											} else {
+												temp += "<tr class=\"even\">";
+											}
+											temp += "<td align=\"left\" width=\"15%\" class=\"listData\">" + nxp.layouts[item].productCreated + "</td>";
+											temp += "<td align=\"left\" width=\"33%\" class=\"listData\">" + nxp.layouts[item].productName + "</td>";
+											if ( nxp.editProduct ) {
+												temp += "<td align=\"center\" width=\"6%\" class=\"listData\"><a href=\"#\" class=\"choice\" onclick=\"javascript:editProduct(" + nxp.layouts[item].productId + ");\"><!--#4DSCRIPT/WEB_LANGUAGE/Wijzig--></a></td>";
+											} else {
+												temp += "<td align=\"center\" width=\"6%\" class=\"listData\">&nbsp;</td>";
+											}
+											if ( nxp.editProduct ) {
+												temp += "<td align=\"center\" width=\"6%\" class=\"listData\"><a href=\"#\" class=\"choice\" onclick=\"javascript:deleteProduct(" + nxp.layouts[item].productId + ");\"><!--#4DSCRIPT/WEB_LANGUAGE/Wis--></a></td>";
+											} else {
+												temp += "<td align=\"center\" width=\"6%\" class=\"listData\">&nbsp;</td>";
+											}
+											temp += "<td align=\"left\" width=\"15%\" class=\"listData\">" + nxp.layouts[item].jobCreated + "</td>";
+											if ( nxp.layouts[item].jobId ) {
+												temp += "<td align=\"center\" width=\"10%\" class=\"listData\"><a href=\"#\" class=\"choice\" onclick=\"javascript:openPreview(" + nxp.layouts[item].jobId + ");\"><!--#4DSCRIPT/WEB_LANGUAGE/Voorbeeld--></a></td>";
+											} else {
+												temp += "<td align=\"center\" width=\"10%\" class=\"listData\">&nbsp;</td>";
+											}
+											if (( nxp.layouts[item].jobId ) && ( preferences.submit.webdesign ) && ( nxp.orderProduct )) {
+												temp += "<td align=\"center\" width=\"15%\" class=\"listData\"><a href=\"#\" class=\"choice toShoppingCard\" id=\"" + nxp.layouts[item].jobId + "\" data-name=\"" + nxp.layouts[item].productName + "\">"
+												if ( preferences.access.useShoppingcard ) {
+													temp += "<!--#4DSCRIPT/WEB_LANGUAGE/In winkelwagen-->";
+												} else {
+													temp += "<!--#4DSCRIPT/WEB_LANGUAGE/Verstuur-->";
+												}
+												temp += "</a></td>";
+											} else {
+												temp += "<td align=\"center\" width=\"15%\" class=\"listData\">&nbsp;</td>";
+											}
+											temp += "</tr>";
+										});
+									
+										temp += "</table>";
+									} else {
+										temp += "<!--#4DSCRIPT/WEB_LANGUAGE/Er zijn geen resultaten gevonden!!!-->";
+									}
+									$("#nxpTable").html ( temp );
+
+									$(".toShoppingCard").click(function() {
+										var data = unformatNumberSerializeArray( $("#formList").serializeArray(), ["run_01"]);
+										data.push({ "name": "jobId", "value": this.id });
+										data.push({ "name": "description", "value": $(this).data("name") });
+										if ( testValueFound(data, "run_01", 0) ) {
+											openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U dient een oplage in te geven-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->", function () { $("#run_01").focus(); });
+										} else {
+											preventClickTwice(this);
+											if ( testValueFound(data, "id", 0) ) {
+												var method = "PUT";
+											} else {
+												var method = "POST";
+											}
+											submitLineHandler(data, method, "succesJob");
+										}
+									});		
+
+									styleLinks(4);
+									
+									$("#nxpTable table").css("border-right", "1px solid " + layouts.styles[4].fontcolor );
+									$("#nxpTable table").css("border-bottom", "1px solid " + layouts.styles[4].fontcolor );
+
+									$("#nxpTable table .listHeader").css("border-left", "1px solid " + layouts.styles[4].fontcolor );
+									$("#nxpTable table .listHeader").css("border-top", "1px solid " + layouts.styles[4].fontcolor );
+									
+									$("#nxpTable table .listData").css("border-left", "1px solid " + layouts.styles[4].fontcolor );
+									$("#nxpTable table .listData").css("border-top", "1px solid " + layouts.styles[4].fontcolor );
+									$("#nxpTable table .even").css( "background-color", layouts.styles[4].altcolor );
+								}
+							}
+						});
+					}
+				}
+			});
+		}
+
+		function calculatedPrice() {
+			var run = unformatNumber($("#run_01").val());
+			if (run > 0) {
+				if (webdesign.minimum_size!=0) {
+					if (webdesign.minimum_size>run) {
+						openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U moet minimaal--> " + formatNumber(webdesign.minimum_size) + " <!--#4DSCRIPT/WEB_LANGUAGE/exemplaren bestellen!-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						run = webdesign.minimum_size;
+					}
+				}
+				if (webdesign.maximum_size!=0) {
+					if (run > webdesign.maximum_size) {
+						openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U mag maximaal--> " + formatNumber(webdesign.maximum_size) + " <!--#4DSCRIPT/WEB_LANGUAGE/exemplaren bestellen!-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						run = webdesign.maximum_size;
+					}
+				}
+				if (webdesign.ordersize>1) {
+					run = Math.round(((run - 1) / webdesign.ordersize) + 0.5)*webdesign.ordersize.toString();
+				}
+
+				$("#run_01").val(formatNumber(run));
+				$("#price").val("");
+
+				$.getJSON('/connector/html/calculateProductPrice?session=' + sessionStorage.getItem("session") +  '&id=' + webdesign.id +  '&bufferType=link&run=' + run, function (data) {
+					if (data.errornumber) {
+						openAlert(data.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						$("#price").val(formatCurrency(data.price));
+					}
+				});
+			} else {
+				$("#run_01").val("");
+				$("#price").val("");
+			}
+		}
+						
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(4);
+				styleLinks(5);
+
+				var id = parseInt(getParameterFromURL('id')) || 0;		//kijk of dit een bestaande regel is
+				$('#id').val(id);
+				if (id > 0 ) {
+					$.getJSON('/connector/html/detailTables?session=' + sessionStorage.getItem("session") +  '&id=' + id +  '&table=0', function (data) {
+						if (data.errornumber) {
+							openAlert(data.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else {
+							$("#run_01").val(formatNumber(data.run_01));
+							$("#reference").val(data.reference);
+							$("#remark").val(data.remark);
+							calculatedPrice();
+							fillDetails(data.key);
+						}
+					});
+				} else {
+// 					$("#run_01").val( getParameterFromURL('run') );
+// 					calculatedPrice();
+// 					$("#reference").val( getParameterFromURL('reference') );
+// 					$("#remark").val( getParameterFromURL('remark') );
+					
+					fillDetails(parseInt(getParameterFromURL('key')) || 0); //haal het product op
+				}
+									
+				if ( preferences.access.noPricesVisible ) {
+					$("#priceRow").hide();
+				}
+
+				if (id > 0) {
+					$("#backButton").hide();
+				} else {
+					$("#back").click(function(){
+						window.location.replace('/module/pages/webdesign.shtm');
+					});
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Webdesign--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content"><div id="content" class="content_child">
+		<form id="formList">
+			<table id="entry-table" class="content_table">
+				<input type="hidden" id="id" 				name="id"					value="0"></input>
+				<input type="hidden" id="key" 				name="key"					value="0"></input>
+				<input type="hidden" id="bufferType" 		name="bufferType"			value="webdesign"></input>
+				<tr>
+					<td class="nocolumn" colspan="3">&nbsp;</td>
+				</tr>
+				<tr id="group">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Groep:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="description">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Omschrijving:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Oplage:--></td>
+					<td class="data"><input type="text" id="run_01" name="run_01" size="10" maxlength="10" value="0" onchange="javascript:calculatedPrice(this)"></input></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="priceRow">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Prijs:--></td>
+					<td class="data"><input type="text" id="price" name="price" size="10" maxlength="10" value="" disabled></input></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Referentie:--></td>
+					<td class="data"><input type="text" id="reference" name="reference" size="30" maxlength="30" onchange="javascript:removeFalseCharacters(this)"></input></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Notities:--></td>
+					<td class="data"><textarea class="longtext" rows="2" id="remark" name="remark" onchange="javascript:removeFalseCharacters(this)"></textarea></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr> 
+					<td class="chapter" colspan="3">&nbsp;</td>
+				</tr>
+				<tr> 
+					<td class="chapter" colspan="3"><!--#4DSCRIPT/WEB_LANGUAGE/Layoutgegevens--></td>
+				</tr>
+				<tr id="nxpNew" style="display: none;">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Product:--></td>
+					<td class="data"></td>
+					<td class="trailing"><a href="#" class="choice" onclick="javascript:createProduct();"><!--#4DSCRIPT/WEB_LANGUAGE/Nieuw--></a></td>
+				</tr>
+				<tr>
+					<td class="nocolumn" colspan="3" id="nxpTable">Ophalen van de gegevens...</td>
+				</tr>
+			</table>
+		</form>
+		</div></div>
+		<div class="footer"><div class="margins right"><span id="backButton"><a id="back" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Terug--></a> | </span></span><a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+		<div class="imageViewer"><img id="imageViewer" /></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

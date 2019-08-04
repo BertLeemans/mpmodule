@@ -1,0 +1,431 @@
+nl	en	de	fr	es	cs	hu	pl	sk	it
+, maak uw keuze uit bovenstaande menubalk.	, make a choice from upper menubar.	, wählen Sie aus den entsprechenden Menüs.	, faîtes votre choix dans le menu	, Hacer una elección de la barra de menú superior.	, vyberte si menu naho?e.	, válasszon a fenti menüb?l.	, dokonaj wyboru z menu.	Vyberte si z vyššie uvedenej ponuky na lište.	, selezionate un'opzione dalla barra del menu sopra riportata.
+Aanleverdatum:	Artwork date:	Dateneingang: 	Date réception:	Fecha de entrega:	Termín dodání:	Szállítási dátum:	Data dostawy:	Termín dodania:	Data di consegna:
+Aanleveren:	Delivery artwork:	Anlieferen:	Livrer les données:	Entrega:	Dodání:	Szállítás:	Dostawa:	dodania:	Consegna:
+Aanmelden	Logon	Anmelden	Se connecter	Inicio de sesión	P?ihlášení	Bejelentkezés:	Zg?oszenie	Prihlásiť sa	Iscrizione
+Aanmeldgegevens	Account details	Kontodetails	Données d'enregistrement	Detalles de la cuenta	Detaily účtu	Fiókrészletek	Szczegóły Konta	Detaily účtu	Dettagli account
+Aantal	Number	Anzahl	Nombre	Número	Číslo	Mennyiség	Numer	číslo	Quantità
+Aantal kleuren in document:	Number of colors in document:	Anzahl Farben in Datei:	Mombres couleurs dans le document	Número de colores del documento:	Po?et barev v dokumentu:	Színek száma a dokumentumban:	Liczba kolorów w dokumencie:	Po?et farieb v dokumente:	Numero di colori nel documento:
+Aantal kleuren verwacht:	Number of colors expected:	Anzahl Farben erwartetet:	Nombres couleurs expectés	Número de colores espera:	P?edpokládaný po?et barev:	Várható színek száma:	Spodziewana liczba kolorów:	Počet farieb očakávať:	Numero di colori previsti:
+Accepteer	Accept	Akzeptiert	Permet	Aceptar	Akceptovat	Elfogadás	Akceptuj	Prija?	Accetta
+Adres:	Address:	Straße:	Adresse:	Dirección:	Adresa:	Cím:	Adres:	Adresa:	Indirizzo:
+Af	Min.	Ab	Moins	Min.	Af	 	Od, z	Min.	Terminato
+af te schrijven van uw rekening.	from our account.	Abschreiben von ihrer Rechnung.	à virer de notre compte	de nuestra cuenta.	odepsat z ú?tu.	a számlájáról leírandó.	do odpisania z rachunku.	z nášho účtu.	da addebitare sul vostro conto.
+Afdeling:	Department:	Abteilung:	Service:	Departamento:	Oddělení:	Részleg:	Departament:	pracovisko:	Dipartimento:
+afgeschreven. Als dit gelukt is ontvangt u de goederen.	. If this goes well you will receive the goods.	abschreiben. Wenn es gut gemacht ist, bekommen sie die Güter.	Viré. Vous recevez vos produits..	. Si esto sigue así va a recibir las mercancías.	odepsaný. Pokud se vám to poda?í, obdržíte zboží.	leírva. Ennek sikeres elvégzése után megkapja az árucikkeket.	odpisano. Po pozytywnym zako?czeniu otrzymasz produkty.	odhlásený Po úspešnom dokon?ení dostanete tovar.	addebitato. Riceverete la merce qualora l'operazione abbia avuto buon esito.
+Afleveradres	Delivery address	Lieferadresse	Adresse de livraison	Dirección de entrega	Doručovací adresa	Kiszállítási cím	Adres dostawy	Dodacia adresa	Indirizzo di recapito
+Afleverbon	Delivery form	Lieferschein	Bon de livraison	Forma de entrega	forma dodávky	Szállítójegy	Kwit dostawy	Dodací list	Ricevuta di recapito
+Afleverbon:	Delivery form:	Lieferschein:	Bon de livraison:	Forma de entrega:	Forma dodávky:	Szállítójegy:	Kwit dostawy:	Dodací list:	Ricevuta di recapito:
+Afleverbonnen	Delivery forms	Lieferscheine	Bons de livraison	formas de suministro	Dodací formy	Szállítójegyek	Kwity dostawy	Dodacie listy	Ricevute di recapito
+Afleveren:	Delivery:	Liefern:	Livrer:	Entregar	Dodat:	Kiszállítás:	Dostarczyć	Doda?:	Recapito:
+Afloop:	Bleed	Anschnitt	Bord perdu	Sangrar	Krvácet	Vérzik	Krwawić	krvácať	Sanguinare
+Afmelden	Logoff	Abmelden	Deconnecter	Desconectarse	Odhlásit	Kijelentkezés	Wyrejestrowanie	Odhlásiť sa	Annullare la registrazione
+Afwerking:	Finishing:	Bubi:	Façonnage:	Refinamiento:	Povrchová úprava:	Végső:	Wykończeniowy:	Povrchová úprava:	Finitura:
+Akkoord	Approved	Akzeptieren	Accord	Aprobado	Schválený	Jóváhagyott	Zatwierdzony	schválený	Approvato
+Alle	All	Alle	Tous	Todas	Všechno	Minden	Wszystko	Všetko	Tutti
+Alle kleuren worden omgezet naar:	Colors will be converted to:	Alle Farben werden konvertiert nach:	Tous les couleurs sont converti vers:	Los colores se pueden convertir en:	Barvy budou převedeny na:	Színek kell átalakítani, hogy:	Kolory zostaną zamienione na:	Farby budú prevedené na:	I colori saranno convertiti in:
+Annuleer	Cancel	Annulieren	Annuler	Cancelar	Zrušit	Törlés	Anuluj	Zruš	Annulla
+Annuleren	Cancel	Annulieren	Annuler	Cancelar	Zrušení	Törlés	Anuluj	Zruš	Annullare
+Archief	Filing	Archiv	Archives	Presentación	Archiv	Archívum	Archiwum	Archív	Archivio
+Archief orders	Filed jobs	Archiv-Aufträge	Archive job	Pedido presentados	Archiv objednávek	Archivált megrendelések	Zlecenia archiwalne	Archivované objednávky	Archivio ordini
+Artikel	Article	Artikel	Article	Artículo	Produkt	Árucikk	Artykuł	Položka	Articolo
+Artikel:	Article:	Artikel:	Article:	Artículo:	Článek:	Cikk:	Artykuł:	Článok:	Articolo:
+Artikelen	Articles	Artikel	Articles	Artículos	Produkty	Árucikkek	Artykuły	Položky	Articoli
+Artikelnr.:	Article nr.:	Artikelnr.:	N° article:	Ref .:	Položka č .:	Cikksz.:	Artykuł nr .:	Položka č.:	Nr. articolo:
+Basiskleuren	Basecolors	Basis Farben	Couleurs de base	Basecolors	Základní barvy	Alapszínek	Kolory podstawowe	Základné farby	Colori supplementari
+Bedrag:	Amount:	Betrag:	Montant:	Cantidad:	Množství:	Összeg:	Kwota:	Suma:	Importo:
+Bedrijfsgegevens	Companyfiles	Betriebsdaten	Données de la société	Companyfiles	Firemní údaje	Vállalati adatok	Dane firmy	Firemné údaje	Dati dell'azienda
+Bedrijfsgegevens:	Companyfiles:	Betriebsdaten:	Données de la société:	Companyfiles:	Firemní údaje:	Vállalati adatok:	Dane firmy:	Firemné údaje:	Dati dell'azienda:
+Bedrukking:	Print:	Druck:	Impression:	Impresión:	Tisk:	Nyomtatás:	Wydrukować:	tlač:	Stampare:
+Beeld	Picture	Bild	Image	Imagen	Obrázek	Kép	Obraz	Obrázok	Immagine
+Beeldbank	Image store	Datenbank	Banque d'images	almacén de imágenes	store Image	Képtár	Bank obrazów	Databáza obrázkov	Banca immagini
+Begeleider	Supervisor	Begleiter	Resp. int.	Supervisor	Dozorce	Felügyelő	Opiekun	Sprievodca	Guida
+Begeleider:	Supervisor:	Begleiter:	Resp. int.:	Supervisor:	Dozorce:	Felügyelő:	Opiekun:	Sprievodca:	Guida:
+Begin	Start	Anfang	Début	comienzo	Start	Kezdés	Początek	štart	Inizio
+Behoud kleuren	Remain colors	Farben beibehalten	Maintient couleurs	El color permanece	zůstávají barvy	Maradj színek	pozostają kolory	zostávajú farby	Rimangono colori
+Behoud steunkleur	Keep spotcolor	Behalt HKS-Farben	Garde couleur support	Mantenga spotcolor	Udržujte spotcolor	tartsuk spotcolor	Zachowaj kolor pomocniczy	Udržujte spotcolor	Mantieni il colore supplementare
+Bericht	Message	Bericht	Message	Mensaje	Zpráva	Üzenet	Wiadomość	Správa	Messaggio
+Bericht:	Message:	Bericht, Notiz:	Message:	Mensaje:	Zpráva:	Üzenet:	Wiadomość:	Správa:	Messaggio:
+Bestand te groot. Maximaal	Filesize to big. Maximum	Dateigröße überschritten. Maximal	Taille du fichier trop grande. Maximum	Tamaño del archivo de grande. Máximo	Velikost souboru příliš velká. Maximum	Fájlméret nagy. Maximális	Rozmiar pliku do dużych. Maksymalny	Veľkosť súboru príliš veľká. maximum	FILESIZE alla grande. Massimo
+Bestand(en):	File(s):	Datei(en):	Fichier(s):	Archivos (s):	Soubor(y):	Dokumentum(ok):	Plik(i):	Súbor(y):	Documento/i:
+Bestand:	File:	Datei:	Fichier:	Archivo:	Soubor:	fájl:	Plik:	súbor:	File:
+Bestanden:	Files:	Daten:	Fichiers	archivos:	Soubory:	Dokumentumok:	Pliki:	Súbory:	Documenti:
+Bestel	Order	Bestel	Commande	Orden	Objednat	Megrendelés	Zamów	Objednaj	Prenota
+Bestel historie	Order history	Historische Bestellung	Historique de commande	Historial de pedidos	Historie objednávek	Eddigi megrendelések	Historia zamówień	História objednávok	Storia prenotazioni
+Bestel:	Order:	Bestellung	Commande:	Orden:	Objednat:	Megrendelés:	Zamów:	Objednaj:	Prenota:
+Bestellen	Ordering	Bestellen	Commander	Ordenando	Objednávka	Megrendelés	Kolejność	Radenie	Prenotare
+bestellen!	to order!	Bestellen!	commander	¡ordenar!	objednat!	rendelni!	zamówić!	objednať!	per ordinare!
+Bestelling bij	Ordering from	Bestellung vom	Commande de	Hacer un pedido desde	objednání z	rendelés	Kolejność od	objednanie z	Ordinare da
+Besteloverzicht	Ordering details	Bestelldetails	Aperçu de la commande	Código de pedido	podrobnosti pro objednávku	rendelési adatok	dane do zamówienia	podrobnosti pre objednávku	dati per l'ordine
+Bestelreferentie	Ordering reference	Bestellcode	Référence de la commande	referencia de pedido	odkaz pro objednání	rendelési hivatkozás	odniesienie do zamówienia	odkaz pre objednanie	di riferimento di ordinazione
+Betaalwijze	Pay mode	Bezahlung	Mode de paiement	el modo de pago	Zp?sob platby	Fizetési mód	Sposób zap?aty	Spôsob platenia	Metodo di pagamento
+Betaling	Payment	Bezahlung	Paiement	Pago	Platba	Fizetés	Zap?ata	Platba	Pagamento
+Betreft offertenummer	Concerns quotationnumber	Ist Angebotsnummer	Concernant n° d'offre	Las preocupaciones quotationnumber	Doty?né ?íslo nabídky	Árajánlat száma	Dotyczy nr oferty	Predmet ?íslo ponuky	Numero dell'offerta
+Betreft ordernummer	Concerns jobnumber	Ist Auftragsnummer	Concernant n° de job	Las preocupaciones númerodeimpresión	obavy jobnumber	aggodalmak jobnumber	obawy jobnumber	obavy jobnumber	preoccupazioni jobnumber
+Bezoek adres:	Visite address:	Besuchsadresse	Adresse de visite	visite la dirección:	Návšt?vní adresa:	Látogatási cím:	Adres dla interesantów:	Návštevná adresa:	Indirizzo per le visite:
+Bij	Plus	plus	Plus	Más	U	 	Przy	Pri	Presso
+Binnenwerk	Body	Inhalt	Interieur	Cuerpo	Interiér	Bels? munkálatok	Wn?trze	Telo	Interno
+Brief	Letter	Brief	Lettre	Carta	Dopis	Levél	List	písmeno	Lettera
+BTW	VAT	MwSt	TVA	TINA	DPH	Áfa	VAT	DPH	IVA
+BTW:	VAT:	MwSt.:	TVA:	TINA:	DPH:	Áfa:	VAT:	DPH:	IVA:
+Calculator	Estimator	Kalkulator	Calculateur	Estimador	Kalkula?ka	Kalkulátor	Kalkulator	Kalkula?ka	Calcolatore
+Calculator:	Estimator:	Kalkulator:	Calculateur:	Estimador:	Kalkula?ka:	Kalkulátor:	Kalkulator:	Kalkula?ka:	Calcolatore:
+Checked	Checked	Controliert	Vérifié	Comprobado	Zkontrolováno	Ellen?rzött	Sprawdzone	Skontrolované	A quadri
+Checklist:	Checklist:	Checkliste:	Checklist:	Lista de comprobación:	Kontrolní seznam:	Ellen?rz?lista:	Lista kontrolna:	Kontrolný zoznam:	Lista di controllo:
+Code	Code	Code	Code	Código	Kód	Kód	Kod	Kód	Codice
+Code:	Code:	Code:	Code:	Código:	Kód:	Kód:	Kod:	Kód:	Codice:
+Contactpersoon	Contactperson	Kontaktperson	Personne de contact	Persona de contacto	Kontaktní osoba	Kapcsolattartó	Osoba kontaktowa	Kontaktná osoba	Referente
+Contactpersoon:	Contactperson:	Kontaktperson:	Pers. de contact:	Persona de contacto:	Kontaktní osoba:	Kapcsolattartó:	Osoba kontaktowa:	Kontaktná osoba:	Referente:
+Controle digitaal document	Check digital document	Check digitale Daten	Contrôle de documents	Compruebe documento digital	Zkontrolujte digitálního dokumentu	Ellenőrizze digitális dokumentum	Sprawdź dokument cyfrowy	Skontrolujte digitálneho dokumentu	Controllare documento digitale
+Controlegetal:	Controlnumber:	Kontrollzahl:	N° de controle	Número de control:	Controlnumber:	Ellenőrző szám:	Liczba kontrolna:	Controlnumber:	Numero di controllo:
+Creditcard	Creditcard	Kreditkarte	Carte de credit	Tarjeta de crédito	Kreditní karta	Kreditkártya	Karta kredytowa	Kreditná karta	Carta di credito
+Cyaan	Cyan	Cyan	Cyan	cian	Azurová	Cián	Cyjan	Kyán	Ciano
+Datum	Date	Datum	Date	Fecha	Datum	Dátum	Data	Dátum	Data
+Datum:	Date:	Datum:	Date:	Fecha:	Datum:	Találka:	Data:	Dátum:	Data:
+De gegevens zijn in gebruik. Probeer het later nog eens.	Your files are in use. Please try again later.	Ihre Daten werden bearbeitet. Bitte versuchen Sie es später erneut.	Vos coördonnées sont déjà utilisées. Veuillez réessayer plus tard.	Sus archivos están en uso. Por favor, inténtelo de nuevo más tarde.	Vaše soubory jsou používány. Prosím zkuste to znovu později.	A fájlok használatban vannak. Kérlek, próbáld újra később.	Twoje pliki są w użyciu. Spróbuj ponownie później.	Vaše súbory sú používané. Skúste neskôr prosím.	I file sono in uso. Per favore riprova più tardi.
+Details	Details	Details	Détails	detalles	Detaily	Adatok	Detale	Podrobnosti	Dettagli
+Deze gebruikersnaam bestaat reeds. Kies een andere gebruikersnaam.	This username allready exists. Please choose another one.	Dieser Benutzername existiert bereits. Bitte wählen Sie einen anderen.	Cet identifiant existe déjà. Veuillez choisir un autre.	Este nombre de usuario ya fuiste existe. Por favor elije otro.	Toto uživatelské jméno už také existuje. Prosím, vyberte jiný.	Ez a felhasználónév már vannak létezik. Kérjük, válasszon egy másikat.	Ta nazwa użytkownika już istnieje. Proszę wybrać inny.	Toto užívateľské meno už tiež existuje. Prosím, vyberte iný.	Questo nome utente esiste giá. Si prega di sceglierne un altro.
+Deze layout heeft geen variabele data!!!	This layout has no variable data!!!	Dieses Layout hat keine variablen Daten!	Cette disposition n'a aucune donnée variable!!!	Esta disposición no tiene datos variables !!!	Toto uspořádání nemá žádné proměnných dat !!!	Ez az elrendezés nem tartalmaz változó adatot!!!	Ten szablon nie ma danych zmiennych!!!	Toto usporiadanie nemá premenné dáta!!!	La presente impaginazione non dispone di dati variabili!!!
+Dit artikel heeft geen plaatje.	This article has no picture.	Dieses Produkt hat keine Abbildung.	Cette article n'a pas d'image.	Este artículo no tiene imagen.	Tento artikl nemá obrázek.	Ehhez az árucikkhez nincs kép.	Nie ma ilustracji do tego artyku?u.	Tento ?lánok neobsahuje obrázok.	Il presente articolo non dispone di illustrazioni.
+Downloaden	Download	Herunterladen	Télécharger	Descargar	Stáhnout	Letöltés	Pobierz	Stiahnu?	Scaricare
+Dubbelzijdig	Double sided	Zweiseitig	Double face	Doble cara	Oboustranný	Kétoldalú	Dwustronna	Obojstranný	Doppia faccia
+Een ogenblik geduld aub...	One moment please...	Einen Moment bitte...	Un instant s'il vous plaît...	Un momento por favor...	?ekejte prosím...	Szíves türelmét kérjük...	Prosz? czeka?...	Ešte chvíľu...	Vi preghiamo gentilmente di rimanere in attesa...
+Eenheid	Unit	Einheit	Unité	Unidad	Jednotka	Egység	Jednostka	Jednotka	Unità
+Email	Email	E-mail	Email	Email	E-mail	E-mail	E-mail	E-mail	E-mail
+Email dit voorbeeld naar:	Email this example to:	Email Beispiel zu:	Example d'email à:	Envía este ejemplo para:	E-mail tomto příkladu:	A példa elküldése a következ? címre:	Wy?lij mailem ten przyk?ad do:	Odosla? tento príklad e-mailom na adresu:	Invia un'e-mail con il presente esempio a:
+Email:	Email:	E-mail:	Email:	Email:	E-mail:	E-mail:	E-mail:	E-mail:	E-mail:
+Enkelzijdig	Single sided	Einseitig	Simple face	De un solo lado	jednostranný	egyoldalas	jednostronna	jednostranný	un solo lato
+Er is helaas geen prijs gevonden voor uw keuze.	There is no price found for your choice.	Keine Preise gefunden.	Pas de prix pour votre choix	No hay un precio encontrado para su elección.	Je zde našli volby žádná cena.	Sajnos nem találtunk árat a kiválasztott árucikkhez.	Niestety nie znaleziono ceny do tego wyboru.	Pre váš výber neexistuje bohužia? žiadna cena.	Purtroppo non è stato trovato nessun prezzo relativo alla vostra scelta.
+Er is nog geen impositie gemaakt!	There is no imposition ready yet.	Gibt es noch keine Imposition bereit.	Il y n'est aucune imposition encore prêt.	No hay imposición listo todavía.	Dosud neexistuje uložení připraven.	Nincs kivetése kész.	Nie ma nałożenie jeszcze gotowy.	Doteraz neexistuje uloženie pripravený.	Non vi è alcuna imposizione ancora pronto.
+Er mogen geen spaties voorkomen in uw e-mailadres.	There can't be any spaces in your e-mail address	Da mochte keine Strecke im E-mailadresse sein.	Il y a des espaces dans votre adresse email	No puede haber ningún espacio en su dirección de e-mail	V e-mailové adrese se nesmí vyskytovat mezera.	Az e-mail címben nem lehet szóköz.	W adresie mailowym nie mo?e by? spacji.	V emailovej adrese sa nemôžu vyskytova? medzery.	L'indirizzo e-mail non può contenere spazi.
+Er staan nog	There are still	Da stehen noch	Il y a	Todavía hay	Stále existují	Vannak még	Jest jeszcze	Nachádza sa tu ešte	Ci sono ancora
+Er staat nog	There is still	Da steht noch	Il y a	Todavía hay	Tam je ještě	Van még	Jest jeszcze	Nachádza sa tu ešte	C'è ancora
+Er zijn geen regels geselecteerd!	There are no lines selected!	Es sind keine Zeilen ausgewählt!	Il n'y a rien selectionné !	No hay líneas seleccionadas!	Nejsou vybrané žádné čáry!	Nincsenek vonalak kiválasztott!	Brak wybrane linie!	Nie sú vybrané žiadne čiary!	Non ci sono linee selezionate!
+Er zijn geen resultaten gevonden!!!	There are no results!!!	Keine Sachen gefunden!	Pas de résultats!	No hay resultados !!!	Nebyly nalezeny žádné výsledky!!!	Nincs találat!!!	Nie znaleziono wyników!!!	Neboli nájdené žiadne výsledky!!!	Non è stato trovato nessun risultato!!!
+Er zijn meerdere gebruikers gevonden op dit email adres. Selecteer de juiste A.U.B.	There are multiple users found with this email address. Please select the correct one.	Es wurden mehrere Benutzer mit dieser E-Mail-Adresse gefunden. Bitte wählen Sie die richtige.	Plusieurs utilisateurs avec cette adresse email ont été retrouvés. Veuillez sélectionner l'utilisateur correct.	Hay varios usuarios que se encuentran con esta dirección de correo electrónico. Por favor, seleccione el correcto.	Existuje více uživatelů nalezeno s touto e-mailovou adresu. Prosím, vyberte ten správný.	Vannak több felhasználó talált az e-mail címét. Kérjük, válassza ki a megfelelőt.	Istnieje wiele użytkowników znalezione z tym adresem e-mail. Proszę wybrać właściwy.	Existuje viac užívateľov nájdených s touto e-mailovú adresu. Prosím, vyberte ten správny.	Ci sono più utenti si trovano con questo indirizzo email. Si prega di selezionare quello corretto.
+Exclusief:	Exclusive	Exklusiv:	Exclusive	Exclusivo	Výhradní	Nincs beleszámítva:	Bez:	Bez:	Esclusivo:
+exemplaren bestellen!	pieces!	Anzahl bestellen!	commander des exemplaires	¡piezas!	objednat exemplá?e!	példányok rendelése!	egzemplarzy zamówi?!	exemplárov objedna?!	ordina esemplari!
+Expeditienr.	Expeditionnr.	Sendungsnr.	N° expéditeur	Expeditionnr.	Expeditionnr.	Kiszállítási szám	Nr spedycji	Expeditionnr.	Nr. di spedizione
+expl.	units	Ex.	exempl.	unidades	Jednotky	egységek	jednostki	Jednotky	unità
+Extra info:	Add. info:	Zusatzinfo:	Info supp.:	Añadir. información:	Další info:	További infó:	Dodatkowe informacje:	Pridať. Info:	Ulteriori informazioni:
+Facturen	Invoices	Rechnungen	Factures	Facturas	faktury	számlák	faktury	faktúry	Fatture
+Factuur	Invoice	Rechnung	Facture	Factura	Faktura	Számla	Faktura	faktúra	Fattura
+Factuuradres	Invoice address	Fakturadresse	Adresse de facturation	Dirección de facturación	Fakturační adresa	Számlázási cím	Adres do faktury	fakturačná adresa	Indirizzo di fatturazione
+Factuuradres:	Invoice address:	Fakturadresse:	Adresse de facturation:	Dirección de facturación:	Fakturační adresa:	Számlázási cím:	Adres do faktury:	Fakturačná adresa:	Indirizzo di fatturazione:
+Factuurdatum:	Invoicedate:	Rechnungsdatum:	Date de facture	Fecha de la factura:	invoiceDate:	Számla kiállítási dátuma:	invoiceDate:	Dátum vystavenia faktúry:	Data fattura:
+Factuurnummer:	Invoicenumber	Rechnungsnummer	Numéro de facture	Número de la factura:	Číslo faktury	Számlaszám	Numer faktury	Číslo faktúry	Numero di fattura
+Fax:	Fax:	Fax:	Fax:	Fax:	Fax:	Fax:	Faks:	Fax:	Fax:
+Filiaal:	Branch:	Filiale:	Succursale:	Rama:	Větev:	Kirendeltség:	Gałąź:	odbor:	Filiale:
+Firma	Company	Firma	Firme	Empresa	Firma	Vállalat	Firma	Firma	Ditta
+Firma:	Company:	Firma:	Firme:	Empresa:	Firma:	Vállalat:	Firma:	Firma:	Ditta:
+Firmanaam:	Companyname:	Betriebsname:	Société:	Nombre de empresa:	Název firmy:	Vállalat neve:	Nazwa firmy:	Názov firmy:	Nome della ditta:
+Formaat	Size	Format	Format	tamaño	Formát	Formátum	Format	Formát	Formato
+Formaat:	Size:	Format:	Format:	Tamaño:	Formát:	Formátum:	Format:	Formát:	Formato:
+Fout	Error	Fehler	Erreur	Error	Chyba	Hiba	Błąd	Chyba	Errore
+Fout:	Mistake:	Fehler	Erreur:	Error:	Chyba:	Hiba:	Błąd:	Chyba:	Errore:
+Full Color	Full Color	Vierfarbig	Couleurs	A todo color	Plná barva	Teljes szín	Pełny kolor	full Color	Pieno di colori
+Functie:	Function:	Funktion:	Fonction:	Función:	Funkce:	Beosztás:	Stanowisko:	Funkcia:	Funzione:
+Gast	Guest	Gäste	Invité	Huésped	Host	Vendég	Gość	Hos?	Ospite
+Gebruikersnaam:	User name:	Benutzername:	Nom d'utilisateur:	Nombre de usuario:	Jméno uživatele:	Felhasználói név:	Nazwa Użytkownika:	Užívateľské meno:	Nome utente:
+Gecombineerd drukken	Print combined	Kombiniert drucken	Impression combinée	Imprimir combinado	Kombinovaný tisk	Kombinált nyomtatás	Drukuj połączeniu	Kombinovaná tla?	Stampa combinata
+Geel	Yellow	Gelb	Jaune	Amarillo	Žlutá	Sárga	Żółty	Žltá	Giallo
+geen afbeelding	no picture	keine Abbildung	Pas d'image	Sin imagen	bez obrázku	nincs kép	brak obrazka	žiadny obraz	nessuna immagine
+Geen afloop in aangeleverd bestand!	No bleed on delivery document!	Kein Ablauf im gelieferten Dokument!	Pas de blanc dans ce document	No sangrar el documento de entrega!	Žádné krvácet na dodací list!	Nem vérzik Szállítási dokumentumot!	Nie krwawią na dokumencie dostawy!	Žiadne krvácať na dodací list!	Non sanguinare sul documento di consegna!
+Geen problemen	No problems	Keine Probleme	Aucun problème	No hay problemas	Bez problém?	Nincs probléma	Bez problemów	Bez problémov	Nessun problema
+Gefactureerd:	Invoiced:	Fakturiert:	Facturé:	Facturado:	Fakturovány:	Számlázva:	Zafakturowano:	Fakturované:	Fatturato:
+Gegevens	Files	Daten	Données	archivos	Údaje	Adatok	Dane	Údaje	Dati
+Geldig tot:	Valid tru:	Gültig bis:	Valable jusqu'à:	tru válida:	Platné do:	Érvényes:	Ważny tru:	Platí tru:	Valido fino a:
+Geleverd	Delivered	Geliefert	Livré	Entregado	Dodáno	Kiszállítva	Dostarczono	Dodané	Fornito
+Geleverd:	Delivered:	Geliefert:	Livré:	Entregado:	doručeno:	Megjelent:	Dostarczone:	doručené:	Consegna:
+Gelieve contactpersoon in te voeren.	Please enter a contactperson.	Bitte eine Contactpersone eintragen.	Veuiller remplir un contact.	Por favor, introduzca una Persona de contacto.	Zadejte prosím kontaktní osobu.	Kérjük, adja meg a kapcsolattartó nevét.	Prosimy wpisa? osob? kontaktow?.	Zadajte, prosím, kontaktnú osobu.	Si prega di inserire un referente.
+Gelieve een bericht in te voeren.	Please enter a message.	Bitte ein Bericht eintragen.	Veuiiler remplir un message.	Por favor, introduzca un mensaje.	Zadejte prosím zprávu.	Kérjük, írjon üzenetet.	Prosimy wpisa? wiadomo??.	Zadajte, prosím, správu.	Si prega di inserire un messaggio.
+Gelieve een omschrijving in te voeren.	Please enter a description.	Bitte eine Umschreibung eintragen.	Veuiller remplir une description.	Por favor, introduzca una descripción.	Zadejte prosím popis.	Kérjük, adjon leírást.	Prosimy wpisa? opis.	Zadajte, prosím, popis.	Si prega di inserire una descrizione.
+Gelieve firma in te voeren.	Please enter a companyname.	Bitte eine Betriebsname eintragen.	Veuiller remplir la société.	Por favor, introduzca una nombredeempresa.	Zadejte prosím firmu.	Kérjük, adja meg a vállalat nevét.	Prosimy wpisa? firm?.	Zadajte, prosím, firmu.	Si prega di inserire una ditta.
+Gelieve telefoon, fax of e-mail in te voeren.	Please enter a phone, fax or e-mail address.	Bitte eine Telefoon, Fax oder E-mail eintragen.	Veuiller remplir tel, fax ou email.	Por favor, introduzca una dirección de teléfono, fax o correo electrónico.	Zadejte prosím telefon, fax nebo e-mail.	Kérjük, adjon meg telefon-, faxszámot vagy e-mailt.	Prosimy wpisa? telefon, faks lub e-mail.	Zadajte, prosím, telefón, fax alebo e-mail.	Si prega di inserire un numero di telefono, di fax o un indirizzo e-mail.
+Geres.	Reserv.	Reser.	Reservé	Reserv.	Geres.	Lefoglalva	Zarez.	Rez.	Prenot.
+Gewicht	Weight	Gewicht	Poids	Peso	Hmotnost	Tömeg	Waga	Hmotnost	Peso
+Gewicht:	Weight:	Gewicht:	Poids:	Peso:	Hmotnost:	Tömeg:	Waga:	Hmotnost:	Peso:
+Grams	Grams	Gramm/m2	Grammage	gramos	Gramy	Gramm	Gram	gramov	Grammi
+Grams:	Grams:	Gramm/m2:	Grammage:	Grams:	Gramy:	Gramm:	Gram:	gramov:	Grammi:
+Gramsgewicht:	Gram weight:	Quadratmetergewicht:	Grammage:	peso en gramos:	Hmotnost v gramech:	Grammsúly:	Gramatura:	Gram hmotnosť:	Grammatura:
+Grijstint	Graytone	Graustuf	Tint de gris	graytone	Odstín šedé	Szürke tónus	Graytone	Graytone	Tono grigio
+Groep	Group	Gruppe	Groupe	Grupo	Skupina	Csoport	Grupa	Skupina	Gruppo
+Groep:	Group:	Gruppe:	Groupe:	Grupo:	Skupina:	Csoport:	Grupa:	Skupina:	Gruppo:
+Grootte:	Size:	Größe:	Grandeur:	Tamaño:	Velikost:	Méret:	Rozmiar:	veľkosť:	Dimensione:
+Handmatig	Manually	Manuell	Façon manuel	A mano	ručně	Manuálisan	Ręcznie	ručne	manualmente
+Hartelijk dank	Thanks	Vielen Dank	Merci beaucoup	Gracias	Díky	Köszönjük!	Dzięki	Vďaka	I più vivi ringraziamenti
+Het is niet toegestaan het wachtwoord op te vragen.	It is not allowed to request the password.	Es ist nicht erlaubt, um das Passwort anzufordern.	Il n'est pas autorisé à demander le mot de passe.	No se le permite solicitar la contraseña.	Není povoleno požadovat heslo.	Nem megengedett, hogy kérje a jelszót.	Niedopuszczalne jest, aby zwrócić się o hasło.	Nie je povolené vyžadovať heslo.	Non è consentito richiedere la password.
+Hierbij machtigen wij	We give a authorization to	Wir bestätigen Ihnen	Donne l'autorisation	Damos una autorización para	Povolujeme tímto	Ezennel meghatalmazzuk	Dajemy zezwolenia	Dávame povolenie na	Con la presente deleghiamo
+Hoofdmenu	Mainmenu	Hauptmenü	Menu principal	Menú principal	Hlavní menu	Főmenü	Menu główne	Hlavné menu	Menu principale
+Impositie	Imposition	Imposition	Imposition	Imposición	Uvalení	kivetése	Nakładanie	uvalenie	Imposizione
+In winkelwagen	To shopping cart	Zum Warenkorb	Votre caddie	para shoppingcard	V nákupním košíku	Bevásárlókocsiba	Do koszyka	V košíku	Nel carrello
+Inclusief:	Inclusive:	Inklusiv:	Inclusive	Inclusivo:	včetně:	Beleszámítva:	Wraz z:	Vrátane:	Inclusivo:
+Index	Index	Index	Retour menu principal	Índice	Index	Tárgymutató	Indeks	Index	Indice
+Informatie	Information	Informationen	Information	Información	Informace	Tájékoztató	Informacje	Informácie	Informazioni
+Informatie:	Information:	Information:	Information:	Información:	Informace:	Tájékoztató:	Informacje:	Informácie:	Informazioni:
+Internet:	Internet:	Internet:	Internet:	Internet:	Internet:	Internet:	Internet:	Internet:	Internet:
+item in uw winkelwagen.	item in your shoppingbag	Artikel in Ihrem Warenkorb	Eléments dans votre Caddie	artículo en su shoppingbag	položka v nákupním košíku.	tétel a bevásárlókocsiban.	element w koszyku.	položka v nákupnom košíku.	articolo nel vostro carrello.
+Item:	Item:	Item:	Article:	Ít:	Položka:	Tétel:	Element:	Položka:	Articolo:
+items in uw winkelwagen.	items in your shoppingbag	Artikel in Ihrem Warenkorb	Eléments dans votre Caddie	artículos en su shoppingbag	položky v nákupním košíku.	tétel a bevásárlókocsiban.	elementów w koszyku.	položiek v nákupnom košíku.	articoli nel vostro carrello.
+Ja	Yes	Ja	Oui	Sí	Ano	Igen	tak	Áno	sì
+Jaar	Year	Jahr	Année	Año	Rok	Év	Rok	rok	Anno
+Jaarverbruik:	Yearly used amount:	Jahresverbrauch:	Consommation annuelle:	Anual cantidad utilizada:	Roční množství použité:	Éves fogyasztás:	Roczne wykorzystanej kwoty:	Ročné množstvo použitej:	Consumo annuo:
+Kaartnummer:	Cardnumber:	Kartennummer:	N° de carte	Número de tarjeta:	Číslo karty:	Kártyaszám:	Nr karty:	Číslo karty:	Numero carta:
+karakters	characters	Charakter	caractères	caracteres	postavy	karakterek	postacie	znaky	personaggi
+Keuze	Choice	Wahl	Menu	Elección	Výběr	Választás	Wybór	Výber	Scelta
+Kleur	Color	Farbe	Couleur	Color	Barva	Szín	Kolor	farba	Colore
+Kleur:	Color:	Farbe:	Couleur:	Color:	Barva:	Szín:	Kolor:	farba:	Colore:
+Kleuren binnenwerk:	Colors body:	Farben - Inhalt:	Couleurs intérieur:	Colores cuerpo:	Barvy tělo:	Színek szerv:	Kolory nadwozia:	Farby telo:	Colori del corpo:
+Kleuren omslag:	Colors cover:	Farben - Umschlag:	Couleurs couverture:	Colores cubierta:	Barvy zahrnují:	Színek terjed ki:	Kolory obejmować:	Farby zahŕňajú:	Colori riguardano:
+Kleuren:	Colors:	Farben:	Couleurs:	Colores:	Barvy:	Színek:	Kolory:	Farby:	Colori:
+Kopie	Copy	Kopie	Copie	Dupdo	Kopírovat	Másolat	Kopiuj	kópie	Copia
+Land:	Country:	Land:	Pays:	País:	Zem?:	Ország:	Kraj:	Krajina:	Paese:
+Layout:	Layout:	Layout:	Lay-out:	Diseño:	Uspo?ádání:	Elrendezés:	Szablon:	Vyobrazenie:	Impaginazione:
+Layoutgegevens	Layoutdetails	Layoutdaten	Données de layout	Layoutdetails	Data uspo?ádání	Elrendezés adatai	Dane do szablonu	Údaje vyobrazenia	Dati impaginazione:
+Lettertype's:	Fonts:	Schriftarten:	Polices:	Fuentes:	Fonty:	Betűtípusok:	Czcionki:	Typy písma:	Polizza di caratteri:
+Leverdatum	Delivery date	Lieferdatum	Date de livraison	Fecha de entrega	Datum dodání	Kiszállítási dátum	Data dostawy	Dátum dodania	Data di consegna
+Leverdatum:	Delivery date:	Lieferdatum:	Date de livraison:	Fecha de entrega:	Datum dodání:	Kiszállítási dátum:	Data dostawy:	Dátum dodania:	Data di consegna:
+Liggend	Portrait	Querformat	Oblong	Retrato	Portrét	portré	Portret	portrét	Ritratto
+Looprichting:	Grain direction:	Laufrichtung:	Sens de coulée:	Dirección de la fibra:	Sm?r chodu:	Haladási irány:	Kierunek:	Smer:	Direzione di macchina:
+LR	Gr	Ir	Sc	SF	LR	HI	LP	LR	LR
+LR:	GR:	LR:	SC:	SF:	LR:	HI:	LP:	LR:	LR:
+Maak uw keuze...	Make your choice...	Wählen Sie...	Faites votre choix...	Haga su elección ...	Vyberte si...	Válasszon...	Wybierz...	Vyberte si...	Selezionate la vostra opzione...
+Maak uw keuze:	Make your choice:	Wählen Sie:	Faites votre choix:	Haga su elección:	Vyberte si:	Válasszon:	Wybierz:	Vyberte si:	Selezionate la vostra opzione:
+Machtiging	Authorization	Vorauskasse	Autorisation	Autorización	Povolení	Meghatalmazás	Upowa?nienie	Povolenie	Delega
+Magenta	Magenta	Magenta	Magenta	Magenta	Purpurová	Lila	Magenta	Purpurová	Magenta
+Management	Management	Management	Management	administración	Řízení	vezetés	Zarządzanie	management	Gestione
+Materiaal binnenwerk:	Material body:	Material Inhalt:	Matérial intérieur:	Material del cuerpo:	Materiál těla:	Anyagi test:	Materia? wewn?trz:	Materiál výplne:	Materiale corpo:
+Materiaal omslag:	Material cover:	Material Umschlag:	Matérial couverture:	Material de la cubierta:	Krycí materiál:	Anyag borítása:	Materia? ok?adki:	Materiál obalu:	Materiale copertina:
+Materiaal:	Material:	Material:	Matérial:	Material:	Materiál:	Anyag:	Materia?:	Materiál:	Materiale:
+Maximaal aantal bestanden is	Maximum number of files is	Maximale Anzahl von Dateien ist	Le nombre maximal de fichiers est	Número máximo de archivos es	Maximální počet souborů	A fájlok maximális száma a	Maksymalna liczba plików jest	Maximálny počet súborov	Numero massimo di file è
+Maximaal bestellen:	Maximum amount:	Max zu bestellen:	Commande maximale:	Cantidad maxima:	Maximální částka:	Maximális rendelés mennyisége:	Maksymalna kwota pomocy:	Maximálna objednávka:	Prenotazioni massime:
+Medewerker:	Employee:	Mitarbeiter:	Employé:	Empleado:	Spolupracovník:	Munkatárs:	Pracownik:	Pracovník:	Collaboratore:
+Met vriendelijke groet,	Greetings,	Viele Grüße	Meilleures salutations,	Saludos,	Posílám pozdrav,	Üdvözlet,	Pozdrowienia,	Zdravím,	Saluti,
+Minimaal	Minimal	Minimal	Minimal	Mínimo	Minimální	Minimális	Minimalny	Minimálny	Minimo
+Minimaal bestellen:	Minimum amount:	Mindes zu bestellen:	Commande minimal:	Monto minimo:	Objednat minimáln?:	Minimális rendelés mennyisége:	Stawka minimalna:	Minimálna objednávka:	Prenotazioni minime:
+Minimaal:	Minimum:	Minimal:	Minimal:	Mínimo:	Minimální:	Minimális:	Minimalnie:	Minimálne:	Minimo:
+Minimale voorraad:	Minimum stock:	Mindestvorrat:	Stock minimal:	Stock mínimo:	Minimální zásoby:	Minimális raktárkészlet:	Minimalny zapas:	Minimálna zásoba:	Quantità magazzino minima:
+Mobiel:	Mobile:	Mobil:	GSM:	Móvil:	Mobilní telefon:	Mobiltelefon:	Tel. komórkowy:	Mobil:	Cellulare:
+MultiPress internet module	MultiPress internet modul	MultiPress Internetmodul	MultiPress Module Web	MultiPress Modul internet	internetový modul MultiPress	MultiPress internet modul	MultiPress www modul	Webový modul MultiPress	Modulo internet MultiPress
+Naam:	Name:	Name:	Nom:	Nombre:	Jméno:	Név:	Nazwa:	Meno:	Nome:
+Nee	No	Nein	Non	No	Ne	Nem	Nie	nie	No
+Nieuw	New	Neu	Nouveau	Nuevo	Nový	Új	Nowy	Nový	Nuovo
+Nieuwe offerte	New quotation	Neue Angebote	Nouveau offre	nueva cita	Nová cenová nabídka	új idézet	Nowy cytat	Nová cenová ponuka	nuova offerta
+Nieuwe order	New job	Neue Aufträge	Nouveau job	Nuevo trabajo	Nová objednávka	Új megrendelés	Nowe zlecenie	Nová objednávka	Nuovo ordine
+Notities:	Notes:	Berichten:	Notes:	notas:	Poznámky:	Megjegyzések:	Notatki:	Poznámky:	Note:
+Nummer	Number	Nummer	Numéro	Número	Číslo	Szám	Numer	číslo	Numero
+Offerte	Quotation	Angebot	Devis	Cotización	Citát	Idézet	Cytat	citát	Quotazione
+Offerte bij	Quotation from	Angebote von	Calcul de	cita de	citace z	idézet	cytat z	citácie z	citazione da
+Offerte status historie	Quotation status history	Angebote Status Historie	Statut histoire d'offre	historial de estado de cotización	Historie status citát	Idézet állapotelőzményeit	Historia stanu cytat	História status citát	la storia dello stato Quotazione
+Offertedatum:	Quotationdate:	Angebotsdatum:	Date d'offre:	Quotationdate:	Quotationdate:	Quotationdate:	Quotationdate:	Quotationdate:	Quotationdate:
+Offertenr.	Quotationnr.	Angebotsnr.	N° d'offre	Quotationnr.	Quotationnr.	Árajánlat sz.	Nr oferty	Quotationnr.	Nr. offerta
+Offertenummer:	Quotationnumber:	Angebotsnr.:	Numéro d'offre:	Quotationnumber:	Quotationnumber:	Árajánlat száma:	Numer oferty:	Quotationnumber:	Numero dell'offerta:
+Offertes	Quotations	Angebote	Calculs	citas	Nabídky	Árajánlatok	Oferty	Ponuky	Offerte
+om een bedrag van	to redraw an amount of	ein Bettag von	pour un montant de	para volver a dibujar una cantidad de	překreslení částku	összeg:	przerysować kwotę	suma	per un importo di
+om uw digitaal document te openen en te controleren.	to open and check your digital document.	und überprüfen Ihr digitale Dokument.	afin d'ouvrir et de contrôler votre document digital.	para abrir y comprobar el documento digital.	otevřít a zkontrolovat digitální dokument.	megnyitásához, és ellenőrizze a digitális dokumentum.	otworzyć i sprawdzić dokument cyfrowy.	otvoriť a skontrolovať digitálny dokument.	per aprire e controllare il documento digitale.
+Omschrijving	Description	Umschreibung	Description	Descripción	Popis	Leírás	Opis	Popis	Descrizione
+Omschrijving:	Description:	Umschreibung:	Description:	Descripción:	Popis:	Leírás:	Opis:	Popis:	Descrizione:
+Omslag	Cover	Umschlag	Couverture	Cubrir	Kryt	Borítás	Pokrywa	Obal	Copertina
+Onbekende pagina	Unknown page	Unbekannte Seite 	Page inconnu	La página de desconocido	neznámá stránka	ismeretlen oldal	Nieznany stronę	neznáma stránka	pagina Unknown
+Ongeldig CreditCard nummer	Invalid CreditCard number	Ungültige Kreditkartennummer	Numéro de carte bancaire non valide	Número de tarjeta de crédito no válido	Neplatné číslo kreditní karty	Érvénytelen hitelkártyaszám	Nieprawidłowy numer karty kredytowej	Nesprávne číslo kreditnej karty	Numero di carta di credito non valido
+Ongeldig e-mailadres.	Invalid e-mail address	E-Mail nicht richtig	Adresse email non-valable	No válida dirección de correo electrónico	Neplatná e-mailová adresa.	Érvénytelen e-mail cím.	Niewa?ny adres e-mail.	Neplatná emailová adresa	Indirizzo e-mail invalido.
+Ongeldig faxnummer.	Invalid fax number.	Fax nicht richtig	N° de fax non-valable	número de fax válido.	Neplatné faxové číslo.	Érvénytelen faxszám.	Niewa?ny nr faksu.	Neplatné faxové ?íslo	Numero di fax invalido.
+Ongeldig formaat	Invalid format	Ungültiges Format	Format non valide	Formato inválido	Neplatný formát	Érvénytelen formátum	Niepoprawny format	neplatný formát	Formato non valido
+Ongeldig telefoonnummer.	Invalid phone number	Telefon nicht richtig	N° de tél non-valable	Numero de telefono invalido	Neplatné telefonní ?íslo.	Érvénytelen telefonszám.	Niewa?ny nr telefonu.	Neplatné telefónne ?íslo	Numero di telefono invalido.
+Ongeldige bestandstype:	Unsupported filetype:	Nicht unterstützter Dateityp:	Type de fichier non valable	Tipo de archivo no soportado:	Nepodporovaný filetype:	Nem támogatott fájltípus:	Stosujesz filetype:	Nepodporovaný filetype:	Tipo di file non supportato:
+Ongeldige karakters gevonden.	Invalid caracters found.	Ungültige Zeichen gefunden.	Caractères non-valables trouvés	caracters válida que se encuentre.	Byl nalezen neplatný caracters.	Érvénytelen karakter számára található.	Znaleziono nieprawidłowy caracters.	Bol nájdený neplatný caracters.	accentate non valido trovato.
+Online	Online	PayPal	Online	En línea	Online	Online	Online	On-line	On-line
+Onze server heeft u niet gevonden als geregistreerde gebruiker.	Our server didn't found you as registered user.	Unser Server hat Sie nicht als registrierten Benutzer finden können.	Notre serveur n'a pas pu vous reconnaître en tant qu'utilisateur enregistré	Nuestro servidor no le encuentra como usuario registrado.	Náš server tě nebyl nalezen jako registrovaný uživatel.	A szerver nem találtam meg, mint regisztrált felhasználó.	Nasz serwer nie znalazł się jako zarejestrowany użytkownik.	Náš server ťa nebol nájdený ako registrovaný užívateľ.	Il nostro server non ha trovato come utente registrato.
+Onze server heeft u niet gevonden als geregistreerde gebruiker. U wordt nu aangemeld als gastgebruiker.	Our server didn't find you as a registered user. You can logon as a guest user.	Unsere Server hat sie nicht gefunden wie Registrierte Benutzer. Jetzt bist du eine Gäste.	Vous n'êtes pas configuré comme client. Vous serez connecté comme invité	Nuestro servidor no se encontró como un usuario registrado. Usted puede iniciar sesión como un usuario invitado.	Nebyl jste naším serverem nalezen jako registrovaný uživatel. Budete nyní p?ihlášeni jako host.	Nincs felhasználóként nyilvántartva rendszerünkben. Vendégfelhasználóként tud bejelentkezni.	Nasz serwer nie mo?e Ci? odnale?? jako zarejestrowanego u?ytkownika. Zostaniesz zg?oszony jako go??.	Náš server vás nenašiel ako registrovaného užívate?a. Budete prihlásený ako hos?ujúci užívate?.	Il nostro serve non è stato in grado di riconoscervi come utente registrato e verrete registrati in qualità di utente ospite.
+Open de volgende URL	Please click on the following url	Bitte klicken Sie auf die folgende url	Veuillez cliquer l'url suivante	Por favor, haga clic en el siguiente enlace	Klikněte prosím na následující adresu URL	Kérjük, kattintson az alábbi URL-	Proszę kliknąć na poniższy URL	Kliknite prosím na nasledujúcu adresu URL	Cliccate sul seguente URL
+Opgeslagen	Saved	Herstellen	Mémorisé	Salvado	uložen	Mentett	Zapisane	uložený	Salvato
+Oplage	Run	Auflage	Quantité	correr	Vydání	Pédányszám	Biegać	Vydanie	Edizione
+Oplage:	Run:	Auflage:	Quantité:	Correr:	Vydání:	Pédányszám:	Biegać:	Vydanie:	Edizione:
+Oplagen:	Runs:	Auflagen:	Quantités:	Carreras:	Vydat:	Pédányok száma:	Działa:	Vydania:	Edizioni:
+Opmerking:	Note:	Bemerkung:	Remarque:	Nota:	Poznámka:	Megjegyzés:	Uwaga:	Poznámka:	Osservazioni:
+Order	Job	Auftrag	Job	Trabajo	Práce	Munka	Praca	zamestnania	Lavoro
+Order status historie	Job status history	Auftrag Status Historie	Statut histoire de Job	la historia del estado del trabajo	Historie status Job	Job állapotelőzményeit	Historia stanu pracy	História status Job	la storia lo stato dei lavori
+Orderdatum:	Job date:	Auftragsdatum:	Date job:	Fecha del trabajo:	Datum objednávky:	Megrendelési dátum:	Data zamówienia:	Dátum objednávky:	Data dell'ordine:
+Ordernr.	Job nr.	Auftragsnr.	N°job	Nr trabajo.	Job nr.	Megrendelési sz.	Nr zamówienia	Job nr.	Nr. ordine
+Ordernr.:	Job nr.:	Auftragnr.	N° de job:	Nr. trabajo:	Job nr .:	Megrendelési sz.:	Nr zamówienia:	Job nr.:	Nr. ordine:
+Ordernummer:	Job number:	Auftragsnummer:	N°job:	Numero trabajo:	Číslo úlohy:	Megrendelési szám:	Numer zamówienia:	Číslo úlohy:	Numero dell'ordine:
+Orders	Jobs 	Aufträge	Jobs	Trabajos	Objednávky	Megrendelések	Zamówienia	Objednávky	Ordini
+Overige	Others	Andere	Autre	Otros	jiní	Egyéb	Pozostałe	iní	Altri
+Overzicht offertes	List quotations	Übersicht Angebote	Résumé des calculs	Lista de citas	P?ehled nabídek	Árajánlatok áttekintése	Wykaz ofert	Preh?ad ponúk	Resoconto offerte
+pagina's omslag	pages cover	Seiten Umschlag	Pages couverture	páginas cubren	titulní stránky	oldalak borítólapja	okładek	Vrchné stránky	copertina delle pagine
+Pagina's:	Pages:	Seiten:	Pages:	páginas:	Stránky:	Oldalak:	Strony:	Stránky:	Pagine:
+Paginaproef	Pageproof	Seite Probe	Epreuves en ligne	Pageproof	Pageproof	Pageproof	Pageproof	Pageproof	Pageproof
+PDF	PDF	PDF	PDF	PDF	PDF	PDF	PDF	PDF	PDF
+PDF bestand	PDF file	PDF-Datei	Fichier PDF	Archivo PDF	PDF soubor	PDF fájl	plik PDF	PDF súbor	file PDF
+PDF Template:	PDF Template:	PDF Template:	PDF Template:	Plantilla PDF:	Šablona PDF:	PDF Sablon:	Szablon w formacie PDF:	Šablóna PDF:	PDF Template:
+Per	per	pro	par	por	Na	 	Na	Po	Per
+Persoonsgegevens:	Personal files:	Personliche daten	Données personnelles	archivos personales:	Osobní údaje:	Személyi adatok:	Dane osobowe:	Osobné údaje:	Dati personali:
+Afbeelding:	Picture:	Abbildung:	Image:	Imagen:	Obrázek:	Kép:	Obrazek:	obrázok:	Immagine:
+Plaats:	City:	Ort:	Lieu:	Ciudad:	Město:	Helység:	Miasto:	Mesto:	Località:
+Post adres:	Postal address:	Postadresse:	adresse postal	Direccion postal:	Poštovní adresa:	Postai cím:	Adres pocztowy:	Poštová adresa:	Indirizzo postale:
+Postcode en Plaats:	Zipcode and City:	Postleitzahl und Ort:	Code postal et lieu	Código postal y ciudad:	PS? a m?sto:	Irányítószám és helység:	Kod pocztowy i miejscowo??:	PS? a miesto:	Codice postale e località:
+Postcode:	Zipcode:	Postleitzahl:	Code postal:	Código postal:	PSČ:	Irányítószám:	Kod pocztowy:	PS?:	Codice postale:
+Prijs	Price	Preis	Prix	Precio	Cena	Ár	Cena	Cena	Prezzo
+Prijs:	Price:	Preis:	Prix:	Precio:	Cena:	Ár:	Cena:	Cena:	Prezzo:
+Prijsafspraken	Price arrangements	Preisabsprachen	Prix convenus	régimen de precios	Cenové dohody	Ármegállapodások	Uzgodnienia cenowe	Ur?ovanie cien	Accordi di prezzo
+Privé adres:	Private address:	Privatadresse:	Adresse privé:	Dirección privada:	Soukromá adresa:	Lakáscím:	Adres prywatny:	Súkromná adresa:	Indirizzo provato:
+Privé plaats:	Private city:	Privatort:	Lieu privé:	ciudad privada:	M?sto:	Lakhely:	Miejscowo?? prywatna:	Súkromné miesto:	Località privata:
+Privé postcode:	Private zipcode:	Privat Postleitzahl:	Code postal privé:	código postal privado:	Soukromé PSČ:	Irányítószám:	Kod pocztowy prywatny:	Súkromné ​​PSČ:	Codice postale privato:
+Privé telefoon:	Private phone:	privat Telefon:	Téléphone privé:	teléfono privado:	Telefon:	Magán telefonszám:	Telefon prywatny:	Súkromný telefón:	Numero di telefono privato:
+Product	Product	Produkt	Produit	Producto	Produkt	Termék	Produkt	produkt	Prodotto
+Product heeft bedrukking aan de rand	Product has elements at the border	Produkt ist randabfallend	Produit imprimer jusqu'au bord	El producto tiene elementos en la frontera	Výrobek má prvky na hranicích	A terméket elemek a határon	Produkt posiada elementy na granicy	Výrobok má prvky na hraniciach	Il prodotto ha elementi alla frontiera
+Product:	Product:	Produkt:	Produit	Producto:	Produkt:	Termék:	Produkt:	Produkt:	Prodotto:
+Producten	Products	Produkte	Produits	productos	produkty	Termékek	Produkty	Produkty	Prodotti
+Productiemethode:	Production method:	Produktionsart:	Méthode de production:	Método de producción:	Výrobní metoda:	Előállítási mód:	Metoda produkcji:	Výrobná metóda:	Metodo di produzione:
+Productsoort	Product type	Produktsorte	Genre de produit	Tipo de producto	Typ produktu	Terméktípus	Rodzaj produktu	Druh produktu	Tipo di prodotto
+Productsoort:	Product type:	Produktsorte:	Genre produit:	Tipo de producto:	Typ produktu:	Terméktípus:	Rodzaj produktu:	Druh produktu:	Tipo di prodotto:
+Proef	Proof	Muster	Épreuve	Prueba	Důkaz	Bizonyíték	Dowód	dôkaz	Prova
+Rapport	Report	Bescheinigung	Signaler	Informe	Zpráva	Jelentés	Raport	správa	rapporto
+Rapport is nog niet klaar. Probeer het later nog eens.	Report is not ready yet. Please try again later.	Bericht ist noch nicht bereit. Bitte versuchen Sie es später noch einmal.	Rapport n'est pas encore prêt. Please try again later.	Informe todavía no está listo. Por favor, inténtelo de nuevo más tarde.	Zpráva ještě není připraven. Prosím zkuste to znovu později.	Report még nincs kész. Kérlek, próbáld újra később.	Raport nie jest jeszcze gotowy. Spróbuj ponownie później.	Správa ešte nie je pripravený. Skúste neskôr prosím.	Rapporto non è ancora pronto. Per favore riprova più tardi.
+Rapporten	Reports	Bericht	Rapport	Informes	zprávy	jelentések	Raporty	správy	Rapporti
+record(s)	records	datei(n)	enregistrements	archivos	evidence	nyilvántartás	dokumentacja	záznamy	record
+Referentie	Reference	Referenz	Référence	Referencia	Reference	Hivatkozás	Referencje	Referencie	Riferimento
+Referentie:	Reference:	Referenz:	Référence:	Referencia:	Reference:	Hivatkozás:	Referencje:	Referencie:	Riferimento:
+Rekening	Account	Rechnung	Compte	Cuenta	Účet	Számla	Rachunek	účet	Conto
+Rembours	Cash on delivery	Nachnahme	Rembours	Los envíos contra reembolso	Náhrada	Utánvétel	Płatność gotówką przy odbiorze	Náhrada	Contrassegno
+Resolutie's:	Resolution:	Bildqualität:	Résolutions:	Resolución:	Rozlišení:	Felbontás:	Rozkład:	Rozlíšenie:	Risoluzioni:
+Selecteer	Select	Wählen	Selectionner	Seleccionar	Vyberte	Választás	Wybierz	Vyber	Seleziona
+Selecteer uw bestand welke gedrukt moet worden.	Select your file which should be printed.	Wählen Sie die Datei die gedruckt werden soll	Selectionner votre fichier à imprimer	Seleccione el archivo que debe ser impreso.	Vyberte soubor, který se má vytisknout.	Válassza ki, hogy melyik dokumentumot szeretné kinyomtatni.	Wybierz plik, który ma by? u?yty.	Vyberte súbor, ktorý sa má vytla?i?.	Selezionare il documento da stampare.
+Sommige afbeeldingen hebben een lage kwaliteit	Some pictures have a low quality	Einige Bilder haben eine niedrige Qualität	Certaines images sont de qualité bas	Algunas imágenes tienen una calidad baja	N?které obrázky mají nízkou kvalitu	Egyes képek min?sége gyenge.	Niektóre ilustracje maj? nisk? rozdzielczo??	Niektoré obrázky majú nízku kvalitu	Alcune immagini presentano una bassa qualità
+Sommige lettertype's zijn niet of deels aanwezig	Some fonts are not or partially available	Nicht alle Schriftarten sind eingebettet	Certaines polices manque	Algunas fuentes no están disponibles o parcialmente	N?které fonty nejsou k dispozici nebo pouze ?áste?n?	Egyes bet?típusok nem vagy csak részben állnak rendelkezésre	Niektóre czcionki nie s? dost?pne lub tylko cz??ciowo	Niektoré typy písma nie sú ?iasto?ne alebo úplne dostupné	Alcuni caratteri presentano una bassa qualità
+Soort:	Type:	Art:	Genre:	Tipo:	Typ:	Típus:	Rodzaj:	Druh:	Tipo:
+Staand	Landscape	Hochformat	Debout	Paisaje	Krajina	Tájkép	Krajobraz	krajina	Paesaggio
+Standaard	Default	Standard	Standard	Defecto	standardní	Alapértelmezett	Zaniedbanie	štandardné	Predefinito
+Standaard berekeningen	Standard quotations	Standardberechnungen	Calculs standards	citas estándar	standardní citáty	Szabványos kiszámítások	Obliczenia standardowe	Štandardné výpo?ty	Calcoli standard
+Status	Status	Status	Statut	Estado	Stav	Státusz	Status	Stav	Stato
+Status:	Status:	Status:	Statut:	Estado:	Stav:	Státusz:	Status:	Stav:	Stato:
+Telefoon:	Phone:	Telefon:	Téléphone:	Teléfono:	Telefon:	Telefonszám:	Telefon:	Telefón:	Telefono:
+Terug	Back	Zurück	Retourne	Espalda	Zadní	Vissza	Cofnij	späť	Indietro
+Tijd	Time	Zeit	Temps	Hora	Čas	Idő	Czas	čas	Tempo
+Toon	Show	Zeigen	Visualiser	Espectáculo	Zobrazit	Tónus	Pokazać	Zobraz	Tono
+Totaal	Total	Total	Total	Total	Celkový	Teljes	Całkowity	celkom	Totale
+U bent op een onbekende pagina gekomen. Klik onder op "index" om opnieuw aan te melden.	You tried to open an unknown page. Click "index" to logging in again.	Sie haben versucht, eine unbekannte Seite zu öffnen. Klicken Sie auf "Index" um weiter zu gehen.	Vous avez essayé d'ouvrir une page inconnue. Cliquez sur "Retour menu princip	Ha intentado abrir una página desconocida. Haga clic en "índice" para acceder de nuevo.	Pokusili jste se otevřít neznámou stránku. Klikněte na "index", aby znovu se přihlásit.	Megpróbálta kinyitni egy ismeretlen oldalon. Kattintson a "index", hogy újra bejelentkezni.	Próbowano otworzyć nieznaną stronę. Kliknij "index", aby zalogować się ponownie.	Pokúsili ste sa otvoriť neznámou stránku. Kliknite na "index", aby znovu sa prihlásiť.	Si è tentato di aprire una pagina sconosciuta. Fai clic su "indice" per accedere di nuovo.
+U dient een bestand te kiezen	You must choose a file	Sie müssen eine Datei	Choisissez un fichier	Debe elegir un archivo	Musíte vybrat soubor	Válasszon egy dokumentumot	Wybierz plik	Musíte vybra? súbor	Siete pregati di selezionare un documento
+U dient een groep in te geven	You must enter a group	Sie müssen eine gruppe anwenden	Il faut remplir un groupe	Debe introducir un grupo	Je nutné zadat skupinu	Meg kell adnia egy csoportot	Musisz podać grupę	Je nutné zadať skupinu	È necessario inserire un gruppo
+U dient een item  te kiezen	You must choose an item	Sie müssen eine Item wahlen	Choisissez un objet	Usted debe elegir un elemento	Musíte vybrat položku	Válasszon egy tételt	Wybierz element	Musíte vybra? položku	Siete pregati di selezionare un articolo
+U dient een materiaal in te geven	You must enter a material	Sie sollten dazu ein Material eingaben	Il faut mettre un material	Debe introducir un material	Musíte zadat materiál	Adjon meg egy anyagot	Podaj materia?	Musíte zada? materiál	Siete pregati di indicare un materiale
+U dient een omschrijving in te geven	You must enter a description	Sie müssen eine Umschreibung eingeben	Remplissez une description	Debe introducir una descripción	Musíte zadat popis	Adjon meg egy leírást	Podaj opis	Musíte zada? popis	Siete pregati di indicare una descrizione
+U dient een omschrijving te kiezen	You must choose a description	Sie müssen eine Umschreibung wahlen	Choisissez une description	Debe elegir una descripción	Musíte vybrat popis	Válasszon egy leírást	Wybierz opis	Musíte vybra? popis	Siete pregati di selezionare una descrizione
+U dient een oplage in te geven	You must enter a number of runs	Sie müssen eine Auflage eingeben	Remplissez une quantité	Debe ingresar un número de carreras	Musíte zadat vydání	Adjon meg egy példányszámot	Podaj nak?ad	Musíte zada? náklad	Siete pregati di indicare un'edizione
+U dient een product in te geven	You must enter a producttype	Sie sollten dazu ein Produkt eingeben	Il faut mettre un produit	Debe introducir una Producttype	Musíte zadat produkt	Adjon meg egy terméket	Podaj produkt	Musíte zada? produkt	Siete pregati di indicare un prodotto
+U dient een soort  te kiezen	You must choose a type	Sie mussen eine sorte wahlen	Choisissez une type	Usted debe elegir un tipo de	Musíte vybrat typ	Válasszon egy típust	Wybierz rodzaj	Musíte vybra? druh	Siete pregati di selezionare un tipo
+U komt onder de minimale voorraad!	You can below the minimum stock!	Sie kommen unter die niedrichste Vorrat!	Quantité trop faible	Puede por debajo del mínimo de stock!	Dostali jste se pod minimální zásoby!	Ez a minimális raktárkészlet alá esik!	Jest to poni?ej minimalnego zapasu!	Ste pod minimálnou zásobou!	Non è stata raggiunta la quantità magazzino minima!
+U mag maximaal	You can order at most	Sie mochte Maximal	Vous devrez maximal	Es posible comprar el máximo	Můžete si objednat nanejvýš	Lehetséges maximális mennyiség:	Można zamówić co najwyżej	Môžete maximálne	Massimo consentito
+U moet minimaal	You must order at least	Sie muss Minimal	Vous devrez minimal	Usted debe pedir al menos	Je nutné objednat minimálně	Lehetséges minimális mennyiség:	Musisz minimalnie	Musíte minimálne	Minimo consentito
+Uploaden	Upload	Upload	Upload	Subir	Uploadovat	Feltöltés	Przekazać plik	nahrať	Carica
+Uw gebruikersnaam en (nieuw) wachtwoord is verzonden naar:	Your username and (new) password is submitted to:	Ihr Benutzername und (neues) Passwort wird übertragen:	Votre identifiant et (nouveau) mot de passe ont été envoyés à:	Su nombre de usuario y la (nueva) contraseña son enviadas a:	Vaše uživatelské jméno a (nové) heslo je předložen:	A felhasználónevét és (új) jelszó be:	Twoja nazwa użytkownika i (nowy) hasło zostanie przedstawiony:	Vaše užívateľské meno a (nové) heslo je predložený:	Il tuo nome utente e la (nuova) password vengono inviate a:
+Uw gegevens zijn correct gewijzigd. De volgende keer kunt u hiermee inloggen. Maak uw keuze uit ons hoofdmenu.	Your account details are correctly saved. Next time you can login with these. Make a choice from the mainmenu.	Ihre Kontodaten werden korrekt gespeichert. Das nächste Mal können Sie sich mit diesen anmelden. Treffen Sie Ihre Auswahl aus dem Hauptmenü.	Vos coordonnées ont été changées de façon correcte. La prochaine fois, vous pouvez vous enregistrer avec les nouvelles données. Faites votre choix dans le menu principal.	Sus detalles de la cuenta se guardan correctamente. La próxima vez que puede iniciar sesión con éstos. Hacer una elección de la mainmenu.	Údaje vašeho účtu uloženy správně. Příště se můžete přihlásit s nimi. Udělat výběr z menu Startovní.	A fiók adatait helyesen menti. Legközelebb akkor be ezeket. Hogy a választás a főmenü.	Dane konta są poprawnie zapisane. Następnym razem możesz zalogować się z nimi. Dokonać wyboru z mainmenu.	Údaje vášho účtu uložené správne. Nabudúce sa môžete prihlásiť s nimi. Urobiť výber z menu Štartovací.	I dati dell'account siano correttamente salvati. La prossima volta che può effettuare il login con questi. Effettuare una scelta dal mainmenu.
+Uw opdracht wordt verwerkt, even geduld a.u.b.	Your action is in progress, please wait...	Ihr Auftrag wird bearbeitet, bitte warten Sie...	Votre commande est traité....	Su acción está en curso, por favor espere ...	Vaše akce probíhá, čekejte prosím ...	Az akció van folyamatban, kérem várjon ...	Twoje działanie jest w toku, proszę czekać ...	Vaša akcia prebieha, čakajte prosím ...	La vostra azione è in corso, attendere prego ...
+van	from	von	de	de	od	 	od	od	di
+van de	of the	von die	du	del	z	 	od, z	od	di
+Van uw kaart wordt een bedrag van	Your card will be charged with an amount of	Van ihre Karte wirt ein betrag von	Le montant crédité de votre carte est	Su tarjeta será cargada con una cantidad de	V nákupním košíku z?stala ?ástka	A következ? összeget emelik le a kártyájáról:	Z karty zostanie potr?cona kwota	Z vašej karty bola suma vo výške	Viene addebitato sulla vostra carta un importo di
+Verbruik	Consumption	Verbrauch	Consommation	Consumo	Spotřeba	Fogyasztás	Konsumpcja	Spotreba	Consumo
+Vergeten	Forgotten	Vergessen	Oublié	Olvidado	Zapomenutý	Elfelejtett	Zapomniany	zabudnutý	Forgotten
+Verkoper:	Salesman:	Verkäufer:	Délégué:	Vendedor:	Prodavač:	Eladó:	Sprzedawca:	predavač:	Venditore:
+Vernieuw	Refresh	Anpassen	Renouveler	Refrescar	Obnovit	Frissítés	Odświeżać	Obnoviť	ricaricare
+Verpakt per:	Packed per:	Verpackt pro:	Emballé par:	Embalado por:	Baleno:	Csomagolási egység:	Opakowanie zawiera:	Balené po:	Confezionato per:
+Verplicht in te voeren	Entry required	Pflichteingabe	A saisir obligatoirement	entrada obligatoria	Vstup požadované	megadása szükséges	Wejście wymagane	vstup požadovanej	voce desiderata
+Versie:	Version:	Version:	Version:	Versión:	Verze:	Változat:	Wersja:	verzia:	Versione:
+Verstuur	Submit	Versenden	Envoyer	Enviar	Zaslat	Küldés	Zatwierdź	Odošli	Invia
+Verwerken van de gegevens...	Processing...	Verarbeitung der Datei...	Traitement des données	Tratamiento...	Zpracování údaj?:	Az adatok feldolgozása folyamatban van...	Przetwarzanie danych...	Spracovanie údajov...	Dati in elaborazione...
+Verwijder	Remove	Entfernen	Enlever	retirar	Odstranit	eltávolít	Usunąć	odstrániť	Rimuovere
+Verwijder steunkleur	Remove spotcolor	Entferne HKS-Farben	Enlever couleur support	Retire spotcolor	Odstranit p?ímou barvu	Segédszín törlése	Usuń spotcolor	odstráňte spotcolor	Rimuovi colore supplementare
+Verzendwijze	Delivery method	Versandweise	Mode d'envoi	Método de entrega	Zp?sob zaslání	Küldési mód	Sposób wys?ania	Spôsob odoslania	Modalità di invio
+Verzendwijze:	Deliverymethod:	Versandart:	Mode d'envoie:	Método de entrega:	Způsob doručení:	Szállítási mód:	Sposób dostawy:	Spôsob doručenia:	Metodo di consegna:
+Voeg toe	Add	Füge hinzu	Ajouter	Añadir	Přidat	Hozzáadás	Dodaj	Pridaj	Aggiungi
+Volgende	Next	Nächste	Suivant	Siguiente	Další	Következő	Nast?pne	Nasledujúci	Seguente
+voor uw artikel order. U ontvangt binnenkort een orderbevestiging. Maak uw keuze uit ons hoofdmenu.	for your article job. You will soon receive a confirmation. Make a choice from the mainmenu.	von Ihrem Auftrag. Sie bekommen eine Bestätigung. Wählen Sie aus dem Hauptmenü.	pour votre commande d'articles. Vous recevez bientôt une confirmation de commande. Faîtes votre choix dans le menu.	para el trabajo de artículo. En breve recibirá una confirmación. Hacer una elección de la mainmenu.	pro vaši objednávku artiklu. Brzy obdržíte potvrzení objednávky. Vyberte si v hlavním menu.	megrendelését illet?en. Megrendelésér?l hamarosan visszajelzést kap. Válasszon a f?menüb?l.	za zamówienie artyku?u. Nied?ugo otrzymasz potwierdzenie zamówienia. Dokonaj wyboru z menu g?ównego.	pre vašu objednávku tovaru. Onedlho vám bude doru?ené potvrdenie objednávky. Vyberte si z nášho hlavného menu.	per il vostro ordine. Riceverete presto una conferma dell'ordine. Selezionate un'opzione dal nostro menu principale.
+voor uw bericht. U ontvangt binnenkort een reactie. Maak uw keuze uit ons hoofdmenu.	for your message. You will soon receive a reaction. Make a choice from the mainmenu.	für Ihren Bericht. Sie erhalten in Kürze eine Bestätigung.	pour votre message. Vous recevez bientôt une réaction. Faîtes votre choix dans le menu.	para su mensaje. En breve recibirá una reacción. Hacer una elección de la mainmenu.	na zprávu. Brzy obdržíte reakci. Vyberte si v hlavním menu.	az üzenetét illet?en. Hamarosan visszajelzést kap. Válasszon a f?menüb?l.	za wiadomo??. Nied?ugo otrzymasz odpowied?. Dokonaj wyboru z menu g?ównego.	pre vašu správu. Onedlho vám bude doru?ená odpove?. Vyberte si z nášho hlavného menu.	per il vostro messaggio. Riceverete presto una risposta. Selezionate un'opzione dal nostro menu principale.
+voor uw bestelling. De betaling is mislukt. Wij zullen spoedig met u contact opnemen. Maak uw keuze uit ons hoofdmenu.	for your order. Payment has failed. We will contact you.  Make a choice from the mainmenu.	für Ihre Bestellung. Die Bezahlung ist nicht gelungen. Sie bekommen in Kürze einen Bericht von uns.	pour votre commande. Le paiement est mal traité. Nous prenons contact avec vous. Faîtes votre choix dans le menu.	para su pedido. El pago ha fallado. Nos pondremos en contacto con usted. Hacer una elección de la mainmenu.	na vaši objednávku. Platba se nezda?ila. Budeme vás co nejd?íve kontaktovat. Vyberte si v hlavním menu.	megrendelését illet?en. A fizetés sikertelen. Rövid id?n belül felvesszük a kapcsolatot Önnel. Válasszon a f?menüb?l.	za zamówienie. Zap?ata nie powiod?a si?. Skontaktujemy si? z Tob? jak najszybciej. Dokonaj wyboru z menu g?ównego.	pre vašu objednávku. Platba neprebehla úspešne. ?oskoro vás budeme kontaktova?. Vyberte si z nášho hlavného menu.	per la vostra prenotazione. Il pagamento non è andato a buon fine. Provvederemo a contattarvi al più presto. Selezionate un'opzione dal nostro menu principale.
+voor uw bestelling. U heeft uw betaling afgebroken. Wij zullen spoedig met u contact opnemen. Maak uw keuze uit ons hoofdmenu.	for your order. You stop the payment. We will contact you.  Make a choice from the mainmenu.	für Ihre Bestellung. Sie erhalten in Kürze eine Bestätigung.	pour votre commande. Le paiement est interrompu. Nous prenons contact avec vous. Faîtes votre choix dans le menu.	para su pedido. Se detiene el pago. Nos pondremos en contacto con usted. Hacer una elección de la mainmenu.	na vaši objednávku. P?erušili jste provedení platby. Budeme vás co nejd?íve kontaktovat. Vyberte si v hlavním menu.	megrendelését illet?en. Megszakította a fizetési folyamatot. Rövid id?n belül felvesszük a kapcsolatot Önnel. Válasszon a f?menüb?l.	za zamówienie. Operacja zap?aty zosta?a przerwana. Skontaktujemy si? z Tob? jak najszybciej. Dokonaj wyboru z menu g?ównego.	pre vašu objednávku. Prerušili ste platbu. ?oskoro vás budeme kontaktova?. Vyberte si z nášho hlavného menu.	per la vostra prenotazione. Il pagamento è stato interrotto. Provvederemo a contattarvi al più presto. Selezionate un'opzione dal nostro menu principale.
+voor uw bestelling. U ontvangt binnenkort een reactie. Maak uw keuze uit ons hoofdmenu.	for your order. You will soon receive a reaction. Make a choice from the mainmenu.	für Ihre Bestellung. Sie erhalten in Kürze eine Bestätigung.	pour votre commande. Vous recevez bientôt une réaction. Faîtes votre choix dans le menu.	para su pedido. En breve recibirá una reacción. Hacer una elección de la mainmenu.	na vaši objednávku. Brzy obdržíte reakci. Vyberte si v hlavním menu.	megrendelését illet?en. Hamarosan visszajelzést kap. Válasszon a f?menüb?l.	za zamówienie. Nied?ugo otrzymasz odpowied?. Dokonaj wyboru z menu g?ównego.	pre vašu objednávku. Onedlho vám bude doru?ená odpove?. Vyberte si z nášho hlavného menu.	per la vostra prenotazione. Riceverete presto una risposta. Selezionate un'opzione dal nostro menu principale.
+voor uw bestelling. Uw betaling is geslaagd. U ontvangt binnenkort uw bestelde artikelen. Maak uw keuze uit ons hoofdmenu.	for your order. Payment is confirmed. You will soon receive the articles. Make a choice from the mainmenu.	für Ihre Bestellung. Die Bezahlung ist gut.	pour votre commande. Paiement réussi. Vous recevez bientôt vos articles. Faîtes votre choix dans le menu.	para su pedido. El pago se confirma. En breve recibirá los artículos. Hacer una elección de la mainmenu.	na vaši objednávku. Platba prob?hla úsp?šn?. Brzy obdržíte objednané zboží. Vyberte si v hlavním menu.	megrendelését illet?en. A fizetés sikerült. Hamarosan megkapja a megrendelt árucikkeket. Válasszon a f?menüb?l.	za zamówienie. Operacja zap?aty powiod?a si?. Nied?ugo otrzymasz zamówione artyku?y. Dokonaj wyboru z menu g?ównego.	pre vašu objednávku. Platba prebehla úspešne. ?oskoro vám doru?íme objednaný tovar. Vyberte si z nášho hlavného menu.	per la vostra prenotazione. Il pagamento è andato a buon fine. Riceverete presto gli articoli ordinati. Selezionate un'opzione dal nostro menu principale.
+voor uw offerte aanvraag. U ontvangt binnenkort een offerte. Maak uw keuze uit ons hoofdmenu.	for your quotation. You will soon recieve a response. Make a choice from the mainmenu.	für Ihre Anfrage. Sie erhalten in Kürze ein Angebot.	pour votre demande de prix. Vous recevez bientôt une offre. Faîtes votre choix dans le menu.	para su cotización. Usted pronto recibirá una respuesta. Hacer una elección de la mainmenu.	na žádost o cenovou nabídku. Brzy obdržíte nabídku. Vyberte si v hlavním menu.	árajánlat kérését illet?en. Hamarosan árajánlatot kap. Válasszon a f?menüb?l.	za zapytanie ofertowe. Wkrótce otrzymasz ofert?. Dokonaj wyboru z menu g?ównego.	pre vašu žiados? o ponuku. Onedlho vám bude doru?ená ponuka. Vyberte si z nášho hlavného menu.	per la vostra richiesta di offerta. Riceverete presto un'offerta. Selezionate un'opzione dal nostro menu principale.
+voor uw order. U ontvangt binnenkort een orderbevestiging. Maak uw keuze uit ons hoofdmenu.	for your job. You will soon receive a confirmation. Make a choice from the mainmenu.	von Ihrem Auftrag. Sie bekommen eine Bestätigung. Wählen Sie aus dem Hauptmenü.	pour votre commande. Vous recevez bientôt une confirmation de commande. Faîtes votre choix dans le menu.	para su trabajo. En breve recibirá una confirmación. Hacer una elección de la mainmenu.	na vaši objednávku. Brzy obdržíte potvrzení objednávky. Vyberte si v hlavním menu.	megrendelését illet?en. Megrendelésér?l hamarosan visszajelzést kap. Válasszon a f?menüb?l.	za zamówienie. Nied?ugo otrzymasz potwierdzenie zamówienia. Dokonaj wyboru z menu g?ównego.	pre vašu objednávku. Onedlho vám bude doru?ené potvrdenie objednávky. Vyberte si z nášho hlavného menu.	per il vostro ordine. Riceverete presto una conferma dell'ordine. Selezionate un'opzione dal nostro menu principale.
+voor uw toevoeging aan de winkelwagen. Maak uw keuze uit ons hoofdmenu.	for adding to shoppingcard. Make a choice from the mainmenu.	von Ihrer Übernahme in den Warenkorb. Wählen Sie aus dem Hauptmenü.	pour votre addition votre caddie. Faîtes votre choix dans le menu.	para añadir a shoppingcard. Hacer una elección de la mainmenu.	pro p?idání do nákupního košíku. Vyberte si v hlavním menu.	a bevásárlókocsi tartalmának kiegészítését illet?en. Válasszon a f?menüb?l.	za dodanie do koszyka. Dokonaj wyboru z menu g?ównego.	pre pridanie do nákupného košíka. Vyberte si z nášho hlavného menu.	per aver aggiunto prodotti nel carrello. Selezionate un'opzione dal nostro menu principale.
+voor uw voorraad order. U ontvangt binnenkort een orderbevestiging. Maak uw keuze uit ons hoofdmenu.	for stock job. You will soon receive a confirmation. Make a choice from the mainmenu.	von Ihrem Vorratsauftrag. Sie bekommen eine Bestätigung. Wählen Sie aus dem Hauptmenü.	pour votre commande de stock. Vous recevez bientôt une confirmation de commande. Faîtes votre choix dans le menu.	para el empleo stock. En breve recibirá una confirmación. Hacer una elección de la mainmenu.	na vaši objednávku ze zásob. Brzy obdržíte potvrzení objednávky. Vyberte si v hlavním menu.	raktárkészleti megbízását illet?en. Megrendelésér?l hamarosan visszajelzést kap. Válasszon a f?menüb?l.	za zamówienie zapasów. Nied?ugo otrzymasz potwierdzenie zamówienia. Dokonaj wyboru z menu g?ównego.	pre vašu objednávku zásob. Onedlho vám bude doru?ené potvrdenie objednávky. Vyberte si z nášho hlavného menu.	per il vostro ordine dal magazzino. Riceverete presto una conferma dell'ordine. Selezionate un'opzione dal nostro menu principale.
+voor uw web2print opdracht. U ontvangt binnenkort een orderbevestiging. Maak uw keuze uit ons hoofdmenu.	for web2print job. You will soon receive a confirmation. Make a choice from the mainmenu.	von Ihrem web2print Auftrag. Sie bekommen eine Bestätigung. Wählen Sie aus dem Hauptmenü.	pour votre carte de visite. Vous recevez bientôt une confirmation de commande. Faîtes votre choix dans le menu.	para el trabajo web2print. En breve recibirá una confirmación. Hacer una elección de la mainmenu.	na váš p?íkaz web2print. Brzy obdržíte potvrzení objednávky. Vyberte si v hlavním menu.	a web2print megrendelését illet?en. Megrendelésér?l hamarosan visszajelzést kap. Válasszon a f?menüb?l.	za zamówienie web2print. Nied?ugo otrzymasz potwierdzenie zamówienia. Dokonaj wyboru z menu g?ównego.	pre vaše zadanie web2print. Onedlho vám bude doru?ené potvrdenie objednávky. Vyberte si z nášho hlavného menu.	per il vostro incarico web2print. Riceverete presto una conferma dell'ordine. Selezionate un'opzione dal nostro menu principale.
+Voorbeeld	Preview	Vorschau	Prévisualisation	Avance	Náhled	Példa	Przyk?ad	Príklad	Esempio
+Voorraad	Stock	Vorrat	Gestion stock	Valores	Zásoby	Raktárkészlet	Zapas	Sklad	Magazzino
+Voorraad:	Stock:	Vorrat:	Stock:	Valores:	Sklad:	Magazzino:	Zásoby:	Raktárkészlet:	Zapas:
+Voortgang	Progress	Statusreport	l'avancement	Progreso	Pokrok	Haladás	Post?p	Pokrok	Progresso
+Vorige	Previous	Zurück	Précéd	Anterior	Předchozí	Előző	Poprzednie	Predchádzajúci	Precedente
+Vorige sessie:	Last session:	Vorherige Session:	Dernière session:	Última sesión:	Poslední zasedání:	Legutóbbi ülésén:	Poprzednia sesja:	Predchádzajúca akcia:	Sessione precedente:
+Vul hier onderin uw email adres in en wij zullen uw aanmeldgegevens naar dit adres versturen.	Enter below your email address and we will submit your account details.	Geben Sie unten Ihre E-Mail-Adresse ein und wir werden Ihre Kontodaten übermitteln.	Remplissez votre adresse email ci-dessous et nous enverrons vos données d'enregistrement à cette adresse	Introduzca su dirección de correo electrónico y vamos a presentar detalles de su cuenta.	Zadejte pod e-mailovou adresu a budeme předkládat údaje o účtu.	Adja meg az alábbi e-mail címét, és mi fog nyújtani a fiók adatait.	Wpisz poniżej swój adres e-mail, a my przedstawić szczegóły konta.	Zadajte pod e-mailovú adresu a budeme predkladať údaje o účte.	Inserisci qui sotto il tuo indirizzo email e ci presenterà i dettagli del conto.
+Vul hier uw bedrijfsgegevens in:	Enter your company details here:	Geben Sie hier Ihre Firmendaten ein:	Remplissez vos données de société:	Introduzca sus datos de la empresa aquí:	Zadejte své firemní údaje:	Adja meg vállalatának adatait:	Wpisz tu dane przedsi?biorstwa:	Zadajte vaše firemné údaje:	Siete pregati di inserire i dati della vostra azienda:
+Vul hier uw kaartgegevens in. Let op dat dit een beveiligde SSL verbinding is. Dit kunt u herkennen aan het slotje in uw browser. Het controle getal vind op op de achterkant van de kaart. Dit zijn de laatste 3 cijfers.	Enter your creditcard details. Make sure this is a secured SSL connection. You can recognize this with the locksign in browser. You can find the controle number at the backside of the card. These are the last 3 digits.	Geben Sie Ihre Kartedaten ein. Pass auf diese ist eine kontrollierte SSL-Verbindung. Sie können dies mit der Locksign im Browser erkennen. Die Anzahl der Controle finden Sie auf der Rückseite der Karte. Dies sind die letzten drei Ziffern.	Remplissez vos données de cartes de crédit. Attention, il vous faut une connection sécurisé SSL. Le n° de controle se trouve a l'arrière de votre carte. (Les 3 dernière chiffres)	Introduzca sus datos de Tarjeta de crédito. Asegúrese de que esto es una conexión SSL segura. Se puede reconocer esto con el locksign en el navegador. Puede encontrar el número controle en la parte trasera de la tarjeta. Estos son los 3 últimos dígitos.	Dopl?te zde nákupní údaje. Upozor?ujeme, že se jedná o zabezpe?ené p?ipojení SSL. M?žete si toho všimnout díky zámku, který se objeví v prohlíže?i. Kontrolní po?et se zobrazí na zadní ?ásti nákupního košíku. Jedná se o poslední 3 ?ísla.	Adja meg kártyájának adatait: Figyelem! Ez egy biztonságos SSL összeköttetés. Ezt a böngész? ablakában is láthatja. Az ellen?z? szám a kártya hátoldalán található. Ez az utolsó 3 számjegy.	Wpisz tu dane karty. Upewnij si?, ?e jest to zabezpieczone po??czenie SSL. Poznasz je po znaczku k?ódki w przegl?darce internetowej. Liczba kontrolna znajduje si? na odwrocie karty. S? to 3 ostatnie cyfry.	Zadajte údaje z vašej karty. Skontrolujte, ?i ste bezpe?ne pripojení cez SSL. Spoznáte to pod?a k?ú?ika v okne prehliada?a. Kontrolné ?íslo nájdete na zadnej strane vašej karty. Ide o posledné 3 ?íslice.	Siete pregati di inserire i dati della vostra carta. Siete in presenza di una connessione protetta SSL che potete riconoscere dal lucchetto nel vostro browser. Il numero di controllo si trova sul retro della carta ed è costituito dalle ultime 3 cifre.
+Vul hieronder in het kort uw vraag in.	Enter below your question.	Gib hier eine kurze Frage ein:	Remplissez votre question	Introduzca a continuación su pregunta.	Níže v krátkosti položte dotaz.	Az alábbiakban röviden írja le kérdését.	Wpisz krótkie pytanie.	V krátkosti zadajte svoju otázku.	Siete pregati di inserire di seguito la vostra breve domanda.
+Waarschuwing	Warning	Achtung	Attention	Advertencia	Varování	Figyelmeztetés	Ostrze?enie	Varovanie	Avvertimento
+waarvan	from which	deren	dont	a partir del cual	který	 	z czego	z ktorých	dei quali
+Wachtwoord:	Password:	Kennwort:	Mot de passe:	Contraseña:	Heslo:	Jelszó:	Hasło:	Heslo:	Password:
+Web2Print	Web2Print	Web2Print	Web2Print	Web2Print	Web2Print	Web2Print	Web2Print	Web2Print	Web2Print
+Webdesign	Webdesign	Webdesign	Webdesign	Diseño web	Webový design	Web design	Projektowanie stron	Vzhľad stránky	Web design
+Webwinkel	Webshop	Webshop	Webshop	tienda online	Internetový obchod	Webáruház	sklep internetowy	internetový obchod	webshop
+Welkom	Welcome	Herzlich Willkommen	Bienvenue	Bienvenido	Vítejte	Üdvözöljük!	Witamy	Vitajte	Benvenuti
+Wij danken u voor deze offerte en zullen hem met zorg uitrekenen.	We thank you for this quotation and we will handle it with care.	Vielen Dank für diesen Angebote. Wir werden ihn sorgfältig bearbeiten.	Nous vous remercions pour cette calcul et la traiterons avec soin	Te damos gracias por esta cita y vamos a manejarlo con cuidado.	Děkujeme vám za tuto citaci a budeme s ní zacházet opatrně.	Mi köszönjük ezt az idézetet, és mi kezelje körültekintően.	Dziękujemy za ten cytat i będziemy obsługiwać go z rozwagą.	Ďakujeme vám za túto citáciu a budeme s ňou zaobchádzať opatrne.	Vi ringraziamo per questa citazione e noi tratteremo con cura.
+Wij danken u voor deze opdracht en zullen hem met zorg uitvoeren.	We thank you for this job and we will handle it with care.	Vielen Dank für diesen Auftrag. Wir werden ihn sorgfältig bearbeiten.	Nous vous remercions pour cette commande et la traiterons avec soin	Te damos gracias por este trabajo y vamos a manejarlo con cuidado.	Děkujeme vám za tuto práci a budeme s ní zacházet opatrně.	Mi köszönjük ezt a munkát, és mi kezelje körültekintően.	Dziękujemy za tę pracę i będziemy obsługiwać go z rozwagą.	Ďakujeme vám za túto prácu a budeme s ňou zaobchádzať opatrne.	Vi ringraziamo per questo lavoro e lo tratteremo con cura.
+Wij hebben uw aanmeldgegevens aangepast. Om in te loggen op ons systeem dient u de volgende gegevens te gebruiken.	We changed your account details. To login into our system please use the following details.	Wir haben Ihre Kontodaten geändert. Um sich in unser System einzuloggen benutzen Sie bitte folgende Angaben.	Nous avons adapté vos données d'enregistrement. Veuillez utiliser les données suivantes pour vous enregistrer sur notre système.	Cambiamos detalles de su cuenta. Para iniciar sesión en nuestro sistema por favor utilice los siguientes detalles.	Změnili jsme své údaje o účtu. Pro přihlášení do našeho systému použijte prosím následující údaje.	Mi változott meg fiókjának adatait. Bejelentkezéshez rendszerünkbe, kérjük használja az alábbi adatokat.	Zmieniliśmy szczegóły konta. Aby zalogować się do naszego systemu należy stosować następujące szczegóły.	Zmenili sme svoje údaje o účte. Pre prihlásenie do nášho systému použite prosím nasledujúce údaje.	Abbiamo cambiato i dettagli dell'account. Per accedere nel nostro sistema si prega di utilizzare i seguenti dati.
+Wij zullen deze order afleveren op het volgende adres:	We will submit this order to the following address:	Wir werden die Bestellung an folgende Anschrift schicken:	La commande sera livrée à l'adresse suivante:	Vamos a presentar este orden a la siguiente dirección:	Budeme předkládat tuto objednávku na adresu:	Akkor benyújtja ezt annak érdekében, hogy a következő címre:	Będziemy wysyłać ten porządek na następujący adres:	Budeme predkladať túto objednávku na adresu:	Trasmetteremo il presente ordine al seguente indirizzo:
+Wijzig	Modify	Ändern	Modifier	Modificar	Modifikovat	Módosít	Modyfikować	modifikovať	Modificare
+Wijzig hieronder uw aanmeldgegevens en klik op verstuur om de aanpassing te activeren.	Please enter below your new account details and press sumbit to confirm.	Bitte geben Sie nachfolgend Ihre neuen Kontodaten ein und bestätigen diese.	Changez vos coordonnées ci-dessous et cliquez sur 'envoyer' pour confirmer le changement	Entre más abajo de su nueva cuenta y pulse Sumbit para confirmar.	Níže zadejte nové podrobnosti účtu a stiskněte sumbit pro potvrzení.	Kérjük, adja meg az alábbi új fiók adatait, és nyomja Submit gombot.	w celu potwierdzenia, wpisz poniżej swój nowych danych konta i naciśnij przesłanie.	Nižšie zadajte nové podrobnosti účtu a stlačte sumbit pre potvrdenie.	per confermare Inserisci qui sotto i tuoi nuovi dettagli dell'account e premere il tasto procedi.
+Winkelwagen	Shopping cart	Warenkorb	Votre caddie	Tarjeta de compras	Nákupní košík	Bevásárlókocsi	Koszyk	Nákupný košík	Carrello
+Wis	Delete	Löschen	Effacer	Borrar	Vymazat	Töröl	Kasować	Vymaž	Cancella
+XML of TAB Bestand	XML or TAB file	XML oder TAB Datei	Fichier XML ou TAB	XML o TAB archivo	XML soubor nebo TAB	XML vagy TAB fájlban	Plik XML lub TAB	XML súbor alebo TAB	file XML o TAB
+Zeker weten?	Are you sure?	Sind Sie sicher?	Êtes-vous certain ?	¿Estás seguro?	Jsi si jistá?	biztos vagy ebben?	Jesteś pewny?	Si si istý?	Sei sicuro?
+Zet om naar	Convert to	Konvertiert nach	Transforme	Convertir a	převést	Változtatás a következ?re:	Konwertuj na	previesť	Fattura a
+Zoek	Search	Suche	Chercher	Buscar	Vyhledat	Keresés	Szukaj	Vyhľadanie	Cerca
+Zoekvenster archief orders	Search window filed jobs	Suchdialog Archivaufträge	Ecran de recherche jobs	ventana de búsqueda presentada empleos	Vyhledávací okno archivu objednávek	Keresés ablak benyújtott munkák	Okno wyszukiwania w zamówieniach archiwalnych	Vyhľadávanie okno podal pracovných miest	Finestra di ricerca archivio ordini
+Zoekvenster offertes	Search window quotations	Suchdialog Angeboten	Ecran de recherche devis	Buscar citas ventana	Vyhledávací okno nabídek	Keresés ablak idézetek	Okno wyszukiwania w ofertach	Vyhľadávanie okenné citáty	Finestra di ricerca offerte
+Zwart	Black	Schwarz	Noir	Negro	Černý	Fekete	Czarny	čierna	Nero
+Zwart/Wit	Black/White	Schwarz/Weiß	Noir et blanc	Negro / blanco	Černá bílá	Fekete-fehér	Czarny biały	Čierna biela	Nero bianco
+Bestand(en) uploaden (nog) niet mogelijk.	File(s) uploading not (yet) possible	Datei-Upload (noch) nicht möglich!	Téléchargement des fichiers pas (encore) possible.	Archivo (s) de subir (aún) no es posible	Soubor (y) nahráním (zatím) možné	Fájl (ok) feltöltése (még) nem lehetséges	File (s), nie przesyłając (jeszcze) możliwe	Súbor (y) nahraním (zatiaľ) možné	File (s) caricare non è (ancora) possibile
+Aanleveren bestanden	Delivery files	Zu sendende Dateien	Livraison des fichiers	los archivos de entrega	Dodací soubory	szállítási fájlok	pliki dostawy	Dodacie súbory	file di consegna
+Vervaldatum:	Expiration date:	Ablauf-Datum:	Date d'expiration:	Fecha de caducidad:	Datum spotřeby:	Lejárati dátum:	Termin ważności:	Dátum spotreby:	Data di scadenza:
+Bewaar	Save	Speicher	Sauver	Salvar	Uložit	Mentés	Zapisać	uložiť	Salvare
+Soort	Type	Sorte	Genre	Tipo	Typ	típus	Rodzaj	typ	Digitare
+Dochter	Descendant	Tochter	Filles	Descendiente	Potomek	Leszármazott	Potomek	potomok	Discendente
+tot	until	bis	à	hasta	až do	amíg	aż do	kým	fino a
+Info	Info	Info	Info	información	Informace	Info	Informacje	Info	Informazioni
+Open	Open	Öffnen	Ouvrir	Abierto	OTEVŘENO	Nyisd ki	otwarty	Otvorený	aperto
+Geen selectie	No selection	Keine selection	Aucune sélection	Sin selección	žádný výběr	nincs kiválasztás	Brak wyboru	žiadny výber	nessuna selezione
+Expeditienummer:	Expeditionnumber:	Sendungsnummer:	Nombre expéditeur:	Expeditionnumber:	Expeditionnumber:	Expeditionnumber:	Expeditionnumber:	Expeditionnumber:	Expeditionnumber:
+Magazijn:	Warehouse:	Lager:	Magazin:	Almacén:	Sklad:	Raktár:	Magazyn:	sklad:	Magazzino:
+Magazijn	Warehouse	Lager	Magasin	Almacén	Sklad	Raktár	Magazyn	sklad	Magazzino
+Locatie	Location	Plätze	Location	Ubicación	Umístění	Elhelyezkedés	Lokalizacja	umiestnenie	luogo
+Reservering:	Reservations:	Reservierungen:	Réservations:	Reservas:	výhrady:	fenntartások:	Rezerwacje:	výhrady:	Prenotazioni:
+Gemaakt door:	Made by:	Erstellt durch:	Fait par:	Hecho por:	Vytvořil:	Készítette:	Zrobione przez:	Vytvorené:	Fatto da:
+Object:	Object:	Objekt:	Objet:	Objeto:	Objekt:	Tárgy:	Obiekt:	objekt:	Oggetto:
+Lengte:	Length:	Länge:	Longueur:	Longitud:	Délka:	Hossz:	Długość:	Dĺžka:	Lunghezza:
+U dient een lengte in te geven	You must enter a length	Sie müssen eine Länge eingeben	Vous devez rentrer une longueur	Debe introducir una longitud	Je třeba zadat délku	Meg kell adnia a hossza	Musisz podać długość	Je potrebné zadať dĺžku	È necessario immettere una lunghezza
+U dient een formaat in te geven	You must enter a size	Sie müssen eine Format eingeben	Vous devez rentrer un format	Debe introducir un tamaño	Je nutné zadat velikost	Meg kell adnia egy méret	Musisz podać rozmiar	Je nutné zadať veľkosť	È necessario immettere una dimensione
+Eenheidsgewicht:	Unit weight:	Einheitsgewicht:	Poids unitaire:	Unidad de peso:	Jednotková hmotnost:	Egység súlya:	Waga jednostkowa:	Hmotnosť jednotky:	Unità di peso:
+Download	Download	Herunterladen	Télécharger	Descargar	Ke stažení	Letöltés	Pobieranie	Stiahnuť	Scaricare
+Aantal soorten:	Number of versions:	Anzahl Sorten:	combien de types :						
+Afwijkend factuuradres	Different invoiceaddress	 Andere Rechnungsadresse	Adresse de facturation non standard						
+Goedkeuring:	Approving:	Zustimmung:	agrément						
+Afgekeurd	Rejected	Abgelehnt	Refusé						
+OK	OK	OK	OK						
+Graag uw akkoord op bovenstaande bestanden!	Please approve the above files!	Bitte bestätigen Sie die oben genannten Dateien!	Veuiller donner votre accord sur les fichiers !						
+Bedankt voor het goedkeuren van de bestanden!	Thank you for appoving the files!	Vielen Dank für Appoving die Dateien!	Merci de approuver les fichier !						
+Wij zullen uw afkeuring in behandeling nemen!	We will work on your rejection treatment!	Wir arbeiten an Ihrer Ablehnung Behandlung!	On va traiter votre rejet !						
+Er is een bevestigingsmail verstuurd naar:	We send a confirmation mail too:	Wir senden eine Bestätigungs-Mail zu:	Il y une confirmation envoyé à :						
+Geef een reden voor het afkeuren van deze bestanden!	Please give a reason for rejection of these files!	Bitte geben Sie einen Grund für die Ablehnung dieser Dateien!	Donnez nous le raison du rejet !						
+Opmerking	Remark	Bemerkung	Remarque						
+De bestanden zijn akkoord gegeven voor productie!	The files are approved for production!	Die Dateien sind für die Produktion zugelassen!	Les fichiers sont bon à tirer !						
+De bestanden zijn afgekeurd voor productie!	The files are rejected for production!	Die Dateien sind für die Produktion abgelehnt!	Les fichiers sont rejeté pour production !						
+Zoekwaarde	Search value	Suche wert	Valeure de recherche						
+Kwaliteit:	Quality:	Qualität:	Qualité:						
+Prijzen	Prices	Preise	Prix						
+Productiemethode	Production method	Produktionsart	Méthode de production	Método de producción	Výrobní metoda	Előállítási mód	Metoda produkcji	Výrobná metóda	Metodo di produzione
+Pagina's	Pages	Seiten	Pages	páginas	Stránky	Oldalak	Strony	Stránky	Pagine
+Materiaal	Material	Material	Matérial	Material	Materiál	Anyag	Materia?	Materiál	Materiale
+Kleuren	Colors	Farben	Couleurs	Colores	Barvy	Színek	Kolory	Farby	Colori
+Bereken	Calculate	Berechnen	Calculer						
+U dient een aantal pagina's in te geven	You must enter a number of pages	Sie müssen eine Anzahl von Seiten eingeben	Vous devez entrer un nombre de pages						
+U dient een berekening uit te voeren	You must execute a calculation	Sie müssen eine Berechnung durchführen	Vous devez effectuer un calcul						
+Aanvraag offerte	Request quotation	Angebot anfordern	Demander un devis						

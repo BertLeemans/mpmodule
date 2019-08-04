@@ -1,0 +1,305 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>
+		var preferences = {};
+		var layouts = {};
+
+		var product = {}
+		
+		function fillDetails (key) {
+			$.ajax({
+				url: "/connector/html/detailTables",
+				type: "GET",
+				data: { session : sessionStorage.getItem("session"), table: 5, id: key },
+				success: function(result) {
+					if (result.errornumber) {
+						openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						$("#key").val(key);
+						product = result;
+
+						var unit = "<!--#4DSCRIPT/WEB_LANGUAGE/expl.-->";
+						
+						if (product.attribute_1) {		$("#group").children(".data").html(product.attribute_1);										} else {	$("#group").hide();				}
+						if (product.description) {		$("#description").children(".data").html(product.description);									} else {	$("#description").hide();		}
+						if (product.extra_info) {		$("#information").children(".data").html(product.extra_info);									} else {	$("#information").hide();		}
+						if (product.product_code) {		$("#code").children(".data").html(product.product_code);										} else {	$("#code").hide();				}
+						if (product.format) {			$("#size").children(".data").html(product.format);												} else {	$("#size").hide();				}
+						if (product.grs) {				$("#paperWeight").children(".data").html(formatNumber(product.grs) + " g/m²");					} else {	$("#paperWeight").hide();		}
+						if (product.grain_direction) {	$("#grainDirection").children(".data").html(product.grain_direction);							} else {	$("#grainDirection").hide();	}
+														$("#stock").children(".data").html(formatNumber(product.stock) + " " + unit);
+														$("#reservations").children(".data").html(formatNumber(product.reserved) + " " + unit);
+						if (product.warehouse_details) {
+							var html_table = "";
+							html_table += "<table class=\"inline_table\" style=\"width: 350px;\">";
+							html_table += "<thead><tr class=	\"inline_table\">";
+							html_table += "<th class=\"inline_table\" style=\"width: 80px;\"><!--#4DSCRIPT/WEB_LANGUAGE/Magazijn--></th><th class=\"inline_table\" style=\"width: 150px;\"><!--#4DSCRIPT/WEB_LANGUAGE/Locatie--></th><th class=\"inline_table\" style=\"width: 70px;\"><!--#4DSCRIPT/WEB_LANGUAGE/Datum--></th><th class=\"inline_table\" style=\"width: 80px;\" align=\"right\"><!--#4DSCRIPT/WEB_LANGUAGE/Aantal--></th>";
+							html_table += "</tr></thead><tbody>";
+							$.each(product.warehouse_details, function( item ) {
+								html_table += "<tr class=\"inline_table";
+								if ((item%2)==0) {
+									html_table += " even";
+								} else {
+									html_table += " odd";
+								}
+								html_table += "\">";
+								html_table += "<td class=\"inline_table\">" + product.warehouse_details[item].name + "</td><td class=\"inline_table\">" + product.warehouse_details[item].location + "</td><td class=\"inline_table\">" + formatDate( product.warehouse_details[item].date ) + "</td><td align=\"right\" class=\"inline_table\">" + formatNumber( product.warehouse_details[item].amount ) + "</td>";
+								html_table += "</tr>";
+							});
+							html_table += "</tbody></table>";
+							$("#warehouse").children(".data").html( html_table );
+
+							$(".inline_table tbody tr.even")
+								.css( "background-color", layouts.styles[4].altcolor )
+								.css( "border-color", layouts.styles[4].fontcolor );
+							$(".inline_table tbody tr.odd").css( "background-color", layouts.styles[4].backcolor );
+							$(".inline_table").css( "border", "1px solid " + layouts.styles[4].fontcolor);
+						} else {
+							$("#warehouse").hide();
+						}
+						if (product.packed_per) {		$("#packed").children(".data").html(formatNumber(product.packed_per) + " " + unit);				} else {	$("#packed").hide();			}
+						if (product.minimum_size) {		$("#minimumRun").children(".data").html(formatNumber(product.minimum_size) + " " + unit);		} else {	$("#minimumRun").hide();		}
+						if (product.maximum_size) {		$("#maximumRun").children(".data").html(formatNumber(product.maximum_size) + " " + unit);		} else {	$("#maximumRun").hide();		}
+						if (product.yearly_used) {		$("#yearRun").children(".data").html(formatNumber(product.yearly_used) + " " + unit);			} else {	$("#yearRun").hide();			}
+						if (product.invoice_sended) {	$("#invoiced").children(".data").html(product.invoice_sended);									} else {	$("#invoiced").hide();			}						
+						
+						calculatedPrice();
+						setupImage(product.image);
+
+						getCurrentFiles(function () {
+							$(".main").css( "visibility","visible");
+							$("#run_01").focus();
+						});
+					}
+				}
+			});			
+		}
+		
+		function calculatedPrice() {
+			var run = unformatNumber($("#run_01").val());
+			if (run > 0) {
+				var unit = "<!--#4DSCRIPT/WEB_LANGUAGE/expl.-->";
+
+				if (product.minimum_size!=0) {
+					if (product.minimum_size>run) {
+						openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U moet minimaal--> " + formatNumber(product.minimum_size) + " " + unit + " <!--#4DSCRIPT/WEB_LANGUAGE/bestellen!-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						run = product.minimum_size;
+					}
+				}
+				if (product.maximum_size!=0) {
+					if (run > product.maximum_size) {
+						openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U mag maximaal--> " + formatNumber(product.maximum_size) + " " + unit + " <!--#4DSCRIPT/WEB_LANGUAGE/bestellen!-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						run = product.maximum_size;
+					}
+				}
+				if (product.packed_per>1) {
+					run = Math.round(((run - 1) / product.packed_per) + 0.5)*product.packed_per.toString();
+				}
+
+				$("#run_01").val(formatNumber(run));
+				$("#price").val("");
+				  				
+				$.getJSON('/connector/html/calculateProductPrice?session=' + sessionStorage.getItem("session") +  '&id=' + $("#key").val() +  '&bufferType=product&run=' + run, function (data) {
+					if (data.errornumber) {
+						openAlert(data.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						$("#price").val(formatCurrency(data.price));
+					}
+				});
+			} else {
+				$("#run_01").val("");
+				$("#price").val("");
+			}
+		}
+				
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(4);
+				styleLinks(5);
+				
+				var id = parseInt(getParameterFromURL('id')) || 0;		//kijk of dit een bestaande regel is
+				$('#id').val(id);
+				if (id > 0) {
+					$('#locationFiles').val("internet");
+					$.getJSON('/connector/html/detailTables?session=' + sessionStorage.getItem("session") +  '&id=' + id +  '&table=0', function (data) {
+						if (data.errornumber) {
+							openAlert(data.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else {
+							$("#run_01").val(formatNumber(data.run_01));
+							$("#reference").val(data.reference);
+							$("#remark").val(data.remark);
+							fillDetails(data.standard_quotation);
+						}
+					});
+				} else {
+					$('#locationFiles').val("temp");
+					fillDetails(parseInt(getParameterFromURL('key')) || 0);	//haal het product op
+				}
+
+				if ( preferences.access.noPricesVisible ) {
+					$("#priceRow").hide();
+				}
+
+				initFileUpload();
+
+				if (preferences.submit.products) {
+					$("#toShoppingCard").click(function() {
+						var data = unformatNumberSerializeArray ( $("#form").serializeArray(), ["run_01"]);
+						if ( testValueFound(data, "run_01", 0) ) {
+							openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U dient een oplage in te geven-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else {
+							if ( testValueFound(data, "id", 0) ) {
+								var method = "PUT";
+							} else {
+								var method = "POST";
+							}
+							preventClickTwice(this);
+							submitLineHandler(data, method, "succesProduct");
+						}
+					});
+				} else {
+					$("#submitButton").hide();
+				}
+						
+				if (id > 0) {
+					$("#backButton").hide();
+				} else {
+					$("#back").click(function(){
+						window.location.replace('/module/pages/products.shtm');
+					});
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Product--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content"><div id="content" class="content_child">
+		<form id="form">
+			<input type="hidden" id="id" 				name="id"					value="0"></input>
+			<input type="hidden" id="key"				name="key"					value="0"></input>
+			<input type="hidden" id="locationFiles"		name="locationFiles"		value="temp"></input>
+			<input type="hidden" id="bufferType" 		name="bufferType"			value="product"></input>
+			<table id="entry-table" class="content_table">
+				<tr>
+					<td class="nocolumn" colspan="3">&nbsp;</td>
+				</tr>
+				<tr id="group">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Groep:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="description">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Omschrijving:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="information">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Informatie:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="code">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Code:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="size">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Formaat:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="paperWeight">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Gramsgewicht:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="grainDirection">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Looprichting:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="stock">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Voorraad:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="reservations">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Reservering:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="warehouse">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Magazijn:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="packed">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Verpakt per:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="minimumRun">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Minimaal bestellen:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="maximumRun">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Maximaal bestellen:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="yearRun">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Jaarverbruik:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="invoiced">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Gefactureerd:--></td>
+					<td class="data">&nbsp;</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Oplage:--></td>
+					<td class="data"><input type="text" id="run_01" name="run_01" size="10" maxlength="10" value="" onchange="javascript:calculatedPrice()"></input></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="priceRow">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Prijs:--></td>
+					<td class="data"><input type="text" id="price" name="price" size="10" maxlength="10" value="" disabled></input></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Referentie:--></td>
+					<td class="data"><input type="text" id="reference" name="reference" size="30" maxlength="30" onchange="javascript:removeFalseCharacters(this)"></input></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Notities:--></td>
+					<td class="data"><textarea class="longtext" rows="2" id="remark" name="remark" onchange="javascript:removeFalseCharacters(this)"></textarea></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+			</table>
+			<table id="upload-table" class="content_table">
+				<tr> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Bestanden:--></td>
+					<td class="data"><input id="fileupload-button" type="file" name="vx_Data"></input><div style="float:left; width:95%;" id="fileupload-progressbar"><div class="progress-label"></div></div></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+			</table>
+		</form>
+		</div></div>
+		<div class="footer"><div class="margins right"><span id="backButton"><a id="back" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Terug--></a> | </span><span id="submitButton"><a id="toShoppingCard" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/In winkelwagen--></a> | </span><a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+		<div class="imageViewer"><img id="imageViewer" /></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

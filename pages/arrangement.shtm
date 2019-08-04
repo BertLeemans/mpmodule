@@ -1,0 +1,612 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>
+		var preferences = {};
+		var layouts = {};
+						
+		var arrangement = {}
+		var currentLevel = 0;				//this is the current level (description, item, type)
+		var previousLevel = [];				//this is the previous level needed for the back button
+
+		function calculatePrice() {
+			var valid = true;
+			var key = $("#key").val();
+			if (key == 0) {
+				valid = false;
+			}
+			var run = unformatNumber( $("#run_01").val());
+			if (run <= 0) {
+				valid = false;
+				run = 0;
+			}			
+			var versions = unformatNumber( $("#run_02").val());
+			if (versions == 0) {
+				versions = 1;
+			}
+			var parameter_1 = unformatMeasurement( $("#parameter_1").val());
+			var parameter_2 = unformatMeasurement($("#parameter_2").val());
+			switch ( arrangement.unit ) {
+				case 1:
+					if ((parameter_1 != 0) & (parameter_2 != 0)) {
+						if (parameter_1 != parameter_2) {
+							if (parameter_1 < parameter_2) {
+								$("#direction").html(" (<!--#4DSCRIPT/WEB_LANGUAGE/Staand-->)");
+							} else {
+								$("#direction").html(" (<!--#4DSCRIPT/WEB_LANGUAGE/Liggend-->)");
+							}
+						} else {
+							$("#direction").html("");
+						}
+					} else {
+						valid = false;
+						$("#direction").html("");
+					}
+					break;
+				case 2:
+					if (parameter_1 == 0) {
+						valid = false;
+						$("#direction").html("");
+					}
+					break;
+			}
+			if ( valid ) {
+				if (arrangement.ordersize>1) {
+					run = Math.round(((run - 1) / arrangement.ordersize) + 0.5)*arrangement.ordersize.toString();
+				}
+				if (arrangement.minimum_size!=0) {
+					if (arrangement.minimum_size>run) {
+						openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U moet minimaal--> " + formatNumber(arrangement.minimum_size) + " <!--#4DSCRIPT/WEB_LANGUAGE/exemplaren bestellen!-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						run = arrangement.minimum_size;
+					}
+				}
+				if (arrangement.maximum_size!=0) {
+					if (run > arrangement.maximum_size) {
+						openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U mag maximaal--> " + formatNumber(arrangement.maximum_size) + " <!--#4DSCRIPT/WEB_LANGUAGE/exemplaren bestellen!-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						run = arrangement.maximum_size;
+					}
+				}
+
+				$("#run_01").val(formatNumber(run));
+				$("#run_02").val(formatNumber(versions));
+				$("#parameter_1").val(formatMeasurement(parameter_1));
+				$("#parameter_2").val(formatMeasurement(parameter_2));
+				$("#price").val("");
+
+				var url = '/connector/html/calculateProductPrice?session=' + sessionStorage.getItem("session") +  '&id=' + key +  '&bufferType=arrangement&run=' + run + '&versions=' + versions;
+				switch ( arrangement.unit ) {
+					case 1:
+						url += '&parameter_1=' + parameter_1 + '&parameter_2=' + parameter_2;
+						break;
+					case 2:
+						url += '&parameter_1=' + parameter_1;
+						break;
+				}
+				$.getJSON(url, function (data) {
+					if (data.errornumber) {
+						$("#error").hide();
+						$("#price").val("");
+						openAlert(data.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						if (data.noPriceFound) {
+							$("#error").show();
+							$("#price").val("");
+						} else {
+							$("#error").hide();
+							$("#price").val(formatCurrency(data.price));
+						}
+					}
+				});
+				
+			} else {
+				$("#run_01").val(formatNumber(run));
+				$("#run_02").val(formatNumber(versions));
+				$("#parameter_1").val(formatMeasurement(parameter_1));
+				$("#parameter_2").val(formatMeasurement(parameter_2));
+				$("#price").val("");
+				$("#error").hide();
+			}
+		}
+		
+		function handleSelection(data) {
+			currentLevel = data.level;
+			if (currentLevel == 3) {
+				$("#text_01").val("");
+				$("#key").val(data.id);
+			} else {
+				$("#text_01").val("");
+				$("#run_01").val("");
+				$("#run_02").val("1");
+				$("#parameter_1").val("");
+				$("#parameter_2").val("");
+				$("#price").val("");
+				$("#error").hide();
+				$("#key").val(0);
+				
+				if (data.id == 0) {		// correction for selection "Make your choice!!!"
+					currentLevel--;
+					if (currentLevel > 0) {
+						data.id = $("#selectLevel" + (currentLevel - 1)).val();
+					}
+				}
+			}
+			fillImageSelection({mode: 'select', id : data.id});
+		}
+		
+		function fillListBackwards (levels, i) {
+			$.ajax({
+				url: "/connector/html/handleArrangements",
+				type: "GET",
+				data: { session : sessionStorage.getItem("session"), id : levels[i] , level : i},
+				success: function(result) {
+					if (result.errornumber) {
+						openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						var options = $("#selectLevel" + i);
+						options.attr('disabled', false);
+						options.empty();
+						options.append($("<option />").val(0).text("<!--#4DSCRIPT/WEB_LANGUAGE/Maak uw keuze...-->"));
+						$.each(result["level" + i], function(item) {
+							if (result["level" + i][item].id == levels[i + 1]) {
+								options.append($("<option selected/>").val(result["level" + i][item].id).text(result["level" + i][item].description));
+							} else {
+								options.append($("<option />").val(result["level" + i][item].id).text(result["level" + i][item].description));
+							}
+						});
+						
+						if (i > 0) {
+							i--;
+							fillListBackwards (levels, i);
+						} else {
+							$(".main").css( "visibility","visible");
+						}
+					}
+				}
+			});
+		}
+		
+		function fillImageSelection(data) {
+			$("#fields").hide().nextAll().hide();
+			$("#upload-table").hide();
+			$.ajax({
+				url: "/connector/html/handleArrangements",
+				type: "GET",
+				data: { session : sessionStorage.getItem("session"), id : data.id , level : currentLevel},
+				success: function(result) {
+					if (result.errornumber) {
+						openAlert(result.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						arrangement = result;
+						if (data.mode == "init") {
+							$(".main").css( "visibility","visible");
+						}
+						if (data.mode == "edit") {
+							if (preferences.picture.arrangements) {
+								data.mode = "select";
+								previousLevel.push(arrangement.link_01);
+								previousLevel.push(arrangement.link_02);
+								previousLevel.push(arrangement.link_03);
+
+								$("#back").on('click', function(){
+									currentLevel--;
+									previousLevel.pop();
+									fillImageSelection({mode: "select", id : previousLevel[(previousLevel.length - 1)]});
+								});
+
+								$(".main").css( "visibility","visible");
+							} else {
+ 								currentLevel = 3;
+								data.mode = "select";
+								
+								var levels = [];
+								levels.push(0);
+								levels.push(arrangement.link_01);
+								levels.push(arrangement.link_02);
+								levels.push(arrangement.link_03);			
+
+								fillListBackwards (levels, 2);
+							}
+						}
+								
+						if (currentLevel < 3) {
+							$(".imageViewer").hide();
+						}
+						
+						$("#formImage").empty();
+						if ((preferences.picture.arrangements) & (currentLevel < 3)) {
+							$("#formImage").show();
+							$("#formList").hide();
+							$("#submitButton").hide();
+							$("#submitQuotation").hide();
+							
+							$("#backButton").hide();
+							$("#back").off();
+							if (currentLevel != 0) {
+								$("#backButton").show();
+								$("#back").on('click', function(){
+									currentLevel--;
+									previousLevel.pop();
+									fillImageSelection({mode: "select", id : previousLevel[(previousLevel.length - 1)]});
+								});
+							}
+							
+							if (result["level" + currentLevel].length > 0) {
+								var defaultHeight = layouts.general.heightImage;
+								var columns = layouts.general.columnsImage;
+								var maxWidth = parseInt(($(".content").width() - 100) / columns);
+								var maxHeight = 0;
+								var rows = Math.floor(result["level" + currentLevel].length / columns);
+								if ((result["level" + currentLevel].length % columns) != 0) {
+									rows++;
+								}
+								var element = 0;
+								$("#formImage").append('<br /><table id="image-table" class="content_table"></table>');
+								for (var i=0; i < rows; i++) {
+									$("#image-table").append('<tr class=\"imageRow' + i + '\"></tr>');
+									for (var j=0; j < columns; j++) {
+										$(".imageRow" + i).append('<td class=\"placeholderImage\" id=\"selectImage' + element + '\"></td>');
+										if (element < result["level" + currentLevel].length) {
+											if (defaultHeight) {
+												var imageWidth = maxWidth;
+												var imageHeight = defaultHeight;
+												maxHeight = defaultHeight;
+												if (result["level" + currentLevel][element].image) {
+													var url = "/connector/html/getImage/" + result["level" + currentLevel][element].id + ".jpg?session=" + sessionStorage.getItem("session") + "&type=" + result["level" + currentLevel][element].image.type + "&id=" + result["level" + currentLevel][element].image.id + "&width=" + imageWidth + "&height=" + imageHeight + "&background=" + encodeURIComponent( layouts.styles[4].backcolor );
+													$("#selectImage" + element).append('<div id=\"' + result["level" + currentLevel][element].id + '\" class="specialImage"><img title=\"' + result["level" + currentLevel][element].description + '\" alt=\"' + result["level" + currentLevel][element].description + '\" height=\"' + imageHeight + '\" width=\"' + imageWidth + '\" class=\"selectImage\" src=\"' + url + '\"/><h2><span>' + result["level" + currentLevel][element].description + '</span></h2></div>');
+												} else {
+													var url = "/connector/html/getImage/nopicture.jpg?session=" + sessionStorage.getItem("session") + "&type=0&id=0&width=" + (maxWidth/2) + "&height=" + (maxWidth/2) + "&background=" + encodeURIComponent( layouts.styles[4].backcolor );
+													$("#selectImage" + element).append('<div id=\"' + result["level" + currentLevel][element].id + '\" class="specialImage"><img title=\"' + result["level" + currentLevel][element].description + '\" alt=\"' + result["level" + currentLevel][element].description + '\" height=\"' + (maxWidth/2) + '\" width=\"' + (maxWidth/2) + '\" class=\"selectImage\" src=\"' + url + '\"/><h2><span>' + result["level" + currentLevel][element].description + '</span></h2></div>');
+												}
+											} else {
+												if (result["level" + currentLevel][element].image) {
+													var factor = maxWidth / result["level" + currentLevel][element].image.width;
+													if ((maxWidth / result["level" + currentLevel][element].image.height) < factor) {
+														factor = maxWidth / result["level" + currentLevel][element].image.height;
+													}
+													if (factor > 1) {
+														factor = 1;
+													}
+													var imageWidth = Math.round(result["level" + currentLevel][element].image.width * factor);
+													var imageHeight = Math.round(result["level" + currentLevel][element].image.height * factor);
+												
+													if (maxHeight < imageHeight) {
+														maxHeight = imageHeight;
+													}
+												
+													var url = "/connector/html/getImage/" + result["level" + currentLevel][element].id + ".jpg?session=" + sessionStorage.getItem("session") + "&type=" + result["level" + currentLevel][element].image.type + "&id=" + result["level" + currentLevel][element].image.id + "&width=" + imageWidth + "&height=" + imageHeight;
+													$("#selectImage" + element).append('<div id=\"' + result["level" + currentLevel][element].id + '\" class="specialImage"><img title=\"' + result["level" + currentLevel][element].description + '\" alt=\"' + result["level" + currentLevel][element].description + '\" height=\"' + imageHeight + '\" width=\"' + imageWidth + '\" class=\"selectImage\" src=\"' + url + '\"/><h2><span>' + result["level" + currentLevel][element].description + '</span></h2></div>');
+												} else {
+													if (maxHeight < (maxWidth/2)) {
+														maxHeight = (maxWidth/2);
+													}
+												
+													var url = "/connector/html/getImage/nopicture.jpg?session=" + sessionStorage.getItem("session") + "&type=0&id=0&width=" + (maxWidth/2) + "&height=" + (maxWidth/2);
+													$("#selectImage" + element).append('<div id=\"' + result["level" + currentLevel][element].id + '\" class="specialImage"><img title=\"' + result["level" + currentLevel][element].description + '\" alt=\"' + result["level" + currentLevel][element].description + '\" height=\"' + (maxWidth/2) + '\" width=\"' + (maxWidth/2) + '\" class=\"selectImage\" src=\"' + url + '\"/><h2><span>' + result["level" + currentLevel][element].description + '</span></h2></div>');
+												}
+											}
+										}
+										element++;
+									}									
+								}
+								$(".placeholderImage").css('width', maxWidth);
+								maxHeight += 50;
+								$(".placeholderImage").css('height', maxHeight);
+								$(".specialImage h2 span").css( "max-width", maxWidth);
+
+								$(".specialImage").click(function() {
+									currentLevel++;
+									previousLevel.push(this.id);
+									$("#key").val(this.id);
+									fillImageSelection({mode: "select", id : this.id});
+								});
+							}
+						} else {
+							$("#formImage").hide();
+							$("#formList").show();
+							if (preferences.picture.arrangements) {
+								var options = $("#selectLevel0");
+								options.empty();
+								options.append($("<option />").val(0).text(result.level0));
+								
+								var options = $("#selectLevel1");
+								options.empty();
+								options.append($("<option />").val(0).text(result.level1));
+								
+								var options = $("#selectLevel2");
+								options.empty();
+								options.append($("<option />").val(0).text(result.description));
+								
+								if (preferences.submit.arrangements) {
+									$("#submitButton").show();
+								}
+								if ((preferences.submit.quotations) && (preferences.access.noPricesVisible)) {
+									$("#submitQuotation").show();
+								}
+							} else {
+								$("#backButton").hide();
+								$("#back").off();
+							}
+							
+							if (currentLevel == 3) {
+								if ( $("#text_01").val() == "" ) {
+									if ( result.remark != "" ) {
+										$("#text_01").val( result.remark );
+									} else {
+										$("#text_01").val( result.level0 + ", " + result.level1 + ", " + result.description );
+									}
+								}
+								if (result.unit != null) {
+									$("#fields").show().nextAll().show();
+									if (preferences.access.uploadFiles) {
+										$("#upload-table").show();
+									}
+									if (!preferences.access.useVersionsByArrangements) {
+										$("#versions").hide();
+									}
+									if (result.unit) {
+										switch ( result.unit ) {
+											case 1:
+												$("#measurementUnit").text(" " + preferences.settings.measurement.unit);
+												$("#dimensionHeight").show();
+												$("#dimension").children()[0].innerText = "<!--#4DSCRIPT/WEB_LANGUAGE/Formaat:-->";
+												break;
+											case 2:
+												$("#measurementUnit").text(" " + preferences.settings.measurement.unit);
+												$("#dimensionHeight").hide();
+												$("#dimension").children()[0].innerText = "<!--#4DSCRIPT/WEB_LANGUAGE/Lengte:-->";
+												break;
+											case 3:
+												$("#measurementUnit").text(" kg");
+												$("#dimensionHeight").hide();
+												$("#dimension").children()[0].innerText = "<!--#4DSCRIPT/WEB_LANGUAGE/Eenheidsgewicht:-->";
+												break;
+										}
+									} else {
+										$("#dimension").hide();
+									}
+								}
+								if ( result.image ) {
+									result.image.reference = "text_01";
+								}
+								setupImage( result.image );
+								if ( preferences.access.noPricesVisible ) {
+									$("#priceRow").hide();
+								}
+								calculatePrice();
+							} else {
+								var options = $("#selectLevel" + currentLevel);
+								options.attr('disabled', false);
+								options.empty();
+								options.append($("<option />").val(0).text("<!--#4DSCRIPT/WEB_LANGUAGE/Maak uw keuze...-->"));
+								$.each(result["level" + currentLevel], function(item) {
+									options.append($("<option />").val(result["level" + currentLevel][item].id).text(result["level" + currentLevel][item].description));
+								});
+								if (currentLevel <= 0) {
+									var options = $("#selectLevel" + 1);
+									options.empty();
+									options.append($("<option />").val(0).text("<!--#4DSCRIPT/WEB_LANGUAGE/Maak uw keuze...-->"));
+									options.attr('disabled', true);
+								}
+								if (currentLevel <= 1) {
+									var options = $("#selectLevel" + 2);
+									options.empty();
+									options.append($("<option />").val(0).text("<!--#4DSCRIPT/WEB_LANGUAGE/Maak uw keuze...-->"));
+									options.attr('disabled', true);
+								}
+							}
+						}
+						styleLinks(4);
+					}
+				}
+			});
+		}
+		
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(5);
+
+				$(".imageViewer").hide();
+				$("#error").hide();
+
+				var id = parseInt(getParameterFromURL('id')) || 0;		//kijk of dit een bestaande regel is
+				$('#id').val(id);
+				if (id > 0 ) {
+					$('#locationFiles').val("internet");												
+
+					$.getJSON('/connector/html/detailTables?session=' + sessionStorage.getItem("session") +  '&id=' + id +  '&table=0', function (data) {
+						$("#key").val(-data.standard_quotation);
+						$("#run_01").val(formatNumber(data.run_01));
+						$("#run_02").val(formatNumber(data.run_02));
+						$("#parameter_1").val(formatMeasurement(data.parameter_1));
+						$("#parameter_2").val(formatMeasurement(data.parameter_2));
+						$("#text_01").val(data.text_01);
+						$("#reference").val(data.reference);
+						$("#remark").val(data.remark);
+						$("#artwork_date").val(formatDate(data.artwork_date));
+
+						getCurrentFiles(function () {
+							currentLevel = 3;
+							fillImageSelection({mode: "edit", id : -data.standard_quotation});
+						});
+					});
+				} else {
+					$('#locationFiles').val("temp");
+			
+					getCurrentFiles(function () {
+						fillImageSelection({mode: "init"});
+					});
+				}
+
+				initFileUpload();
+
+				$("#artwork_date").datetimepicker(datetimeformat);
+
+				if (preferences.submit.arrangements) {
+					$("#toShoppingCard").click(function(){
+						var data = unformatNumberSerializeArray( $("#formList").serializeArray(), ["run_01"]);
+
+						data.push ( { "name" : "parameter_1", "value": unformatMeasurement( $("#parameter_1").val()) } );
+						data.push ( { "name" : "parameter_2", "value": unformatMeasurement( $("#parameter_2").val()) } );
+
+						if ( testValueFound(data, "run_01", 0) ) {
+							openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U dient een oplage in te geven-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else if (( testValueFound(data, "parameter_1", 0) ) & ( arrangement.unit == 2 )) {
+							openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U dient een lengte in te geven-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else if ((( testValueFound(data, "parameter_1", 0) ) | ( testValueFound(data, "parameter_2", 0) )) & ( arrangement.unit == 1 )) {
+							openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U dient een formaat in te geven-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else if ( testValueFound(data, "text_01", "") ) {
+							openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U dient een omschrijving in te geven-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else if ( $("#error").is(":visible") == true ) {
+							openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/Er is helaas geen prijs gevonden voor uw keuze.-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else {
+							if ( testValueFound(data, "id", 0) ) {
+								var method = "PUT";
+							} else {
+								var method = "POST";
+							}
+							preventClickTwice(this);
+							submitLineHandler(data, method, "succesJob");
+						}
+					});
+				} else {
+					$("#submitButton").hide();
+				}
+				
+				if ((preferences.submit.quotations) && (preferences.access.noPricesVisible)) {
+					$("#sendQuotation").click(function(){
+						var data = unformatNumberSerializeArray( $("#formList").serializeArray(), ["run_01"]);
+
+						data.push ( { "name" : "parameter_1", "value": unformatMeasurement( $("#parameter_1").val()) } );
+						data.push ( { "name" : "parameter_2", "value": unformatMeasurement( $("#parameter_2").val()) } );
+
+						if ( testValueFound(data, "run_01", 0) ) {
+							openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U dient een oplage in te geven-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else if (( testValueFound(data, "parameter_1", 0) ) & ( arrangement.unit == 2 )) {
+							openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U dient een lengte in te geven-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else if ((( testValueFound(data, "parameter_1", 0) ) | ( testValueFound(data, "parameter_2", 0) )) & ( arrangement.unit == 1 )) {
+							openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U dient een formaat in te geven-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else if ( testValueFound(data, "text_01", "") ) {
+							openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U dient een omschrijving in te geven-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else if ( $("#error").is(":visible") == true ) {
+							openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/Er is helaas geen prijs gevonden voor uw keuze.-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else {
+							if ( testValueFound(data, "id", 0) ) {
+								var method = "PUT";
+							} else {
+								var method = "POST";
+							}
+							data.push ( { "name": "request", "value": "quotation"} );
+							preventClickTwice(this);
+							data.push({name: 'session', value: sessionStorage.getItem("session")});
+							$.ajax({
+								dataType: 'json',
+								data: data,
+								url: '/connector/html/handleBufferLine',
+								type: method,
+								success: function (files) {
+									if (files.errornumber) {
+										openAlert(files.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+									} else {
+										window.location.replace('/module/pages/main.shtm?message=succesQuotation');
+									}
+								}
+							});    
+						}
+					});
+				} else {
+					$("#submitQuotation").hide();
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Prijsafspraken--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content">
+			<div id="content" class="content_child">
+				<form id="formImage"></form>
+				<form id="formList">
+					<input type="hidden" id="id" 				name="id"					value="0"></input>
+					<input type="hidden" id="locationFiles"		name="locationFiles"		value="temp"></input>
+					<input type="hidden" id="bufferType" 		name="bufferType"			value="arrangement"></input>
+					<input type="hidden" id="key" 				name="key"					value="0"></input>
+					<table id="entry-table" class="content_table">
+						<tr>
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Omschrijving:--></td>
+							<td class="data"><select id="selectLevel0" name="selectLevel0" class="largeselect" onchange="javascript:handleSelection({level: 1, id: $(this).val()});"></select></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr>
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Item:--></td>
+							<td class="data"><select id="selectLevel1" name="selectLevel1" class="largeselect" onchange="javascript:handleSelection({level: 2, id: $(this).val()});"></select></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr>
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Soort:--></td>
+							<td class="data"><select id="selectLevel2" name="selectLevel2" class="largeselect" onchange="javascript:handleSelection({level: 3, id: $(this).val()});"></select></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr id="fields">
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Oplage:--></td>
+							<td class="data"><input type="text" id="run_01" name="run_01" size="10" maxlength="10" value="" onchange="javascript:calculatePrice()"></input></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr id="versions">
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Aantal soorten:--></td>
+							<td class="data"><input type="text" id="run_02" name="run_02" size="10" maxlength="10" value="" onchange="javascript:calculatePrice()"></input></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr id="dimension">
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Formaat:--></td>
+							<td class="data"><input type="text" id="parameter_1" size="10" maxlength="10" value="" onchange="javascript:calculatePrice()"></input><span id="dimensionHeight"> x <input type="text" id="parameter_2" size="10" maxlength="10" value="" onchange="javascript:calculatePrice()"></input></span><span id="measurementUnit"></span><span id="direction"></span></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr id="priceRow">
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Prijs:--></td>
+							<td class="data"><input type="text" id="price" name="price" size="10" maxlength="10" value="" disabled></input><span id="error"> <!--#4DSCRIPT/WEB_LANGUAGE/Er is helaas geen prijs gevonden voor uw keuze.--></span></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr>
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Object:--></td>
+							<td class="data"><textarea class="longtext" rows="2" id="text_01" name="text_01" onchange="javascript:removeFalseCharacters(this)"></textarea></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr> 
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Referentie:--></td>
+							<td class="data"><input type="text" id="reference" name="reference" size="30" maxlength="30" onchange="javascript:removeFalseCharacters(this)"></input></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr> 
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Notities:--></td>
+							<td class="data"><textarea class="longtext" rows="2" id="remark" name="remark" onchange="javascript:removeFalseCharacters(this)"></textarea></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+						<tr> 
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Aanleverdatum:--></td>
+							<td class="data"><input type="text" id="artwork_date" name="artwork_date" size="10" maxlength="10" value=""></input></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+					</table>
+					<table id="upload-table" class="content_table">
+						<tr> 
+							<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Bestanden:--></td>
+							<td class="data"><input id="fileupload-button" type="file" name="vx_Data"></input><div style="float:left; width:95%;" id="fileupload-progressbar"><div class="progress-label"></div></div></td>
+							<td class="trailing">&nbsp;</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+		<div class="footer"><div class="margins right"><span id="submitQuotation"><a id="sendQuotation" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Aanvraag offerte--></a> | </span><span id="submitButton"><a id="toShoppingCard" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/In winkelwagen--></a> | </span><span id="backButton"><a id="back" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Terug--></a> | </span><a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+		<div class="imageViewer"><img id="imageViewer" /></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

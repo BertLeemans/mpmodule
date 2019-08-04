@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>				
+		var preferences = {};
+		var layouts = {};
+
+		var tableSetup = {
+			"table": 5,
+			"doubleClickHandler": selectLine,
+			"search": true,
+			"header": true,
+			"footer": true,
+			"distinct": ["attribute_1"],
+			"sorting": [{"field": "description", "direction": "asc"}],
+			"fields": [
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Omschrijving-->",
+					"field": "description",
+					"alignment": "left",
+					"width": "200px",
+					"sortable": true,
+					"searchable": true,
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Code-->",
+					"field": "product_code",
+					"alignment": "left",
+					"width": "100px",
+					"sortable": true,
+					"searchable": true,
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Formaat-->",
+					"field": "format",
+					"alignment": "left",
+					"width": "90px",
+					"sortable": true,
+					"searchable": true,
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Grams-->",
+					"field": "grs",
+					"alignment": "center",
+					"width": "65px",
+					"sortable": true,
+					"searchable": true,
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/LR-->",
+					"field": "grain_direction",
+					"alignment": "center",
+					"width": "45px",
+					"sortable": true,
+					"searchable": true,
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Voorraad-->",
+					"field": "stock",
+					"alignment": "right",
+					"format": formatNumber,
+					"width": "65px",
+					"sortable": true,
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Verbruik-->",
+					"field": "yearly_used",
+					"alignment": "right",
+					"format": formatNumber,
+					"width": "65px",
+					"sortable": true,
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Prijs-->",
+					"field": "unit_price_sale",
+					"alignment": "right",
+					"format": formatCurrency,
+					"width": "65px",
+					"sortable": true,
+					"visible": true
+				},
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Beeld-->",
+					"alignment": "center",
+					"format": formatImage,
+					"width": "45px",
+					"visible": true
+				}
+			]
+		};
+	
+		var imageSetup = {
+			"table": 5,
+			"doubleClickHandler": selectLine,
+			"image": 1,
+			"distinct": ["attribute_1"],
+			"sorting": [{"field": "description", "direction": "asc"}],
+			"fields": [
+				{
+					"label": "<!--#4DSCRIPT/WEB_LANGUAGE/Omschrijving-->",
+					"field": "description",
+					"searchable": true
+				}
+			]
+		};
+
+		function formatImage (record) {
+			if (record.image) {
+				if (record.image.pdf) {
+					var url = "/connector/html/getImage/" + record.image.id + ".pdf?session=" + sessionStorage.getItem("session") + "&type=" + record.image.type + "&id=" + record.image.id + "&pdf=" + record.image.pdf;
+					return "<a class='choice' href='#' onclick='javascript:openPDF(\"" + url + "\");'><!--#4DSCRIPT/WEB_LANGUAGE/Toon--></a>";
+				} else {
+					return "<a class='choice' href='#' onclick='javascript:openImage(" + JSON.stringify(record.image) + ");'><!--#4DSCRIPT/WEB_LANGUAGE/Toon--></a>";
+				}
+			} else {
+				return "";
+			}
+		}
+
+		function selectLine(id) {
+			window.location.replace('/module/pages/product.shtm?key=' + id);
+		}
+
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(5);
+			
+				if (preferences.picture.products) {
+					fillImage ( {"action": "init"} );
+
+					$("#group0").bind("change", function() {
+						fillImage({"action": "search"});
+					});
+					$("#searchSelect").bind("change", function() {
+						$("#searchValue").val("");
+						fillImage({"action": "search"});
+					});
+					$("#searchValue").bind("change", function() {
+						fillImage({"action": "search"});
+					});
+				} else {
+					removePriceColumn ( ["unit_price_sale"] );					
+					fillTable({"action": "init"});
+			
+					$("#group0").bind("change", function() {
+						fillTable({"action": "search"});
+					});
+					$("#searchSelect").bind("change", function() {
+						$("#searchValue").val("");
+						fillTable({"action": "search"});
+					});
+					$("#searchValue").bind("change", function() {
+						fillTable({"action": "search"});
+					});
+				}
+			});
+		});
+		
+		$( window ).resize(function() {
+			tableScrollHeight();
+		});
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Producten--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content">
+			<div class="content_child" style="height: 15px;"><!--#4DSCRIPT/WEB_LANGUAGE/Groep--> <select id="group0"></select> <!--#4DSCRIPT/WEB_LANGUAGE/Zoek--> <select id="searchSelect"></select><input id="searchValue"></input></div>
+			<div class="content_child" id="gridPlaceHolder"></div>			
+		</div>
+		<div class="footer"><div class="margins right"><a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>

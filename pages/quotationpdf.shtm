@@ -1,0 +1,647 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!--#4DINCLUDE header.shtm-->
+	<script>
+		var totalFiles = 0;
+		var preferences = {};
+		var layouts = {};
+
+		var autoFillObjects = [];
+		var currentProduct = {};
+		var preflightData = [];
+		var documentWithBleed = true;
+
+		function calculatedPrice(field) {
+			var run = unformatNumber($(field).val());
+			if (run > 0) {
+				$(field).val(formatNumber(run));
+			} else {
+				$(field).val("0");
+			}
+		}					
+
+		function initDocumentInfo() {
+			initFileUpload(preflightFile);
+
+			$.getJSON('/connector/html/autoFillAttributes?session=' + sessionStorage.getItem("session"), function (data) {
+				autoFillObjects = data;
+
+				$.getJSON('/connector/html/sendContentData?session=' + sessionStorage.getItem("session") + '&location=' + $('#locationFiles').val() + '&id=' + $('#id').val(), function (files) {
+					if (files.errornumber) {
+						openAlert(files.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+					} else {
+						totalFiles = files.length;
+						$.each(files, function (index, file) {
+							updateFiles((index - 1), file);
+							preflightFile(file.filename);
+						});
+					}
+				});
+			});
+		}
+				
+		function updateDocumentInfo() {
+			documentWithBleed = true;
+			var totalPages = 0;
+			var modelWidth = 0;
+			var modelHeight = 0;
+			var missingFonts = [];
+			var resolution = false;
+			$.each(preflightData, function(item) {
+				if (preflightData[item].pages) {
+					totalPages += preflightData[item].pages.length;
+					$.each(preflightData[item].pages, function(page) {
+						if ((preflightData[item].pages[page].modelWidth == preflightData[item].pages[page].boxWidth) || (preflightData[item].pages[page].modelHeight == preflightData[item].pages[page].boxHeight)) {
+							documentWithBleed = false;
+						}
+						if (modelWidth == 0) {
+							modelWidth = preflightData[item].pages[page].modelWidth;
+						}
+						if (modelHeight == 0) {
+							modelHeight = preflightData[item].pages[page].modelHeight;
+						}
+						if (preflightData[item].pages[page].imageResolution) {
+							resolution = true;
+						}
+						if (preflightData[item].pages[page].bitmapResolution) {
+							resolution = true;
+						}
+					});
+					if (preflightData[item].missingFonts) {
+						$.each(preflightData[item].missingFonts, function(font) {
+							if (missingFonts.indexOf(preflightData[item].missingFonts[font]) == -1) {
+								missingFonts.push(preflightData[item].missingFonts[font]);
+							}
+						});
+					}
+				}
+			});
+			if (totalPages != 0) {
+				$("#totalPages").val(totalPages);
+				
+				$("#modelWidth").val( formatMeasurement(modelWidth) );
+				$("#modelHeight").val( formatMeasurement(modelHeight) );
+				if ((modelWidth != 0) & (modelHeight != 0) & (modelWidth != modelHeight)) {
+					if (modelWidth < modelHeight) {
+						$("#modelDirection").val("<!--#4DSCRIPT/WEB_LANGUAGE/Staand-->");
+						$("#direction").html(" (<!--#4DSCRIPT/WEB_LANGUAGE/Staand-->)");
+					} else {
+						$("#modelDirection").val("<!--#4DSCRIPT/WEB_LANGUAGE/Liggend-->");
+						$("#direction").html(" (<!--#4DSCRIPT/WEB_LANGUAGE/Liggend-->)");
+					}
+				} else {
+					$("#modelDirection").val("");
+					$("#direction").html("");
+				}
+				
+				updateColorMisMatch(true);
+
+				if (missingFonts.length != 0) {
+					var temp = decodeEntities("<!--#4DSCRIPT/WEB_LANGUAGE/Sommige lettertype's zijn niet of deels aanwezig-->");
+					$("#availableFonts").val(temp);
+					$("#minimalResoltionLine").children(".trailing").children().attr("alt", temp).attr("title", temp);
+					$("#availableFontsLine").show();
+				} else {
+					$("#availableFontsLine").hide();
+				}
+				if (resolution) {
+					var temp = decodeEntities("<!--#4DSCRIPT/WEB_LANGUAGE/Sommige afbeeldingen hebben een lage kwaliteit-->");
+					$("#minimalResoltion").val(temp);
+					$("#minimalResoltionLine").children(".trailing").children().attr("alt", temp).attr("title", temp);
+					$("#minimalResoltionLine").show();
+				} else {
+					$("#minimalResoltionLine").hide();
+				}
+				$("#waiting-table").hide();
+				
+				if (totalPages > 1) {
+					$("#singleSided").prop("checked","");
+					$("#doubleSided").prop("checked","checked");
+				} else {
+					$("#singleSided").prop("checked","checked");
+					$("#doubleSided").prop("checked","");
+				}
+				updateAutoGenerate( true );
+			} else {
+				$("#waiting-table").hide();
+				$("#entry-table").hide();
+				$("#submitButton").hide();
+			}
+		}
+				
+		function updateAutoGenerate( refreshDescription ) {
+			var totalPages = parseInt($("#totalPages").val());
+			if (totalPages != 0) {
+				var options = $("#productType");
+				options.empty();
+				$.each(autoFillObjects, function(item) {
+					if ((totalPages >= autoFillObjects[item].minimum_page) && (totalPages <= autoFillObjects[item].maximum_page)) {
+						if (($("#singleSided").is(":checked") & autoFillObjects[item].singlesided) || ($("#doubleSided").is(":checked") & autoFillObjects[item].doublesided)) {
+							options.append($("<option />").val(autoFillObjects[item].id).text(autoFillObjects[item].description));
+						}
+					}
+				});
+				if ( refreshDescription ) {
+					$("#entry-table").show();
+					if (preferences.submit.quotations) {
+						$("#submitButton").show();
+					}
+					if (preflightData[0].title) {
+						$("#description").val(preflightData[0].title);
+					} else {
+						$("#description").val(preflightData[0].filename.replace(/\.[^/.]+$/, ""));
+					}
+				}
+				updateProductType();	
+				// setup bleed			
+				$("#printAtBorders").attr("checked",documentWithBleed);
+				fillBleed();
+			} else {
+				$("#entry-table").hide();
+				$("#submitButton").hide();
+			}
+		}
+		
+		function updateProductType() {
+			var productType = $("#productType").val();
+			var totalPages = parseInt($("#totalPages").val());
+			var modelWidth = unformatNumber($("#modelWidth").val());
+			var modelHeight = unformatNumber($("#modelHeight").val());
+
+			$.each(autoFillObjects, function(item) {
+				if (autoFillObjects[item].id == productType) {
+				
+					if (!autoFillObjects[item].doublesided) {
+						$("#singleSided").prop("checked","checked");
+						$("#doubleSided").prop("checked","");
+					}
+					if (!autoFillObjects[item].singlesided) {
+						$("#singleSided").prop("checked","");
+						$("#doubleSided").prop("checked","checked");
+					}
+
+					$(".finishing").remove();
+					
+					$.getJSON('/connector/html/autoFillAttributes?id=' + productType + '&session=' + sessionStorage.getItem("session"), function (data) {
+						currentProduct = data;
+				
+						$(".lines").remove();
+						$.each(currentProduct.productionlines, function(productionlines) {
+							$("#lines").clone().addClass("lines").removeAttr("id").insertAfter( $("#lines") );
+						});
+
+						var temp = 0;
+						var current = 0;
+						var pages = (parseInt($("#totalPages").val()) || 0);
+					
+						$.each(currentProduct.productionlines, function(item) {
+							if ( currentProduct.productionlines[item].printingsheet != "" ) {
+								$(".lines:eq(" + item + ") td:eq(0)").text( currentProduct.productionlines[item].printingsheet + " (" + currentProduct.productionlines[item].printingmatter + "):" );
+							} else {
+								$(".lines:eq(" + item + ") td:eq(0)").text( currentProduct.productionlines[item].printingmatter + ":" );
+							}
+						
+							var text = "";
+							text += "<select id='method" + item + "' class='productionLineMethod' style='width:100px;'>";
+							if (currentProduct.productionlines[item].offset) {
+								text += "<option value='offset'>" + currentProduct.productionlines[item].offset.description + "</option>";
+							}
+							if (currentProduct.productionlines[item].webb) {
+								text += "<option value='webb'>" + currentProduct.productionlines[item].webb.description + "</option>";
+							}
+							if (currentProduct.productionlines[item].silkscreen) {
+								text += "<option value='silkscreen'>" + currentProduct.productionlines[item].silkscreen.description + "</option>";
+							}
+							if (currentProduct.productionlines[item].digital) {
+								text += "<option value='digital'>" + currentProduct.productionlines[item].digital.description + "</option>";
+							}
+							if (currentProduct.productionlines[item].largeformat) {
+								text += "<option value='largeformat'>" + currentProduct.productionlines[item].largeformat.description + "</option>";
+							}
+							text += "</select>";
+							$(".lines:eq(" + item + ") td:eq(1) div span:eq(0)").html( text );
+							$("#method" + item).val( currentProduct.productionlines[item].standard.method );
+
+							current += currentProduct.productionlines[item].pages;
+							if ( current > pages ) {
+								current = current - pages;
+								temp = current - pages;
+							} else {
+								temp = currentProduct.productionlines[item].pages;
+							}
+							if ((currentProduct.productionlines.length - 1) == item) {
+								temp = (pages-current);
+							}
+
+							text = "<input type='text' id='current" + item + "' class='productionLineCurrent' size='5' maxlength='5' value='" + temp + "'>";
+							$(".lines:eq(" + item + ") td:eq(1) div span:eq(1)").html( text );
+												
+							text = "<select id='material" + item + "' class='productionLineMaterial' style='width:240px;'></select>";
+							$(".lines:eq(" + item + ") td:eq(1) div span:eq(2)").html( text );
+
+							text = "<select id='colorlist" + item + "' class='productionLineColors' style='width:240px;'></select>";
+							$(".lines:eq(" + item + ") td:eq(1) div span:eq(3)").html( text );
+						
+							fillMaterialColor( item );
+
+		//afwerking
+							var options = $("#finishing td:eq(1) select");
+							options.empty();
+							options.append( $("<option />").val("").text("") );
+							$.each(currentProduct.finishing, function(item) {
+								options.append( $("<option />").val(currentProduct.finishing[item].description).text(currentProduct.finishing[item].description) );
+							});
+							$("#finishing").show();
+							createFinishing();
+						});
+
+						$(".productionLineMethod").on('change', function () {
+							var row = parseInt( this.id.replace(/\D/g, '') );
+							fillMaterialColor( row );
+						});
+
+						$(".productionLineCurrent").on('change', function () {
+							var current = (parseInt($(this).val()) || 0);
+							$(this).val(current);
+						
+							var totalPages = (parseInt($("#totalPages").val()) || 0);
+							$(".productionLineCurrent").each( function(item) {
+								totalPages -= (parseInt($(this).val()) || 0);
+							});
+						
+							var last = (parseInt($(".productionLineCurrent:last").val()) || 0);
+							$(".productionLineCurrent:last").val(last + totalPages );
+						});
+					});
+				}
+			});
+		}
+
+		function fillMaterialColor( row ) {
+			var method = $("#method" + row).val();
+
+			$("#material" + row).empty();
+			$.each(currentProduct.productionlines[row][method].materials, function(element) {
+				$("#material" + row).append( "<option>" + currentProduct.productionlines[row][method].materials[element] + "</option>" );
+			});
+
+			var standard = "";
+			var data = {};
+			$("#colorlist" + row).empty();
+			$.each(currentProduct.productionlines[row][method].colors, function(element) {
+				data = currentProduct.productionlines[row][method].colors[element];
+				if ( $("#singleSided").is(":checked") & (( data.front == 0 ) | ( data.back == 0 )) ) {
+					if ( currentProduct.productionlines[row][method].colors[element].standard ) {
+						standard = data.description;
+					}
+					$("#colorlist" + row).append( "<option>" + data.description + "</option>" );
+				}
+				if ( $("#doubleSided").is(":checked") & (( data.front != 0 ) & ( data.back != 0 )) ) {
+					if ( currentProduct.productionlines[row][method].colors[element].standard ) {
+						standard = data.description;
+					}
+					$("#colorlist" + row).append( "<option>" + data.description + "</option>" );
+				}
+			});
+			if (standard != "") {
+				$('#colorlist' + row).val(standard).prop("selected", "selected");
+			}
+		}
+
+		function createFinishing( list ) {
+			var choices = [];
+			if ( list ) {
+				$.each (list, function ( index, element ) {
+					choices.push ( element.description );
+				});
+			} else {
+				$(".finishingselect").each ( function ( index, element ) {
+					if ( element.value != "" ) {
+						if ( $.inArray(element.value, choices) == -1 ) {
+							choices.push( element.value );
+						}
+					}
+				});
+			}
+			$(".finishing").remove();
+			$.each(choices, function(element) {
+				$("#finishing").clone().addClass("finishing").removeAttr("id").insertAfter( $("#finishing") );
+			});
+			$(".finishingselect").each(function(element, value) {
+				if (element <= choices.length) {
+					value.value = choices[element];
+				} else {
+					value.value = "";
+				}
+			});
+			$(".finishingselect").on('change', function () {
+				createFinishing();
+			});
+		}
+		
+		function buildAutofill () {
+			var autofill = {};
+			autofill.description = $("#description").val();
+			autofill.modelheight = unformatNumber($("#modelHeight").val());
+			autofill.modelwidth = unformatNumber($("#modelWidth").val());
+			autofill.doublesided = $("#doubleSided").is(":checked");
+			if ( $("#printAtBorders").is(":checked") ) {
+				autofill.bleed = preferences.settings.margins.bleed;
+			} else {
+				autofill.bleed = 0;
+			}
+			autofill.pages = (parseInt($("#totalPages").val()) || 0);
+			autofill.productionlines = [];
+			$.each( $(".lines"), function(element) {
+				var temp = {};
+				temp.method = $(".lines:eq(" + element + ") td:eq(1) div span:eq(0) select").val();
+				temp.current = $(".lines:eq(" + element + ") td:eq(1) div span:eq(1) input").val();
+				temp.material = $(".lines:eq(" + element + ") td:eq(1) div span:eq(2) select").val();
+				temp.colorlist = $(".lines:eq(" + element + ") td:eq(1) div span:eq(3) select").val();
+				autofill.productionlines.push( temp );
+			});
+			autofill.finishing = [];
+			$(".finishingselect").each ( function ( index, element ) {
+				if ( element.value != "" ) {
+					autofill.finishing.push( { "description": element.value } );
+				}
+			});
+			
+			var data = {};
+			data.bufferType = $("#bufferType").val();
+			data.id = (parseInt($("#productType").val()) || 0);
+			data.run = (parseInt($("#run_01").val()) || 0);
+			data.session = sessionStorage.getItem("session");
+			data.autofill = JSON.stringify( autofill );
+			
+			if ( data.run == 0 ) {
+				data.errornumber = -1;
+				data.errortext = "<!--#4DSCRIPT/WEB_LANGUAGE/U dient een oplage in te geven-->";
+			} else if ( data.id == 0 ) {
+				data.errornumber = -1;
+				data.errortext = "<!--#4DSCRIPT/WEB_LANGUAGE/U dient een product in te geven-->";
+			} else if (( autofill.modelheight == 0) || ( autofill.modelwidth == 0)) {
+				data.errornumber = -1;
+				data.errortext = "<!--#4DSCRIPT/WEB_LANGUAGE/U dient een formaat in te geven-->";
+			} else if ( autofill.pages == 0 ) {
+				data.errornumber = -1;
+				data.errortext = "<!--#4DSCRIPT/WEB_LANGUAGE/U dient een aantal pagina's in te geven-->";
+			}
+						
+			return data;
+		}
+		
+		function updateColorMisMatch(init) {
+			var colors = [];
+			$.each(preflightData, function(item) {
+				if (preflightData[item].pages) {
+					totalPages += preflightData[item].pages.length;
+					$.each(preflightData[item].pages, function(page) {
+						if (preflightData[item].pages[page].colors) {
+							$.each(preflightData[item].pages[page].colors, function(color) {
+								if (colors.indexOf(preflightData[item].pages[page].colors[color]) == -1) {
+									colors.push(preflightData[item].pages[page].colors[color]);
+								}
+							});
+						}
+					})
+				}
+			});
+
+			var needed = 0;
+			if (colors.length == 1) {
+				if (colors[0] == 'Black') {
+					needed = 1;
+				} else {
+					needed = 3;
+				}
+			} else {
+				var fc = true;
+				$.each(colors, function(item) {
+					if (((colors[item] == 'Cyan') | (colors[item] == 'Magenta') | (colors[item] == 'Yellow') | (colors[item] == 'Black')) == false) {
+						fc = false;
+					}
+				})
+				if (fc) {
+					needed = 2;
+				} else {
+					needed = 3;
+				}
+			}
+		}
+
+		function fillBleed() {
+			if ($("#printAtBorders").is(':checked')) {
+				if (!documentWithBleed) {
+					var temp = "<!--#4DSCRIPT/WEB_LANGUAGE/Geen afloop in aangeleverd bestand!-->";
+					$("#noBleed").show().attr("alt", temp).attr("title", temp);
+				} else {
+					$("#noBleed").hide();				
+				}
+				$("#modelBleed").val(preferences.settings.margins.bleed);
+			} else {
+				$("#modelBleed").val(0);
+				$("#noBleed").hide();				
+			}
+		}
+		
+		function singleOrDouble(single) {
+			var totalPages = (parseInt($("#totalPages").val()) || 0);
+			if ((single) | (totalPages < 2)) {
+				$("#singleSided").prop("checked","checked");
+				$("#doubleSided").prop("checked","");
+			} else {
+				$("#singleSided").prop("checked","");
+				$("#doubleSided").prop("checked","checked");
+			}
+			updateAutoGenerate( false );	
+		}
+		
+		function preflightFile (file) {
+			$("#waiting-table").show();
+			$("#entry-table").hide();
+			$("#submitButton").hide();
+			$.getJSON('/connector/html/preflightContentData?session=' + sessionStorage.getItem("session") + '&location=' + $('#locationFiles').val() + '&id=' + $('#id').val() + '&filename=' + encodeURIComponent(file), function (data) {
+				if (data.errornumber) {
+					openAlert(data.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+				} else {
+					preflightData.push(data);
+				}
+				if (totalFiles != 0) {
+					totalFiles -= 1;
+				}
+				if (totalFiles == 0) {
+					updateDocumentInfo();
+				}
+			});
+		}
+
+		$(document).ready(function() {
+			basicInit();
+			checkSession(function() {
+				initMenu();
+				styleScreen();		//setup all the divs
+				styleLinks(5);
+			
+				for(var i=0; i < $("[id=measurementUnit]").length; i++) {
+					$("[id=measurementUnit]")[i].innerHTML = (" " + preferences.settings.measurement.unit);
+				}
+			
+				$("#waiting-table").hide();
+				$("#entry-table").hide();
+				$("#submitButton").hide();
+			
+				$(".main").css( "visibility","visible");
+			
+				initDocumentInfo();
+						
+				if (preferences.submit.quotations) {
+					$("#sendQuotation").click(function(){
+						var autofill = buildAutofill().autofill;
+						var data = unformatNumberSerializeArray( $("#form").serializeArray(), ["run_01", "run_02", "run_03"]);
+						if ( testValueFound(data, "run_01", 0) ) {
+							openAlert("<!--#4DSCRIPT/WEB_LANGUAGE/U dient een oplage in te geven-->", "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->", function () { $("#run_01").focus(); });
+						} else if ( autofill.errornumber ) {
+							openAlert(autofill.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+						} else {
+							if ( testValueFound(data, "id", 0) ) {
+								var method = "PUT";
+							} else {
+								var method = "POST";
+							}
+							data.push ( { "name": "autofill", "value": autofill} );
+							preventClickTwice(this);
+							data.push({name: 'session', value: sessionStorage.getItem("session")});
+							$.ajax({
+								dataType: 'json',
+								data: data,
+								url: '/connector/html/handleBufferLine',
+								type: method,
+								success: function (files) {
+									if (files.errornumber) {
+										openAlert(files.errortext, "<!--#4DSCRIPT/WEB_LANGUAGE/Fout-->");
+									} else {
+										window.location.replace('/module/pages/main.shtm?message=succesQuotation');
+									}
+								}
+							});    
+						}
+					});
+				} else {
+					$("#submitButton").hide();
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="header"><div class="margins"><!--#4DSCRIPT/WEB_LANGUAGE/Nieuwe offerte--></div></div>
+		<div class="logo"><img id="logo" /></div>
+		<div class="menubar"><!--#4DINCLUDE menu.shtm--></div>
+		<div class="content"><div id="content" class="content_child">
+		
+		<table id="upload-table" class="content_table">
+			<tr> 
+				<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Bestanden:--></td>
+				<td class="data"><input id="fileupload-button" type="file" name="vx_Data"></input><div style="float:left; width:95%;" id="fileupload-progressbar"><div class="progress-label"></div></div></td>
+				<td class="trailing">&nbsp;</td>
+			</tr>
+		</table>
+
+		<table id="waiting-table" class="content_table">
+			<tr>
+				<td class="nocolumn" colspan="3">&nbsp;</td>
+			</tr>
+			<tr>
+				<td class="nocolumn" colspan="3"><div style="margin-left: 48%" id="ajax-loader"><img src="/module/images/ajax-loader.gif" /></div></td>
+			</tr>
+		</table>
+
+		<form id="form">
+			<input type="hidden" id="id" 						name="id"						value="0"></input>
+			<input type="hidden" id="locationFiles"				name="locationFiles"			value="temp"></input>
+			<input type="hidden" id="bufferType" 				name="bufferType"				value="quotationPDF"></input>
+			<input type="hidden" id="modelDirection"			name="modelDirection"			value=""></input>
+			<input type="hidden" id="modelBleed" 				name="modelBleed" 				value="0"></input>
+			<table id="entry-table" class="content_table">
+				<tr>
+					<td class="nocolumn" colspan="3">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Oplagen:--></td>
+					<td class="data"><input type="text" id="run_01" name="run_01" size="10" maxlength="10" value="0" onchange="javascript:calculatedPrice(this)"></input>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="run_02" name="run_02" size="10" maxlength="10" value="0" onchange="javascript:calculatedPrice(this)">&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="run_03" name="run_03" size="10" maxlength="10" value="0" onchange="javascript:calculatedPrice(this)"></input></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Omschrijving:--></td>
+					<td class="data"><input type="text" id="description" name="description" size="80" maxlength="80"></input></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Pagina's:--></td>
+					<td class="data"><input type="text" id="totalPages" name="totalPages" size="5" maxlength="5" readonly value="0"></input></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="printingSides"> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Bedrukking:--></td>
+					<td class="data"><div style="position:relative;"><input type="radio" id="singleSided" name="singleSided" value="1" onchange="javascript:singleOrDouble(true);"><!--#4DSCRIPT/WEB_LANGUAGE/Enkelzijdig--></input>&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="doubleSided" name="doubleSided" value="1" onchange="javascript:singleOrDouble(false);"><!--#4DSCRIPT/WEB_LANGUAGE/Dubbelzijdig--></input><span style="position:absolute; left:250px;"><!--#4DSCRIPT/WEB_LANGUAGE/Afloop:--> <input type="checkbox" id="printAtBorders" onchange="javascript:fillBleed()"></input><!--#4DSCRIPT/WEB_LANGUAGE/Product heeft bedrukking aan de rand--></span></div></td>
+					<td class="trailing"><image src="/module/images/error.png" width="24" height="24" id="noBleed"></image></td>
+				</tr>
+				<tr>
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Formaat:--></td>
+					<td class="data"><input type="text" id="modelWidth" name="modelWidth" size="5" maxlength="5" readonly></input> x <input type="text" id="modelHeight" name="modelHeight" size="5" maxlength="5" readonly></input><span id="measurementUnit"></span><span id="direction"></span></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Product:--></td>
+					<td class="data"><select id="productType" name="productType" class="middleselect" onchange="javascript:updateProductType();"></select></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="lines"> 
+					<td class="leading">&nbsp;</td>
+					<td class="data">
+						<div style="position:relative; height:22px;">
+							<span style="position:absolute; bottom:0px; left:0px;"><!--#4DSCRIPT/WEB_LANGUAGE/Productiemethode--></span>
+							<span style="position:absolute; bottom:0px; left:110px;"><!--#4DSCRIPT/WEB_LANGUAGE/Pagina's--></span>
+							<span style="position:absolute; bottom:0px; left:165px;"><!--#4DSCRIPT/WEB_LANGUAGE/Materiaal--></span>
+							<span style="position:absolute; bottom:0px; left:420px;"><!--#4DSCRIPT/WEB_LANGUAGE/Kleuren--></span>
+						</div>
+					</td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="finishing"> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Afwerking:--></td>
+					<td class="data"><select id="finishingSelect" class="finishingselect middleselect"></select></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr id="availableFontsLine">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Lettertype's:--></td>
+					<td class="data"><input type="text" id="availableFonts" name="availableFonts" size="80" maxlength="80" disabled></input></td>
+					<td class="trailing"><image src="/module/images/error.png" width="24" height="24"></image></td>
+				</tr>
+				<tr id="minimalResoltionLine">
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Resolutie's:--></td>
+					<td class="data"><input type="text" id="minimalResoltion" name="minimalResoltion" size="80" maxlength="80" disabled></input></td>
+					<td class="trailing"><image src="/module/images/error.png" width="24" height="24"></image></td>
+				</tr>
+				<tr> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Referentie:--></td>
+					<td class="data"><input type="text" id="reference" name="reference" size="30" maxlength="30" onchange="javascript:removeFalseCharacters(this)"></input></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+				<tr> 
+					<td class="leading"><!--#4DSCRIPT/WEB_LANGUAGE/Notities:--></td>
+					<td class="data"><textarea class="longtext" rows="2" id="remark" name="remark" onchange="javascript:removeFalseCharacters(this)"></textarea></td>
+					<td class="trailing">&nbsp;</td>
+				</tr>
+			</table>
+		</form>
+		
+		</div></div>
+		<div class="footer"><div class="margins right"><span id="submitButton"><a id="sendQuotation" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Verstuur--></a> | </span><a id="logoff" href="#" class="link"><!--#4DSCRIPT/WEB_LANGUAGE/Afmelden--></a></div></div>
+		<a href="#" class="tnr_modal">&nbsp;</a>
+	</div>
+</body>
+</html>
